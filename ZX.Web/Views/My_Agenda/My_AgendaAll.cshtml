@@ -1,0 +1,350 @@
+﻿
+@{
+    ViewBag.Title = "我的日程-指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/js/layui/css/layui.css" />
+<link href="/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="/Static/js/calendar/zui.calendar.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<script src="/Static/js/zui/zui.min.js"></script>
+<script src="/Static/js/calendar/zui.calendar.min.js"></script>
+<script src="/Static/js/layer/layer.js"></script>
+<script src="/Static/js/layer/layer.tools.js"></script>
+<style>
+    .label.task-status-doing {
+        color: #D2322D
+    }
+
+    .label.task-status-done {
+        color: #229F24
+    }
+
+    .label.task-status-waiting {
+        color: #E48600
+    }
+
+    .label.task-status-cancel {
+        color: #333
+    }
+
+    .taskMenu {
+        width: 200px
+    }
+
+        .taskMenu + .page-content {
+            margin-left: 220px;
+        }
+
+    #dropMenu {
+        min-width: 200px;
+    }
+
+    #defaultMenu, #finishedMenu, #suspendMenu {
+        min-width: 168px;
+    }
+
+    #groupBar .btn-group {
+        margin-right: 15px;
+    }
+
+    #currentItem {
+        margin-right: 1px;
+    }
+
+    .children {
+        background: #f0f0f0;
+    }
+
+    .modal-team .table-form {
+        margin: auto;
+        width: 90%;
+    }
+
+    .modal-team .modal-content {
+        padding: 5px;
+    }
+
+        .modal-team .modal-content .table-form td + td, .table-form th + th {
+            padding-left: 5px;
+        }
+
+    .panel .panel-heading a:hover {
+        text-decoration: none;
+    }
+
+    #menu .pull-right {
+        margin-right: 5px;
+    }
+
+    .page-content > .panel > .panel-heading > .panel-actions {
+        margin-left: -5px;
+    }
+
+    .tr-child, .tr-child > td {
+        padding: 0;
+    }
+
+        .tr-child > td > table {
+            padding: 5px;
+            background-color: #fff;
+            border: 2px solid #DDDDDD;
+        }
+
+    td.wait {
+        color: #808080;
+    }
+
+    td.doing {
+        color: #d2322d;
+    }
+
+    td.done {
+        color: #229f24;
+    }
+
+    td.closed {
+        color: #E48600;
+    }
+
+    td.cancel {
+        color: #888888;
+    }
+    .a_btn_menu{
+        padding-right:10px;
+    }
+    .w-290px {
+        width: 330px;
+        font-size: 12.8;
+    }
+    .active {
+        float: left;
+    }
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='active'>
+            <a href='javascript:;' onclick="jumpMyCalendar()">日历</a>
+        </li>
+        <li class='active'>
+            <a href='javascript:;' onclick="jumpMyAgendaAll()">所有</a>
+        </li>
+        <li class='active'>
+            <a href='javascript:;' onclick="jumpAssignOther();">指派他人</a>
+        </li>
+        <li class='active'>
+            <a href='javascript:;' onclick="jumpAssignMy();">指派给我</a>
+        </li>
+        <li class='active'>
+            <a href='javascript:;' onclick="jumpUnfinished();">未完成</a>
+        </li>
+        <li class='active'>
+            <a href='javascript:;' onclick="jumpUndetermined();">待定</a>
+        </li>
+    </ul>
+</nav>
+<div class='row page-content with-menu'>
+    <div class='row'>
+        <div class='panel'>
+            <form id='ajaxForm' method='post' action="">
+                <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed'>
+                    <thead>
+                        <tr class='text-center'>
+                            <th class='w-60px'>
+                                编号
+                            </th>
+                            <th class='w-100px'>
+                                日期
+                            </th>
+                            <th class='w-100px'>
+                                类型
+                            </th>
+                            <th class='w-100px'>
+                                优先级
+                            </th>
+                            <th class="text-center">
+                                名称
+                            </th>
+                            <th class='w-90px'>
+                                指派给
+                            </th>
+                            <th class='w-90px'>
+                                开始时间
+                            </th>
+                            <th class='w-80px'>
+                                结束时间
+                            </th>
+                            <th class='w-100px'>
+                                状态
+                            </th>
+                            <th class='w-290px'>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbList"></tbody>
+                </table>
+                <div class='table-footer'>
+                    <div class='pull-left text-danger'></div>
+                    <div style='float:right; clear:none;' class='pager form-inline'>
+                        <div id="myPager"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSearch").click(function () {
+            pageIndex = 1;
+            getList();
+        });
+    });
+    $(function () {
+        getList(-1);
+    });
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList(status) {
+        win.showLoading("正在加载...");
+        $.post("/My_Agenda/GetMy_AgendaList", { pageIndex: pageIndex, pageSize: pageSize, name: "", status: status, mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                //$("#htmlBody").val(data.Data)
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage(status);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage(status) {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList(status);
+                    }
+                }
+            });
+        });
+    }
+    //日历
+    function jumpMyCalendar() {
+        window.location.href = "/PersonalSpace/MyCalendar?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //所有
+    function jumpMyAgendaAll() {
+        window.location.href = "/My_Agenda/Index?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //指派他人
+    function jumpAssignOther() {
+        window.location.href = "/My_Agenda/AssignedOtherList?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //指派给我
+    function jumpAssignMy() {
+        window.location.href = "/My_Agenda/AssignedMyList?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    function jumpUnfinished() {
+        window.location.href = "/My_Agenda/UnfinishedList?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    function jumpUndetermined() {
+        window.location.href = "/My_Agenda/IsUndeterminedList?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    //查看 look
+    function look(obj) {
+        var id = $(obj).attr("val");
+        win.open("/My_Agenda/Readonly?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 700, "待办编辑");
+    }
+    //完成
+    function finish(obj) {
+        win.confirm("确认要完成吗?", function () {
+            win.showLoading("正在处理...");
+            var id = $(obj).attr("val");
+            $.post("/My_Agenda/Finish", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("操作成功", function () {
+                        win.hideLoading();
+                        getList();
+                    });
+                } else {
+                    win.alert("操作失败");
+                }
+            });
+        });
+    }
+    //指派
+    function point(obj) {
+        var id = $(obj).attr("val");
+        win.open("/My_Agenda/Point?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 509, "待办指派");
+    }
+    //激活
+    function runAgain(obj) {
+        win.confirm("确认要激活吗?", function () {
+            win.showLoading("正在处理...");
+            var id = $(obj).attr("val");
+            $.post("/My_Agenda/RunAgain", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("操作成功", function () {
+                        win.hideLoading();
+                        getList();
+                    });
+                } else {
+                    win.alert("操作失败");
+                }
+            });
+        });
+    }
+
+    function agendaClose(obj) {
+        var id = $(obj).attr("val");
+        win.open("/My_Agenda/Close?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 300, "待办关闭");
+    }
+    function edit(obj) {
+        var id = $(obj).attr("val");
+        win.open("/My_Agenda/My_AgendaEdit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 700, "待办编辑");
+    }
+    function del(obj) {
+        win.confirm("确认要删除吗?", function () {
+            win.showLoading("正在处理...");
+            var id = $(obj).attr("val");
+            $.post("/My_Agenda/DeleteData", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功", function () {
+                        win.hideLoading();
+                        getList();
+                    });
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+</script>

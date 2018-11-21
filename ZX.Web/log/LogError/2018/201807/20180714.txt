@@ -1,0 +1,108 @@
+
+ 
+记录时间：2018-07-14 10:20:27,305 
+线程ID:[15] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 10:22:17,807 
+线程ID:[20] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:21:33,684 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:21:38,942 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:33:59,312 
+线程ID:[36] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:34:30,832 
+线程ID:[32] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:35:18,411 
+线程ID:[32] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:36:20,739 
+线程ID:[44] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:37:51,017 
+线程ID:[37] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:38:40,146 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:40:43,285 
+线程ID:[37] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316
+
+ 
+记录时间：2018-07-14 18:40:47,501 
+线程ID:[24] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.UserInfo() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\Sys_UserController.cs:行号 316

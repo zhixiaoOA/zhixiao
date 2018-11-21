@@ -1,0 +1,187 @@
+
+ 
+记录时间：2018-10-13 08:54:41,889 
+线程ID:[25] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-13 08:54:42,393 
+线程ID:[15] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-13 08:54:45,327 
+线程ID:[25] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-13 08:54:45,834 
+线程ID:[15] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-13 09:30:58,077 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:11c44d47-2008-42bc-a0b0-edd595214d5e
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-13 09:45:49,447 
+线程ID:[17] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:837eb037-91e1-425d-b5f3-3aeced21aada
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-13 10:27:09,263 
+线程ID:[30] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 lambda_method(Closure )
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Evaluate(Expression e) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 125
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 67
+   在 ZX.Tools.AiExpressionVisitor.VisitBinary(BinaryExpression b, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 123
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 50
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitLambda(LambdaExpression lambda, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 298
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 64
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitUnary(UnaryExpression u, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 112
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 26
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitExpressionList(ReadOnlyCollection`1 original, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 194
+   在 ZX.Tools.AiExpressionVisitor.VisitMethodCall(MethodCallExpression m, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 181
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 62
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitLambda(LambdaExpression lambda, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 298
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 64
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Eval(HashSet`1 candidates, Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 55
+   在 ZX.Tools.AiPartialEvaluator.Eval(Expression expression, Func`2 fnCanBeEvaluated, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 33
+   在 ZX.Tools.AiPartialEvaluator.Eval(Expression expression, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 20
+   在 ZX.Tools.AiExpressionWriterSql.Write(TextWriter writer, Expression expression, AiExpSqlType bizSql, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionWriterSql.cs:行号 64
+   在 ZX.Tools.AiExpressionWriterSql.BizWhereWriteToString(Expression expression, AiExpSqlType bizSql, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionWriterSql.cs:行号 94
+   在 ZX.Tools.AiExpConditions`1.SetWhere(Expression aiExp, Dictionary`2& listValue, Dictionary`2& listField, AiExpUnion bizUion) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\AiExpConditions.cs:行号 410
+   在 ZX.Tools.AiExpConditions`1.SetConditionStr(Expression aiExp, AiExpUnion aiUion) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\AiExpConditions.cs:行号 374
+   在 ZX.Tools.AiExpConditions`1..ctor(Expression`1 aiExp) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\AiExpConditions.cs:行号 29
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 193
+   在 ZX.Web.Controllers.Sys_RoleController.SaveData(String data) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Sys_RoleController.cs:行号 148
+
+ 
+记录时间：2018-10-13 10:27:33,073 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 lambda_method(Closure )
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Evaluate(Expression e) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 125
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 67
+   在 ZX.Tools.AiExpressionVisitor.VisitBinary(BinaryExpression b, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 123
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 50
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitLambda(LambdaExpression lambda, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 298
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 64
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitUnary(UnaryExpression u, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 112
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 26
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitExpressionList(ReadOnlyCollection`1 original, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 194
+   在 ZX.Tools.AiExpressionVisitor.VisitMethodCall(MethodCallExpression m, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 181
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 62
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiExpressionVisitor.VisitLambda(LambdaExpression lambda, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 298
+   在 ZX.Tools.AiExpressionVisitor.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionVisitor.cs:行号 64
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Visit(Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 70
+   在 ZX.Tools.AiPartialEvaluator.SubtreeEvaluator.Eval(HashSet`1 candidates, Expression exp, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 55
+   在 ZX.Tools.AiPartialEvaluator.Eval(Expression expression, Func`2 fnCanBeEvaluated, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 33
+   在 ZX.Tools.AiPartialEvaluator.Eval(Expression expression, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiPartialEvaluator.cs:行号 20
+   在 ZX.Tools.AiExpressionWriterSql.Write(TextWriter writer, Expression expression, AiExpSqlType bizSql, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionWriterSql.cs:行号 64
+   在 ZX.Tools.AiExpressionWriterSql.BizWhereWriteToString(Expression expression, AiExpSqlType bizSql, Dictionary`2& listValue, Dictionary`2& listField) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\Base\AiExpressionWriterSql.cs:行号 94
+   在 ZX.Tools.AiExpConditions`1.SetWhere(Expression aiExp, Dictionary`2& listValue, Dictionary`2& listField, AiExpUnion bizUion) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\AiExpConditions.cs:行号 410
+   在 ZX.Tools.AiExpConditions`1.SetConditionStr(Expression aiExp, AiExpUnion aiUion) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\AiExpConditions.cs:行号 374
+   在 ZX.Tools.AiExpConditions`1..ctor(Expression`1 aiExp) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\AiExpressionTurn\AiExpConditions.cs:行号 29
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 193
+   在 ZX.Web.Controllers.Sys_RoleController.SaveData(String data) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Sys_RoleController.cs:行号 148
+
+ 
+记录时间：2018-10-13 10:38:07,783 
+线程ID:[30] 
+日志级别：  ERROR 
+错误描述：需转换的集合为空
+ 
+System.Exception: 需转换的集合为空
+   在 ZX.Tools.DataConvert.ToDataTable[T](List`1 entitys, String dtName) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\DataConvert.cs:行号 788
+   在 ZX.DAL.DBBase`1.AddModel(List`1 list) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 64
+   在 ZX.BLL.BaseBLL`2.AddModel(List`1 list) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 35
+   在 ZX.Web.Controllers.Sys_RoleController.SaveData(String data) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Sys_RoleController.cs:行号 153
+
+ 
+记录时间：2018-10-13 10:51:57,090 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：需转换的集合为空
+ 
+System.Exception: 需转换的集合为空
+   在 ZX.Tools.DataConvert.ToDataTable[T](List`1 entitys, String dtName) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\DataConvert.cs:行号 788
+   在 ZX.DAL.DBBase`1.AddModel(List`1 list) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 64
+   在 ZX.BLL.BaseBLL`2.AddModel(List`1 list) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 35
+   在 ZX.Web.Controllers.Sys_RoleController.SaveData(String data) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Sys_RoleController.cs:行号 155
+
+ 
+记录时间：2018-10-13 11:35:52,528 
+线程ID:[7] 
+日志级别：  ERROR 
+错误描述：导入员工异常
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Sys_UserController.ImportUserExcel() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Sys_UserController.cs:行号 534

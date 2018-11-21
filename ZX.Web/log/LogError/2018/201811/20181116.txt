@@ -1,0 +1,100 @@
+
+ 
+记录时间：2018-11-16 15:51:58,645 
+线程ID:[8] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:对象名 'Sys_Menu' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 对象名 'Sys_Menu' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(String strWhere) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 482
+   在 ZX.BLL.BaseBLL`2.GetList(String where) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 163
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 231
+ClientConnectionId:4300b1e3-4a83-4def-8e7c-1ef39a09a67d
+Error Number:208,State:1,Class:16
+
+ 
+记录时间：2018-11-16 15:51:58,743 
+线程ID:[8] 
+日志级别：  ERROR 
+错误描述：获取按钮异常
+ 
+System.Data.SqlClient.SqlException (0x80131904): 对象名 'Sys_Role_Menu' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(String strWhere) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 482
+   在 ZX.BLL.BaseBLL`2.GetList(String where) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 163
+   在 ZX.Web.Controllers.BaseController.GetButtonListByMenuId(Int32 menuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 320
+ClientConnectionId:4300b1e3-4a83-4def-8e7c-1ef39a09a67d
+Error Number:208,State:1,Class:16
+
+ 
+记录时间：2018-11-16 15:53:17,030 
+线程ID:[8] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:对象名 'Sys_Menu' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 对象名 'Sys_Menu' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(String strWhere) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 482
+   在 ZX.BLL.BaseBLL`2.GetList(String where) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 163
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 231
+ClientConnectionId:5796a631-5182-46d1-93dc-b4f398438b6c
+Error Number:208,State:1,Class:16
+
+ 
+记录时间：2018-11-16 15:53:17,080 
+线程ID:[8] 
+日志级别：  ERROR 
+错误描述：获取按钮异常
+ 
+System.Data.SqlClient.SqlException (0x80131904): 对象名 'Sys_Role_Menu' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(String strWhere) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 482
+   在 ZX.BLL.BaseBLL`2.GetList(String where) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 163
+   在 ZX.Web.Controllers.BaseController.GetButtonListByMenuId(Int32 menuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 320
+ClientConnectionId:5796a631-5182-46d1-93dc-b4f398438b6c
+Error Number:208,State:1,Class:16

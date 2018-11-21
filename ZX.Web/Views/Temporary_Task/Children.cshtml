@@ -1,0 +1,189 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model  List<Temporary_Task>
+@{
+    ViewBag.Title = "子任务-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+
+<input type="hidden" id="Id" name="Id" value="@ViewBag.ParentId">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class="modal-content">
+    <div class="modal-body">
+        <style>
+            .only-pick-time table {
+                width: 100%
+            }
+
+                .only-pick-time table td {
+                    width: 150px
+                }
+
+                .only-pick-time table > tfoot .today, .only-pick-time table > thead {
+                    display: none !important;
+                }
+        </style>
+        <div class="page-content">
+            <form id="batchCreateForm" method="post" action="">
+                <div class="panel">
+                    <table id="chrldTask" class="layui-table" lay-size="sm" style="margin-top: 0px;">
+                        <thead>
+                            <tr class="text-center">
+                                <th class="w-60px">编号</th>
+                                <th>名称 <span class="required"></span></th>
+                                <th class="w-100px">指派给</th>
+                                <th class="w-p25">任务描述</th>
+                                <th class="w-140px">截止日期</th>
+                                <th class="w-70px">优先级</th>
+                                <th class="w-70px">预计</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @{
+                                for (int j = 1; j < 7; j++)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <label style="width:36px;" class="layui-form-label">@j</label>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="childName" value="" class="form-control">
+                                        </td>
+                                        <td>
+                                            <select name="Sel_Assigned" class="form-control" style="width:80px;">
+                                                @{
+                                                    <option value="" data-keys=""></option>
+                                                    try
+                                                    {
+                                                        List<SelectListItem> selectItemsAssigned = ViewBag.ListTeam;
+                                                        foreach (var item in selectItemsAssigned)
+                                                        {
+                                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+                                                    catch
+                                                    {
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <textarea name="desc" rows="1" class="form-control"></textarea>
+                                        </td>
+                                        <td>
+                                            <div class="required required-wrapper"></div>
+                                            <div class="required required-wrapper"></div>
+                                            <input type="text" name="finishTime" id="finishTime" value="@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))" placeholder="截止日期" onclick="WdatePicker()" class="form-control form-date">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="Priority" />
+                                            <select name="Sel_Priority" class="form-control" style="width:68px;">
+                                                <option value="" data-keys=""></option>
+                                                @{
+                                                    List<SelectListItem> selectItemsPriority = ViewBag.ListPriority;
+                                                    foreach (var item in selectItemsPriority)
+                                                    {
+                                                        if (item.Value.ToInt() == 3)
+                                                        {
+                                                            <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>}
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="estimate" value="" class="form-control text-center" placeholder="小时" onkeypress="$.admin.keyPress(this)"
+                                                   onkeyup="$.admin.keyUp(this)"
+                                                   onblur="$.admin.keyBlur(this)">
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    @Html.Raw(ViewBag.CurrentBtnList29)
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //保存
+    function saveData() {
+        win.showLoading("正在保存...");
+        // 遍历 tr
+        var parentTask = [];
+
+        $('tbody tr').each(function (i) {
+
+            var item = { ParentId: "", TName: "", Assigned: "", Priority: "", AsTime: "", TDesc: "", TExpected: "" };
+
+            item.ParentId = $("#Id").val();
+
+            $(this).children("td").each(function (j) {
+                if ($(this).children("input").attr("name") == "childName") {
+                    item.TName = $(this).children("input").val();
+                    if (item.TName == "") {
+                        return false;
+                    }
+                }
+                if ($(this).children("select").attr("name") == "Sel_Assigned") {
+                    item.Assigned = $(this).children("select").val();
+                }
+                if ($(this).children("input").attr("name") == "finishTime") {
+                    item.AsTime = $(this).children("input").val();
+                }
+                if ($(this).children("select").attr("name") == "Sel_Priority") {
+                    item.Priority = $(this).children("select").val();
+                }
+                if ($(this).children("textarea").attr("name") == "desc") {
+                    item.TDesc = $(this).children("textarea").val();
+                }
+                if ($(this).children("input").attr("name") == "estimate") {
+                    item.TExpected = $(this).children("input").val();
+                }
+            });
+            if (item.TName != "") {
+                parentTask.push(item);
+            }
+        });
+
+        var jsonData = JSON.stringify(parentTask);
+        $.post("/Temporary_Task/ChildrenSave", { jsonData: jsonData, pid: $("#Id").val() }, function (data) {
+            if (data.Code = 200) {
+                win.success("保存成功", function () {
+                    win.hideLoading();
+                    window.parent.location.reload();//刷新父页面.
+                    win.close();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+
+</script>

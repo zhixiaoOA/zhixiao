@@ -1,0 +1,111 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Sys_Role
+@{
+    ViewBag.Title = "添加或编辑角色-指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .page-content {
+        padding-right: 40%;
+        padding-left: 150px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <script>
+        var simple =
+            ['formatblock', 'fontsize', '|', 'bold', 'italic', 'underline', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
+                'emoticons', 'image', 'link', '|', 'removeformat', 'undo', 'redo'];
+
+        var full =
+            ['formatblock', 'fontsize', 'lineheight', '|', 'forecolor', 'hilitecolor', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', '|',
+                'insertorderedlist', 'insertunorderedlist', '|',
+                'emoticons', 'image', 'insertfile', 'hr', '|', 'link', 'unlink', '/',
+                'undo', 'redo', '|', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml', 'quickformat', '|',
+                'indent', 'outdent', 'subscript', 'superscript', '|',
+                'table', 'code', '|', 'pagebreak', 'anchor', '|',
+                'fullscreen', 'source', 'about'];
+    </script>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i> 角色基本信息</strong></div>
+        <div class='panel-body'>
+            <form action="/Sys_Role/SaveData" method="post" class="form" id="formRole">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+                <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+                <table class='table table-form'>
+                    <tr>
+                        <th style='width:100px'>角色名称<span style="color:red">*</span></th>
+                        <td style='width:50%'>
+                            <input type='text' name='RName' id="RName" value="@Model.RName" class='form-control' datatype="*" />
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>角色描述</th>
+                        <td colspan='2'>
+                            <textarea name='RDesc' id='RDesc' class='form-control' rows='5'>@Model.RDesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style='width:100px'>排序</th>
+                        <td style='width:50%'>
+                            <input type='text' name='RSort' id='RSort' value='@Model.RSort' class='form-control' onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" />
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td colspan='2'>
+                            @Html.Raw(ViewBag.CurrentBtnList29)
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function saveData() {
+        $("#formRole").submit();
+    }
+    $("#formRole").Validform({
+        tiptype: 2,
+        callback: function (form) {
+            $("#formRole").ajaxSubmit(function (data) {
+                if (data.Code == 300) {
+                    win.alert("保存失败");
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        goBackToList();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+    function goBackToList() {
+        var url = "/Sys_Role/Index?&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+        window.location.href = url;
+    }
+</script>

@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "供货商分类-指效";
+}
+
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='active' style="height:41px;">
+        </li>
+    </ul>
+</nav>
+<div class='row page-content with-menu'>
+    <div id='menuActions'>
+        <a href='javascript:;' onclick="add()" class="btn btn-primary"><i class="icon-plus"></i> 创建类型</a>
+    </div>
+    <div class='panel'>
+        <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-60px'>序号</th>
+                    <th class='text-left'>分类名称</th>
+                    <th class='text-left'>排序</th>
+                    <th class='text-left'>备份</th>
+                    <th class='text-left'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+    });
+    function add() {
+        win.open("/Supplier_Type/addedit", 500, 350, "新增");
+    }
+    function edit(id) {
+        win.open("/Supplier_Type/addedit/" + id, 500, 350, "编辑");
+    }
+    function del(id) {
+        win.confirm("确认要删除吗?", function () {
+            $.post("/Supplier_Type/deletedata", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功");
+                    getList();
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/Supplier_Type/getlist", { pageIndex: pageIndex, pageSize: pageSize, name: "" }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

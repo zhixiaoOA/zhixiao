@@ -1,0 +1,312 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@{
+    ViewBag.Title = "文档库-指效OA";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<style>
+    .outer {
+        overflow: auto
+    }
+
+    .doclib-action li {
+        list-style: none
+    }
+
+    .doc-content {
+        overflow-x: scroll;
+    }
+
+    label.checkbox {
+        float: left;
+        margin-right: 10px;
+        width: 100px;
+    }
+
+    input[type=checkbox] {
+        margin-top: 1px;
+    }
+
+    .table-form td + td, .table-form th + th {
+        padding-left: 20px;
+    }
+
+    .icon-2x {
+        font-size: 40px;
+    }
+
+    .libs-group-heading {
+        color: #808080;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+    }
+
+        .libs-group-heading a {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-decoration: none;
+        }
+
+    .libs-group {
+        padding: 10px;
+        height: 84px;
+    }
+
+    .lib {
+        float: left;
+        display: block;
+        width: 80px;
+        padding: 5px;
+        margin: 0px 3px;
+        text-align: center;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .lib .file-icon {
+            margin-bottom: 5px;
+        }
+
+        .lib .lib-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .lib:hover, .lib:focus, .lib:active {
+            border-color: #2e6dad;
+            background-color: #EBF2F9;
+            color: #2e6dad;
+            text-decoration: none;
+        }
+
+    .w-lib-p100 {
+        width: 100%;
+    }
+
+    .w-lib-p50 {
+        width: 45%;
+    }
+
+    .w-lib-p33 {
+        width: 30%;
+    }
+
+    #menu .nav > li > a {
+        display: inline-block;
+    }
+
+    #navBarActions {
+        position: absolute;
+        right: 100px;
+        top: 4px;
+        z-index: 10000;
+    }
+
+    .panel-body > form {
+        max-width: 1200px;
+    }
+
+    #libList .lib .icon-move {
+        display: none;
+        position: relative;
+        top: -20px;
+        right: -70px;
+    }
+
+    #libList .lib:hover .icon-move {
+        display: inline-block;
+        cursor: move;
+    }
+
+    .lib-heading {
+        border-right: 1px solid #ddd;
+    }
+
+    .lib-more a.more {
+        font-weight: bold;
+        display: block;
+    }
+
+    #libs .libs-group-heading {
+        border: 1px solid #ddd;
+    }
+
+    #libs .libs-group {
+        border: 1px solid #ddd;
+        border-top: 0px;
+        margin-bottom: 20px;
+    }
+
+        #libs .libs-group.lib-more {
+            border: 0px;
+            text-align: center;
+            height: 120px;
+            line-height: 110px;
+        }
+
+            #libs .libs-group.lib-more:hover {
+                background-color: #EBF2F9
+            }
+
+    #libs .libs-custom-heading {
+        text-align: center;
+        height: 120px;
+        line-height: 110px;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        #libs .libs-custom-heading:hover {
+            background-color: #EBF2F9
+        }
+
+        #libs .libs-custom-heading a {
+            display: block;
+            height: 100%;
+        }
+
+        #libs .libs-custom-heading .lable-custom {
+            position: absolute;
+            left: 8px;
+        }
+
+    #libs hr {
+        margin-top: 0px;
+    }
+</style>
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div id='libs'>
+    <div class='row'>
+        @{
+            List<Project> list = ViewBag.ListProject;
+            if (list != null)
+            {
+                foreach (var item in list)
+                {
+                    <div class='col-md-3'>
+                        <div class='libs-group-heading libs-project-heading' onclick="jumpProjectLib(@item.Id,0)" style="height:34px;">
+                            <a href='javascript:;' title='@item.PName' onclick="jumpProjectLib(@item.Id)"><span class='label label-success'>项目文档库</span> @item.PName</a>
+                        </div>
+                        <div class='libs-group clearfix'>
+                            <a class='lib w-lib-p50' title='项目主库' href='javascript:;' onclick="jumpProjectLib(@item.Id,0)">
+                                <i class='icon icon-2x icon-folder-open-alt'></i>
+                                <div class='lib-name' title='项目主库'>项目主库</div>
+                            </a>
+                            <a class='lib w-lib-p50' title='附件库' href='javascript:;'>
+                                <i class='icon icon-2x icon-folder-open-alt'></i>
+                                <div class='lib-name' title='附件库'>附件库</div>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+    <hr />
+    <div class='row clearfix'>
+        @{
+            if (list != null)
+            {
+                foreach (var item in list)
+                {
+
+                    <div class='col-md-3'>
+                        <div class='libs-group-heading libs-custom-heading'>
+                            <span class='label label-info lable-custom'>自定义文档库</span> <a href='javascript:;' onclick="jumpProjectLib(@item.Id,10)" title='@item.PName'>@item.PName</a>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>
+<script language='Javascript'>
+    /* Set doc type. */
+    function setType(type) {
+        if (type == 'url') {
+            $('#urlBox').removeClass('hidden');
+            $('#contentBox').addClass('hidden');
+        }
+        else if (type == 'text') {
+            $('#urlBox').addClass('hidden');
+            $('#contentBox').removeClass('hidden');
+        }
+    }
+
+    $(document).ready(function () {
+        $('#mainNavbar .nav li').removeClass('active');
+        $("#mainNavbar .nav li").first().addClass('active');
+
+
+        if ($('#mainNavbar .nav li').find("a[href*='" + v.libID + "']").length > 0) {
+            $('#mainNavbar .nav li').removeClass('active');
+            if (config.requestType == 'GET') {
+                $("#mainNavbar .nav li a[href*='libID=" + v.libID + "']").parent().addClass('active');
+            }
+            else {
+                $("#mainNavbar .nav li a[href*='browse-" + v.libID + "-']").parent().addClass('active');
+            }
+        }
+
+        $('#private').click(function () {
+            $('#userTR').toggle();
+            $('#groupTR').toggle();
+
+            if ($(this).prop('checked')) {
+                $('#users').val('');
+                $('#users').trigger('chosen:updated');
+                $('[name*=groups]').attr('checked', false);
+            }
+        });
+
+        if (v.private) $('#private').click();
+
+        $('#libList').sortable(
+            {
+                trigger: '.lib',
+                selector: '.lib',
+                finish: function () {
+                    var orders = {};
+                    var orderNext = 1;
+                    $('#libList .lib').not('.addbtn').not('.files').each(function () {
+                        orders[$(this).data('id')] = orderNext++;
+                    });
+
+                    $.post(createLink('doc', 'sort'), orders, function (data) {
+                        if (data.result == 'success') {
+                            return location.reload();
+                        }
+                        else {
+                            alert(data.message);
+                            return location.reload();
+                        }
+                    }, 'json');
+                }
+            })
+
+        $(document).on('click', '.edui-for-fullscreen', function () {
+            $('#content .edui-editor').toggleClass('full-screen');
+
+            if ($('#content .edui-editor.full-screen').length > 0) {
+                $(this).css('right', '100px');
+                $('#content .edui-editor').css('z-index', 99999);
+            }
+            else {
+                $(this).css('right', '');
+                $('#content .edui-editor').css('z-index', '');
+            }
+        })
+    });
+
+    function jumpProjectLib(projectId, libType) {
+        window.location.href = "/Document_Library/ProjectLib?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&libType=" + libType + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

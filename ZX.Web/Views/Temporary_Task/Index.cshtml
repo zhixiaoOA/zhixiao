@@ -1,0 +1,293 @@
+﻿@using ZX.Model
+@using ZX.BLL
+@using ZX.Tools
+@using System.Linq
+@{
+    ViewBag.Title = "临时任务-首页-指效OA";
+    int userId = Session["UserId"].ToInt();
+}
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding:15px;
+    }
+    .temp-task-btn{
+        margin-top:-45px;
+    }
+    .navbar-brand {
+        font-size: 17px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        padding-top:15px
+    }
+    .panel-title-text {
+        font-family: 宋体;
+        font-size: 14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div style="width:auto;float:right;">
+    <a href='javascript:;' onclick="addBlock()" class="layui-btn layui-btn-normal temp-task-btn">添加区块</a>
+</div>
+<div class='row page-content' style="width:95%">
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <div class='dashboard dashboard-draggable' id='dashboard' data-confirm-remove-block='确定移除区块【{0}】吗？'>
+        <div class='row'>
+            @{
+                foreach (var item in ViewBag.userBlockList)
+                {
+                    <div class="panel-box">
+                        <div class="panel-title" id='block@(item.Id)' data-id='@item.Id' data-blockid='@item.Id' val="@item.Id,'@item.BName'" data-name='@item.BName'><span class="panel-title-text">@item.BName</span><i class="del-panel layui-icon layui-icon-delete" onclick="delBlock(this)"></i></div>
+                        <div class="panel-row">
+                            @{
+                                int topCount = item.RowCounts;
+                                //1-指派给我 2-由我创建 3-由我完成 4-由我关闭 5-由我取消
+                                int type = item.TType;
+
+                                List<Temporary_TaskModel> taskList = new List<Temporary_TaskModel>();
+
+
+                                string orderBy = "";
+
+                                if ("id_asc".Equals(item.BOrderBy))
+                                {
+                                    orderBy = "Id";
+                                }
+                                else if ("id_desc".Equals(item.BOrderBy))
+                                {
+                                    orderBy = "Id DESC";
+                                }
+                                else if ("pri_asc".Equals(item.BOrderBy))
+                                {
+                                    orderBy = "Priority";
+                                }
+                                else if ("pri_desc".Equals(item.BOrderBy))
+                                {
+                                    orderBy = "Priority DESC";
+                                }
+                                else if ("deadline_asc".Equals(item.BOrderBy))
+                                {
+                                    orderBy = "AsTime";
+                                }
+                                else if ("deadline_desc".Equals(item.BOrderBy))
+                                {
+                                    orderBy = "AsTime DESC";
+                                }
+
+                                //识别排序规则
+                                //switch (item.BOrderBy)
+                                //{
+                                //    //创建时间递增
+                                //    case "id_asc":
+                                //        orderBy = "Id";
+                                //        break;
+                                //    case "id_desc":
+                                //        orderBy = "Id DESC";
+                                //        break;
+                                //    case "pri_asc":
+                                //        orderBy = "Priority";
+                                //        break;
+                                //    case "pri_desc":
+                                //        orderBy = "Priority DESC";
+                                //        break;
+                                //    case "deadline_asc":
+                                //        orderBy = "AsTime";
+                                //        break;
+                                //    case "deadline_desc":
+                                //        orderBy = "AsTime DESC";
+                                //        break;
+                                //    default:
+                                //        break;
+                                //}
+
+                                switch (type)
+                                {
+                                    case 1:
+                                        taskList = Temporary_TaskBLL.GetTemporary_TaskBlockList(topCount, " Assigned=" + userId + " AND (ParentId IS NULL OR ParentId <=0) ", orderBy);
+                                        break;
+                                    case 2:
+                                        taskList = Temporary_TaskBLL.GetTemporary_TaskBlockList(topCount, " CreateUserId=" + userId + " AND (ParentId IS NULL OR ParentId <=0) ", orderBy);
+                                        break;
+                                    case 3:
+                                        taskList = Temporary_TaskBLL.GetTemporary_TaskBlockList(topCount, " TSuccess=" + userId + " AND (ParentId IS NULL OR ParentId <=0) ", orderBy);
+                                        break;
+                                    case 4:
+                                        taskList = Temporary_TaskBLL.GetTemporary_TaskBlockList(topCount, " TClosed=" + userId + " AND (ParentId IS NULL OR ParentId <=0) ", orderBy);
+                                        break;
+                                    case 5:
+                                        taskList = Temporary_TaskBLL.GetTemporary_TaskBlockList(topCount, " TCancel=" + userId + " AND (ParentId IS NULL OR ParentId <=0) ", orderBy);
+                                        break;
+                                }
+
+                                //状态
+                                List<string> status = new List<string>();
+                                try
+                                {
+                                    status = item.TState.Split(',').ToList();
+                                }
+                                catch (Exception e) { }
+
+                                List<Temporary_Task> filterList = new List<Temporary_Task>();
+                                if (status.Count > 0)
+                                {
+                                    // 1-未完成 2-未开始 3-进行中 4-已完成 5-已取消 6-已关闭
+                                    foreach (var task in status)
+                                    {
+                                        taskList.Where(l => l.TState == task.ToInt());
+                                        filterList.AddRange(taskList.Where(l => l.TState == task.ToInt()));
+                                    }
+                                }
+                                else
+                                {
+                                    filterList.AddRange(taskList);
+                                }
+                            }
+                            <table class="task-tab">
+                                <tr>
+                                    <td class="task-tab-td-left" style="width:33%;">任务名称</td>
+                                    <td class="task-tab-td-center" style="width:34%;" title="按工时计算">进度</td>
+                                    <td class="task-tab-td-right" style="width:33%;" title="状态">状态</td>
+                                </tr>
+                                @{
+                                    foreach (var task in filterList)
+                                    {
+
+                                        <tr>
+                                            @{
+                                                decimal doneHours = 0;//已耗时
+                                                decimal predictHours = 0;//预估剩余工时
+                                                decimal totalTExpected = 0; //获取项目总共最初预计，用于亮灯控制判断
+                                                Temporary_Task_Team team = new Temporary_Task_Team();
+                                                try
+                                                {
+                                                    team = Temporary_Task_TeamBLL.GetList(d => d.Where(t => t.FK_TemporaryTaskId == task.Id)).ToList().FirstOrDefault();
+                                                    doneHours = team.ConsumTime.ToInt();
+                                                    predictHours = team.TheTime.ToInt();
+                                                }
+                                                catch (Exception e) { }
+
+
+                                                decimal percent = 0;
+                                                try
+                                                {
+                                                    percent = doneHours / (doneHours + predictHours) * 100;
+
+                                                    percent = System.Decimal.Round(percent, 2);
+                                                }
+                                                catch { }
+
+                                                totalTExpected += task.TExpected.ToInt();
+                                            }
+                                            <td class="task-tab-td-left"><a class="task-text-color-blue" href="javascript:;" onclick="goTask(this)" val="@task.Id">@task.TName</a></td>
+                                            <td class="task-tab-td-center">
+                                                <div class="layui-progress layui-progress-big" lay-showPercent="true">
+                                                    @{ if (percent >= 90 && percent < 100 && task.TState != 4)
+                                                        {
+                                                            <div class="layui-progress-bar layui-bg-orange" lay-percent="@percent%"></div>
+                                                        }
+                                                        else if (percent < 90 && task.TState != 4)
+                                                        {
+                                                            <div class="layui-progress-bar layui-bg-blue" lay-percent="@percent%"></div>
+                                                        }
+                                                        if (doneHours > totalTExpected)
+                                                        {
+                                                            <div class="layui-progress-bar layui-bg-red" lay-percent="@percent%"></div>
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                            @{
+                                                string tStatusName = "未知";
+                                                switch (task.TState.ToInt())
+                                                {
+                                                    case 1:
+                                                        tStatusName = "未完成";
+                                                        break;
+                                                    case 2:
+                                                        tStatusName = "未开始";
+                                                        break;
+                                                    case 3:
+                                                        tStatusName = "进行中";
+                                                        break;
+                                                    case 4:
+                                                        tStatusName = "已完成";
+                                                        break;
+                                                    case 5:
+                                                        tStatusName = "已取消";
+                                                        break;
+                                                    case 6:
+                                                        tStatusName = "已关闭";
+                                                        break;
+                                                }
+
+                                            }
+                                            <td class="task-tab-td-right">@tStatusName</td>
+                                        </tr>
+                                    }
+                                }
+                            </table>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <script>
+        $(function () {
+            layui.use('element', function () {
+                var element = layui.element;
+            });
+        });
+        //添加区块
+        function addBlock() {
+            win.open("/Temporary_Task_Block/AddEdit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 500, "添加区块");
+        }
+        //删除区块
+        function delBlock(obj) {
+            var blockInfo = $(obj).parent().attr("val");
+            var blockArray = blockInfo.split(',');
+            layer.confirm("确认要删除[" + blockArray[1] + "]吗？", {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                $.post("/Temporary_Task_Block/DeleteData", { id: blockArray[0] }, function (data) {
+                    if (data.Code == 200) {
+                        layer.msg('删除成功', { icon: 1 });
+                        window.location.href = "/Temporary_Task/Index?mid=" + $("#currentMid").val() + + "&secondMenuId=" + $("#secondMenuId").val();
+                    } else {
+                        layer.alert(data.Message, { icon: 7 });
+                    }
+                }, "json");
+            });
+        }
+        //查看
+        function goTask(obj) {
+            var taskInfo = $(obj).attr("val");
+            var tArray = taskInfo.split(',');
+            win.open("/Temporary_Task/Readonly?id=" + tArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 1000, 600, "临时任务查看");
+        }
+    </script>
+</div>

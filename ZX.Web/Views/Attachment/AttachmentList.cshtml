@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "附件管理--指效OA";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='row page-content with-menu'>
+    <div class='panel'>
+        <table class='layui-table'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-60px'>序号</th>
+                    <th class='text-left'>标题</th>
+                    <th class='text-left'>分类</th>
+                    <th class='text-left'>附件</th>
+                    <th class='text-left'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        getList();
+    });
+
+    function edit(id, projectId) {
+        window.location.href = "/Project_Task/Edit?id=" + id + "&projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    function del(id, delType) {
+        win.confirm("确认要删除吗?", function () {
+            $.post("/Attachment/DelFileByDire", { id: id, delType: delType }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功");
+                    getList();
+                } else {
+                    win.alert(data.Message);
+                }
+            });
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/Attachment/GetList", {
+            pageIndex: pageIndex, pageSize: pageSize, name: "", secondMenuId: $("#secondMenuId").val()
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

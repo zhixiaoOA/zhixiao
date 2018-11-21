@@ -1,0 +1,141 @@
+﻿@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+<html>
+<DOCTYPE html></DOCTYPE>
+<head>
+    <link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+    <script src="/Static/script/jquery-1.10.2.min.js"></script>
+    <script src="~/Static/js/layui/layui.js"></script>
+    <script src="~/Static/js/layer/layer.js"></script>
+    <script src="~/Static/js/layer/layer.tools.js"></script>
+    <style>
+        #eject {
+            width: 200px;
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+        }
+
+        .zx-center-box {
+            position: absolute;
+            height: 20rem;
+            width: 22rem;
+            top: 50%;
+            left: 50%;
+            margin-left: -18rem;
+            margin-top: -14rem;
+            border: 1px solid;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        .zx-database-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="">
+    <div class="zx-center-box">
+        <div class="zx-database-title">配置数据库信息</div>
+        <div>
+            <form class="layui-form" action="/">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据库地址</label>
+                    <div class="layui-input-inline">
+                        <input type="text" required lay-verify="required" autocomplete="off" class="layui-input" name="server" id="server" placeholder="请填写ip地址" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="userName" required lay-verify="required" autocomplete="off" class="layui-input" id="userName" placeholder="请输入用户名" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据库密码:</label>
+                    <div class="layui-input-inline">
+                        <input name="password" id="password" required lay-verify="required" autocomplete="off" class="layui-input" type="password" placeholder="请输入密码" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据库名:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="dataBaseName" required lay-verify="required" autocomplete="off" class="layui-input" name="dataBaseName" placeholder="请输入数据库名称" />
+                    </div>
+                </div>
+                <button type="button" class="layui-btn" id="dataBase-btn">提交</button>
+                <button type="button" class="layui-btn" id="jump-btn">跳过</button>
+            </form>
+        </div>
+    </div>
+    <div id="eject">
+
+    </div>
+</body>
+</html>
+<script>
+    var url = '@Request.Url';
+    url = url.replace("/Admin/Index", "");
+    url += "/Check/DataIndex";
+
+    $(function () {
+        $("#jump-btn").click(function () {
+            $.ajax({
+                url: "/Admin/checkDataBase",
+                type: "GET",
+                success: function (data) {
+                    if (data.Code == 200) {
+                        window.location.href = url;
+                    } else {
+                        layer.msg("请先配置数据库信息", { time: 10 * 1000 });
+                    }
+                },
+                error: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            });
+        });
+
+
+        //发送表单ajax请求
+        $('#dataBase-btn').on('click', function () {
+            var data = JSON.stringify($('form').serializeObject());
+            $.ajax({
+                url: "/Admin/valiConn",
+                type: "POST",
+                data: data,
+                contentType: "application/json", //缺失会出现URL编码，无法转成json对象
+                success: function (data) {
+                    if (data.Code == 200) {
+                        window.location.href = url;
+                    }
+                },
+                error: function (data) {
+                    layer.msg(data.Message, {time:10*1000});
+                }
+            });
+        });
+
+        /**
+            * 自动将form表单封装成json对象
+            */
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    });
+</script>

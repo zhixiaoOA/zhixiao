@@ -1,0 +1,131 @@
+﻿
+@using ZX.Tools
+@using ZX.Model
+@model MySealUse
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<MySealUseDetail> listDetail = ViewBag.ListDetail ?? new List<MySealUseDetail>();
+    int positionCounts = ViewBag.PositionCounts;
+    List<Sys_User> userList = ViewBag.UserList ?? new List<Sys_User>();
+    string userSign0 = "";
+
+    string userSign1 = "";
+
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>印章使用审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/MySealUse/SaveApproval" method="post" class="form" id="formMySealUse">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="FK_ApprovalId" value="@Model.FK_ApprovalId" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-left w-120px">申请部门</th>
+                        <td>@user.DeptName</td>
+                        <th class='text-left w-70px'>申请人 </th>
+                        <td colspan="2">@user.RealName</td>
+                        <th class='text-left w-80px'>申请日期</th>
+                        <td>@(Model.AddTime.ToDateFormat("yyyy-MM-dd"))</td>
+                        <td colspan="4" rowspan="2">留存原件/复印件(一份)</td>
+                    </tr>
+                    <tr>
+                        <th>印章名称</th>
+                        <td colspan="6">@Model.YinzName</td>
+                    </tr>
+                    @{int rowIndex = 1; }
+                    @foreach (var item in listDetail)
+                    {
+                        <tr name="trDetail">
+                            @if (rowIndex == 1)
+                            {
+                                <th rowspan="4" class="text-center">资料名称</th>
+                            }
+                            <td>@item.ZlName</td>
+                            <th class="text-center">份数</th>
+                            <td>@item.ZlCount</td>
+                            @if (rowIndex == 1)
+                            {
+                                <th rowspan="4" class="text-center">合同类填写编号</th>
+                            }
+                            <th>合同编号</th>
+                            <td name="moneys">@item.HtNo</td>
+                            <th class="text-center w-50px">原件</th>
+                            <td>@item.YJianCount</td>
+                            <th>复印件</th>
+                            <td>@item.FYJianCount</td>
+                        </tr>
+                        rowIndex++;
+                    }
+                    <tr>
+                        <th class="text-right">部门负责人:</th>
+                        <td colspan="4">
+                            @{
+
+                                try
+                                {
+                                    userSign0 = userList[0].USgin;
+                                }
+                                catch { }
+
+                                try
+                                {
+                                    userSign1 = userList[1].USgin;
+                                }
+                                catch { }
+
+                                //如果申请单只走部门负责人审批,则仅仅显示部门负责人
+                                if (positionCounts > 1)
+                                {
+                                    if (userSign1.IsNotNullOrEmpty())
+                                    {
+                                        <img src="@userSign1" style="width:200px;height:50px;margin-left:7px;" />
+                                    }
+                                }
+                                else
+                                {
+                                    if (userSign0.IsNotNullOrEmpty())
+                                    {
+                                        <img src="@userSign0" style="width:200px;height:50px;margin-left:7px;" />
+                                    }
+
+                                }
+                            }
+                        </td>
+                        <th class="text-right">总经理:</th>
+                        <td colspan="5">
+                            @{
+                                //如果申请单只走部门负责人审批,则仅仅显示部门负责人
+                                if (positionCounts > 1 && userSign0.IsNotNullOrEmpty())
+                                {
+                                    <img src="@userSign0" style="width:200px;height:50px;margin-left:7px;" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        onprint();
+    });
+    function printHtml(html) {
+        var bodyHtml = html;
+        document.body.innerHTML = html;
+        window.print();
+        document.body.innerHTML = bodyHtml;
+    }
+    function onprint() {
+        var html = $(".panel-body").html();
+        printHtml(html);
+    }
+</script>

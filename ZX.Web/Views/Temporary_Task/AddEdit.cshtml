@@ -1,0 +1,349 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Temporary_Task
+@{
+    ViewBag.Title = "添加/编辑";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<form action="/Admin/Temporary_Task/SaveData" method="post" class="ui form" id="formTemporary_Task">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>Id</label>
+            <input type="text" name="Id" value="@Model.Id" placeholder="Id" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TName</label>
+            <input type="text" name="TName" value="@Model.TName" placeholder="TName" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>Assigned</label>
+            <input type="text" name="Assigned" value="@Model.Assigned" placeholder="Assigned" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>Priority</label>
+            <input type="text" name="Priority" value="@Model.Priority" placeholder="Priority" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TExpected</label>
+            <input type="text" name="TExpected" value="@Model.TExpected" placeholder="TExpected" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>AsTime</label>
+            <input type="text" name="AsTime" value="@Model.AsTime" placeholder="AsTime" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TDesc</label>
+            <input type="text" name="TDesc" value="@Model.TDesc" placeholder="TDesc" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TState</label>
+            <input type="text" name="TState" value="@Model.TState" placeholder="TState" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TCC</label>
+            <input type="text" name="TCC" value="@Model.TCC" placeholder="TCC" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>Attach</label>
+            <input type="text" name="Attach" value="@Model.Attach" placeholder="Attach" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TRemark</label>
+            <input type="text" name="TRemark" value="@Model.TRemark" placeholder="TRemark" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TSuccess</label>
+            <input type="text" name="TSuccess" value="@Model.TSuccess" placeholder="TSuccess" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TSucTime</label>
+            <input type="text" name="TSucTime" value="@Model.TSucTime" placeholder="TSucTime" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TCancel</label>
+            <input type="text" name="TCancel" value="@Model.TCancel" placeholder="TCancel" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TCancelTime</label>
+            <input type="text" name="TCancelTime" value="@Model.TCancelTime" placeholder="TCancelTime" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TClosed</label>
+            <input type="text" name="TClosed" value="@Model.TClosed" placeholder="TClosed" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TClosedTime</label>
+            <input type="text" name="TClosedTime" value="@Model.TClosedTime" placeholder="TClosedTime" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>TClosedWhy</label>
+            <input type="text" name="TClosedWhy" value="@Model.TClosedWhy" placeholder="TClosedWhy" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>CreateUserId</label>
+            <input type="text" name="CreateUserId" value="@Model.CreateUserId" placeholder="CreateUserId" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>CreateTime</label>
+            <input type="text" name="CreateTime" value="@Model.CreateTime" placeholder="CreateTime" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>UpdateUserId</label>
+            <input type="text" name="UpdateUserId" value="@Model.UpdateUserId" placeholder="UpdateUserId" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>UpdateTime</label>
+            <input type="text" name="UpdateTime" value="@Model.UpdateTime" placeholder="UpdateTime" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>CreateAccount</label>
+            <input type="text" name="CreateAccount" value="@Model.CreateAccount" placeholder="CreateAccount" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>UpdateAccount</label>
+            <input type="text" name="UpdateAccount" value="@Model.UpdateAccount" placeholder="UpdateAccount" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>ParentId</label>
+            <input type="text" name="ParentId" value="@Model.ParentId" placeholder="ParentId" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>EditCount</label>
+            <input type="text" name="EditCount" value="@Model.EditCount" placeholder="EditCount" autocomplete="off" datatype="*">
+        </div>
+    </div>
+
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need"></span>是否首页展示</label>
+            <input type="checkbox" style="width: 30px;" class="cbox" name="IsHot" value="1" />是
+            &nbsp;&nbsp;&nbsp;
+            <input type="checkbox" style="width: 30px;" class="cbox" name="IsHot" value="0" />否
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>价格</label>
+            <input type="text" name="OldPrice" maxlength="10" placeholder="价格" datatype="*" autocomplete="off"
+                   onkeypress="$.admin.keyPress(this)"
+                   onkeyup="$.admin.keyUp(this)"
+                   onblur="$.admin.keyBlur(this)">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle">状态</label>
+            <select name="Status">
+                <option value="1" @(Model.Status == 1 ? "selected" : "")>发布</option>
+                <option value="0" @(Model.Status == 0 ? "selected" : "")>草稿</option>
+            </select>
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="eight wide field">
+            <label class="lbltitle"><span class="need"></span>生日</label>
+            <input type="text" name="CBirthday" value="" placeholder="生日" autocomplete="off" onclick="WdatePicker()">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle">描述</label>
+            <textarea style="height:40px;" name="ProductContent" maxlength="100">描述</textarea>
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle">图片</label>
+            <input id="file_upload1" type="file" name="file_upload1" class="uploadify" />
+            <img id="AImage" src="@Model.AImage" style="width:80px;height:80px;margin-left:10px;@(Model.AImage + "" == "" ? "display:none" : "")" alt="@Model.AImage" />
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="eight wide field">
+            <label class="lbltitle"><span class="need"></span>多个图片</label>
+            <input id="file_upload" type="file" name="file_upload" class="uploadify" />
+            <div style="float:left; margin-left:10px; line-height:25px;" id="divImage">
+                @foreach (var item in (Model.PImages + "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    <div style="float:left;" class="ees">
+                        <a href="@item" target="_blank"><img src="@item" name="PImages" style="height: 100px;width: 100px;" /></a>
+                        <a href="javascript:;" onclick="onRemoveImg(this)">删除</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="footer_form">
+        <button onclick="win.close();" class="btn btn-sm btn-danger">
+            <i class="icon-reply fa icon-only bigger-120">关闭</i>
+        </button>
+        <button type="submit" class="btn btn-sm btn-primary">
+            <i class="icon-save bigger-120">保存</i>
+        </button>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function () {
+        var edtor = initUEditor('Content', 800, 350);
+
+        $("#formTemporary_Task").Validform({
+            tiptype: 3,
+            datatype: {
+                "vtest": function (gets, obj, curform, regxp) {
+                    return true;
+                }
+            },
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#formTemporary_Task").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        parent.getList();
+                        parent.win.success(data.Message);
+                        win.close();
+                    }
+                });
+                return false;
+            }
+        });
+        $('#file_upload').uploadify({
+            auto: true,
+            formData: { 'type': 'upload' },
+            swf: '/Scripts/uploadify/uploadify.swf',
+            uploader: '/Scripts/uploadify/ImageHandler.ashx',
+            fileSizeLimit: '10MB', //上传最大值
+            fileTypeDesc: '文件类型',
+            fileTypeExts: '*.jpg;*.gif;*.png', //上传文件类型
+            queueSizeLimit: '1', //允许同时上传数量
+            buttonText: '选择图片',
+            buttonClass: 'some-class',
+            width: 80,
+            height: 25,
+            onSelect: function (file) {
+            },
+            onUploadError: function (file, errorCode, errorMsg, errorString) {
+                layer.alert(errorMsg, { icon: 7 });
+            },
+            onQueueComplete: function (queueData) {
+            },
+            onUploadComplete: function (file) {
+            },
+            onUploadSuccess: function (file, data, response) {
+                var json = eval("(" + data + ")");
+                var imgHtml = '';
+                imgHtml += '<div style="float:left;" class="ees">';
+                imgHtml += '<a href="' + json.path + '" target="_blank"><img src="' + json.path + '" name="PImages"  style="height: 100px;width: 100px;"/></a>';
+                imgHtml += '<a href="javascript:;" onclick="onRemoveImg(this)">删除</a>';
+                imgHtml += '</div>';
+                $("#divImage").append(imgHtml);
+            },
+            onInit: function (instance) {
+                $("#file_upload-queue").hide();
+            }
+        });
+        $('#file_upload1').uploadify({
+            auto: true,
+            formData: { 'type': 'upload' },
+            swf: '/Scripts/uploadify/uploadify.swf',
+            uploader: '/Scripts/uploadify/ImageHandler.ashx',
+            fileSizeLimit: '500KB', //上传最大值
+            fileTypeDesc: '文件类型',
+            fileTypeExts: '*.jpg;*.gif;*.png', //上传文件类型
+            queueSizeLimit: '1', //允许同时上传数量
+            buttonText: '选择图片',
+            buttonClass: 'some-class',
+            width: 80,
+            height: 25,
+            onSelect: function (file) {
+            },
+            onUploadError: function (file, errorCode, errorMsg, errorString) {
+                layer.alert(errorMsg, { icon: 7 });
+            },
+            onQueueComplete: function (queueData) {
+            },
+            onUploadComplete: function (file) {
+            },
+            onUploadSuccess: function (file, data, response) {
+                var json = eval("(" + data + ")");
+                $("#AImage").show().attr("src", json.path);
+                $("input[name='AImage']").val(json.path);
+            },
+            onInit: function (instance) {
+                $("#file_upload1-queue").hide();
+            }
+        });
+
+        $("input[name='IsHome']").click(function () {
+            $(this).prop("checked", true).siblings().prop("checked", false);
+        });
+    });
+    //删除图片
+    function onRemoveImg(obj) {
+        $(obj).parent().remove();
+    }
+</script>

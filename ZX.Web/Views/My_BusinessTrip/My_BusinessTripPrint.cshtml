@@ -1,0 +1,144 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model My_BusinessTrip
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Sys_User> userList = ViewBag.UserList ?? new List<Sys_User>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>加班/调休审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/My_BusinessTrip/SaveApproval" method="post" class="form" id="formMy_BusinessTrip">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-center w-130px">申报部门/单位</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-70px'>申请人</th>
+                        <td class="w-160px">
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-80px'>出差人员</th>
+                        <td>
+                            @Model.Persons
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">出差日期</th>
+                        <td colspan="4">
+                            @(Model.StartTime.ToDateFormat("yyyy-MM-dd") + "----" + Model.EndTime.ToDateFormat("yyyy-MM-dd"))
+                        </td>
+                        <td>
+                            @("共 " + Model.BLength + " 天")
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">出差事由</th>
+                        <td colspan="5">
+                            @Model.ADesc
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">拟出差路线</th>
+                        <td colspan="5">
+                            @Model.Luxian
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">申请费用</th>
+                        <td colspan="2">
+                            @Model.ApplyMoney
+                        </td>
+                        <th class="text-center w-120px">拟乘交通工具</th>
+                        <td colspan="2">
+                            @Model.Jtgj
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">是否需要代购车票</th>
+                        <td colspan="2">
+                            @(Model.IsDgou == 1 ? "是" : "否")
+                        </td>
+                        <th class="text-center w-120px">代购车票提供个人资料</th>
+                        <td colspan="2">
+                            @Model.DgouInfo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center">部门负责人意见</td>
+                        <td colspan="2" class="text-center">综合部意见</td>
+                        <td colspan="2" class="text-center">总经理意见</td>
+                    </tr>
+                    <tr>
+                        @{
+                            int approvalUserCount = userList.Count;
+
+                            string userSign0 = "";
+                            string userSign1 = "";
+                            string userSign2 = "";
+
+                            try
+                            {
+                                userSign0 = userList[0].USgin;
+                            }
+                            catch { }
+
+                            try
+                            {
+                                userSign1 = userList[1].USgin;
+                            }
+                            catch { }
+
+
+                            try
+                            {
+                                userSign2 = userList[2].USgin;
+                            }
+                            catch { }
+
+                        }
+                        <td colspan="2" class="text-center">
+                            <div><img src="@userSign2" style="width:200px;height:50px;margin-left:7px;" /></div>
+                        </td>
+                        <td colspan="2" class="text-center">
+                            <div><img src="@userSign1" style="width:200px;height:50px;margin-left:7px;" /></div>
+                        </td>
+                        <td colspan="2" class="text-center">
+                            <div><img src="@userSign0" style="width:200px;height:50px;margin-left:7px;" /></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            说明： 1、出差人员应提前1天填写《出差申请表》，出示人力资源部备案。
+                            2、此申请表作为出差申请、借款、核销必备凭证。凡未填写《出差申请表》的视为旷工处理，并不予报销出差费用。
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        onprint();
+    });
+    function printHtml(html) {
+        var bodyHtml = html;
+        document.body.innerHTML = html;
+        window.print();
+        document.body.innerHTML = bodyHtml;
+    }
+    function onprint() {
+        var html = $(".panel-body").html();
+        printHtml(html);
+    }
+</script>

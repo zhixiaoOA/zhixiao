@@ -1,0 +1,60 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@{
+    ViewBag.Title = "员工Excel导入-指效";
+    int userId = Session["UserId"].ToInt();
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/datetimepicker/datetimepicker.min.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/datetimepicker/datetimepicker.min.js"></script>
+<form id="doTaskForm" method="post" class="form-horizontal" action="">
+    <div id="div_Attach" class="form-group">
+        <label for="Attach" class="col-sm-2">
+            Excel
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input type="hidden" value="" name="Attach" id="Attach" />
+            <button type="button" class="layui-btn" id="btnUpload">上传Excel</button><label id="lblAttach"></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function () {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/UploadAttach'
+                , accept: 'file'
+                , data: { direName: "/User/Excel" }
+                , done: function (res) {
+                    $.post("/Sys_User/ImportUserExcel", { fileUrl: res.Data }, function (data) {
+                        if (data.Code = 200) {
+                            win.success("导入成功", function () {
+                                win.hideLoading();
+                                window.parent.location.reload();//刷新父页面.
+                                win.close();
+                            });
+                        } else {
+                            win.alert("导入失败");
+                        }
+                        win.hideLoading();
+                    });
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+</script>

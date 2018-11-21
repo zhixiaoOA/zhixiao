@@ -1,0 +1,333 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MyGiftBuy
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<MyGiftBuyDetail> listDetail = ViewBag.ListDetail ?? new List<MyGiftBuyDetail>();
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    List<Dictionary> listGifUnit = ViewBag.ListGifUnit ?? new List<Dictionary>();
+    //List<Approval_User> listAuser = ViewBag.ListAUser ?? new List<Approval_User>();
+    List<Approval> listApproval = ViewBag.ListApproval ?? new List<Approval>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        font-size: 14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>物资采购申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/MyGiftBuy/SaveData" method="post" class="form" id="formMyGiftBuy">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <input type="hidden" name="detail" value="" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-left" colspan="3">申请人：@user.RealName</th>
+                        <th class='text-left' colspan="2">申请部门/公司： @user.DeptName</th>
+                        <th class='text-left' colspan="3">日期：@(Model.AddTime.ToDateFormat("yyyy-MM-dd"))</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">姓名</th>
+                        <th class="text-center">品牌及型号</th>
+                        <th class="text-center">数量</th>
+                        <th class="text-center">单价（元）</th>
+                        <th class="text-center w-100px">金额（元）</th>
+                        <th class="text-center">购置部门</th>
+                        <th class="text-center">资产类别</th>
+                        <th class="text-left">&nbsp;</th>
+                    </tr>
+                    <tbody id="tblist" style="border:0;">
+                        @{int rowIndex = 1; }
+                        @foreach (var item in listDetail)
+                        {
+                            <tr>
+                                <td><input name="Name" class="form-control" value="@item.Name" datatype="*" nullmsg="请填写姓名" /></td>
+                                <td><input name="Brand" class="form-control" value="@item.Brand" datatype="*" nullmsg="请填写品牌及型号" /></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input name="Count" class="form-control" value="@item.Count"
+                                               onkeypress="$.admin.keyPress(this)"
+                                               onkeyup="$.admin.keyUp(this)"
+                                               onblur="$.admin.keyBlur(this); setMoney(this);" datatype="*" nullmsg="请填写数量" />
+                                        <span class="input-group-addon fix-border fix-padding"></span>
+                                        <select name="GifUnitName" class="form-control" style="width:80px;">
+                                            @{
+                                                foreach (var gifItem in listGifUnit)
+                                                {
+                                                    if (item.GifUnitName.IsNotNullOrEmpty() && item.GifUnitName.Equals(item.Name))
+                                                    {
+                                                        <option selected value="@gifItem.Name">@gifItem.Name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@gifItem.Name">@gifItem.Name</option>
+                                                    }
+
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input name="Price" class="form-control" value="@item.Price"
+                                           onkeypress="$.admin.keyPress(this)"
+                                           onkeyup="$.admin.keyUp(this)"
+                                           onblur="$.admin.keyBlur(this); setMoney(this);" datatype="*" nullmsg="请填写单价" />
+                                </td>
+                                <td name="moneys">
+                                    @(item.Count * item.Price)
+                                </td>
+                                <td>
+                                    <input name="BuyDeptName" class="form-control" value="@item.BuyDeptName" datatype="*" nullmsg="请填写购置部门" />
+                                </td>
+                                <td>
+                                    <input name="ZChanType" class="form-control" value="@item.ZChanType" datatype="*" nullmsg="请填写资产类别" />
+                                </td>
+                                <td>
+                                    @if (rowIndex == listDetail.Count)
+                                    {
+                                        <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="icon icon-minus-sign-alt" style="cursor:pointer;" title="删除" onclick="onAddOrDelRow(this)"></i>
+                                    }
+                                </td>
+                            </tr>
+                            rowIndex++;
+                        }
+                        @if (listDetail.Count == 0)
+                        {
+                            <tr>
+                                <td><input name="Name" class="form-control" value="" datatype="*" nullmsg="请填写姓名" /></td>
+                                <td><input name="Brand" class="form-control" value="" datatype="*" nullmsg="请填写品牌及型号" /></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input name="Count" class="form-control" value=""
+                                               onkeypress="$.admin.keyPress(this)"
+                                               onkeyup="$.admin.keyUp(this)"
+                                               onblur="$.admin.keyBlur(this); setMoney(this);" datatype="*" nullmsg="请填写数量" />
+                                        <span class="input-group-addon fix-border fix-padding"></span>
+                                        <select name="GifUnitName" class="form-control" style="width:80px;">
+                                            @{
+                                                foreach (var gifItem in listGifUnit)
+                                                {
+                                                    <option value="@gifItem.Name">@gifItem.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input name="Price" class="form-control" value=""
+                                           onkeypress="$.admin.keyPress(this)"
+                                           onkeyup="$.admin.keyUp(this)"
+                                           onblur="$.admin.keyBlur(this); setMoney(this);" datatype="*" nullmsg="请填写单价" />
+                                </td>
+                                <td name="moneys">
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <input name="BuyDeptName" class="form-control" value="" datatype="*" nullmsg="请填写购置部门" />
+                                </td>
+                                <td>
+                                    <input name="ZChanType" class="form-control" value="" datatype="*" nullmsg="请填写资产类别" />
+                                </td>
+                                <td>
+                                    <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tr>
+                        <th class="text-center" colspan="4">总计金额</th>
+                        <td colspan="4">
+                            <span id="spmoney">@(listDetail.Sum(t => t.Price * t.Count))(元)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">申请理由</th>
+                        <td colspan="7">
+                            <textarea style="width:100%;" cols="3" name="ADesc" class='form-control' autocomplete="off" datatype="*" nullmsg="请填写申请理由">@Model.ADesc</textarea>
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="7">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>请选择审批流程<span style="color:red">*</span></th>
+                        <td colspan='7'>
+                            <select class="form-control" style="max-width:80%;" name="FK_ApprovalId" datatype="*" nullmsg="请选择审批流程">
+                                <option value="">==请选择==</option>
+                                @foreach (var item in listApproval)
+                                {
+                                    <option value="@item.Id" @(Model.FK_ApprovalId == item.Id ? "selected" : "")>@item.DName</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveCaogao()'>存为草稿</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="submitMsg" value="" />
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#formMyGiftBuy").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                if ($("input[name='Status']").val() == "@ApplyStatus.草稿.ToInt()") {
+                    win.showLoading("正在保存...");
+                    var details = [];
+                    $("#tblist tr").each(function () {
+                        var detail = {
+                            Name: $(this).find("input[name='Name']").val(),
+                            Brand: $(this).find("input[name='Brand']").val(),
+                            Count: $(this).find("input[name='Count']").val(),
+                            GifUnitName: $(this).find("select[name='GifUnitName']").val(),
+                            Price: $(this).find("input[name='Price']").val(),
+                            BuyDeptName: $(this).find("input[name='BuyDeptName']").val(),
+                            ZChanType: $(this).find("input[name='ZChanType']").val(),
+                        };
+                        details.push(detail);
+                    });
+                    $("input[name='detail']").val(JSON.stringify(details));
+                    $("#formMyGiftBuy").ajaxSubmit(function (data) {
+                        if (data.Code == 300) {
+                            win.alert(data.Message);
+                        } else if (data.Code == 200) {
+                            win.success($("#submitMsg").val(), function () {
+                                goBack();
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    win.confirm("确认提交审批？", function () {
+                        win.showLoading("正在保存...");
+                        var details = [];
+                        $("#tblist tr").each(function () {
+                            var detail = {
+                                Name: $(this).find("input[name='Name']").val(),
+                                Brand: $(this).find("input[name='Brand']").val(),
+                                Count: $(this).find("input[name='Count']").val(),
+                                GifUnitName: $(this).find("select[name='GifUnitName']").val(),
+                                Price: $(this).find("input[name='Price']").val(),
+                                BuyDeptName: $(this).find("input[name='BuyDeptName']").val(),
+                                ZChanType: $(this).find("input[name='ZChanType']").val(),
+                            };
+                            details.push(detail);
+                        });
+                        $("input[name='detail']").val(JSON.stringify(details));
+                        $("#formMyGiftBuy").ajaxSubmit(function (data) {
+                            if (data.Code == 300) {
+                                win.alert(data.Message);
+                            } else if (data.Code == 200) {
+                                win.success($("#submitMsg").val(), function () {
+                                    goBack();
+                                }, 1000);
+                            }
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+    });
+    function saveCaogao() {
+        $("input[name='Status']").val("@(ApplyStatus.草稿.ToInt())");
+        $("#submitMsg").val("保存草稿成功");
+        $("#formMyGiftBuy").submit();
+    }
+    function saveData() {
+        if(@Model.Id==0)$("input[name='Status']").val("@(ApplyStatus.新申请.ToInt())");
+        $("#submitMsg").val("提交审批成功");
+        $("#formMyGiftBuy").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    //新增行
+    function onAddOrDelRow(obj) {
+        if ($(obj).attr("title") == "新增") {
+            var newTr = $(obj).parent().parent().clone();
+            $(newTr).find("input").val("");
+            $(newTr).find("td[name='moneys']").html("");
+            $("#tblist").append(newTr);
+            $(obj).removeClass("icon-plus-sign-alt").addClass("icon-minus-sign-alt").attr("title", "删除");
+        } else {
+            $(obj).parent().parent().remove();
+        }
+    }
+    function setMoney(obj) {
+        var count = $(obj).parent().parent().find("input[name='Count']").val();
+        var price = $(obj).parent().parent().find("input[name='Price']").val();
+        if (count != "" && price != "") {
+            $(obj).parent().parent().find("td[name='moneys']").html(parseInt(count) * parseFloat(price));
+        }
+        var totalMoney = 0;
+        $("#tblist tr").each(function () {
+            var count = $(this).find("input[name='Count']").val();
+            var price = $(this).find("input[name='Price']").val();
+            if (count != "" && price != "") {
+                totalMoney = totalMoney + parseInt(count) * parseFloat(price);
+            }
+        });
+        $("#spmoney").html(totalMoney + "（元）");
+    }
+</script>

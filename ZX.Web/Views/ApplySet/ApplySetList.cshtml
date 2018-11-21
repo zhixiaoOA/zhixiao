@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "审批流程设置-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<script src="~/Static/js/layer/layer.js"></script>
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style type="text/css">
+    .table-font-size {
+        font-size: 13px;
+    }
+
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    .panel{
+        margin-top:30px
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content with-menu' style="margin-top:0;">
+    <div class='panel'>
+        <div class="panel-heading">
+            <strong><i class="icon-group"></i>审批流程设置</strong>
+        </div>
+        <div class="panel-body">
+            <div>
+                <fieldset>
+                    <legend>查询条件</legend>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">部门/流程名称</label>
+                            <input type="text" class="form-control" id="key" placeholder="部门、流程名称" style="width:150px;" />
+                        </div>
+                        <button type="button" class="btn btn-primary" id="btnSearch">查询</button>
+                        <div style="width:auto;float:right;">
+                            @Html.Raw(ViewBag.CurrentBtnList32)
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <table class='layui-table' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-60px'>序号</th>
+                        <th class='text-left'>流程名称</th>
+                        <th class='text-left'>部门</th>
+                        @*<th class='text-left'>自动/手动</th>*@
+                        <th class='text-left'>引用申请单</th>
+                        <th class='text-left'>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSearch").click(function () {
+            getList();
+        });
+        getList();
+    });
+
+    function add() {
+        window.location.href = "/applyset/addedit?mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    function del(obj) {
+        var id = $(obj).attr("val");
+        win.confirm("确认要删除吗?", function () {
+            $.post("/applyset/deletedata", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功");
+                    getList();
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/applyset/getlist", { pageIndex: pageIndex, pageSize: pageSize, name: $("#key").val(), mid: "@ViewBag.CurrentMid", secondMenuId: "@ViewBag.SecondMenuId" }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+
+    function edit(obj) {
+        var id = $(obj).attr("val");
+        window.location.href = "/applyset/addedit?id=" + id + "&mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    function look(obj) {
+        var id = $(obj).attr("val");
+        win.open("/applyset/Readonly?id=" + id + "&mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId", 770, 350, "流程查看");
+    }
+</script>

@@ -1,0 +1,25 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model List<ZX.Model.AssetsUseDetail>
+<style>
+    body {
+    padding-top:10px;
+    }
+</style>
+<div class='page-content'>
+    <table class='table table-bordered' style="border: 1px solid #ddd;">
+        <tr>
+            <th class="text-center w-150px">领取时间</th>
+            <th class="text-center w-80px">领取数量</th>
+            <th class='text-center'>资产资质</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-center">@item.AuthTime.ToDateFormat("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.DCount</td>
+                <td>@item.NatureOfAssets</td>
+            </tr>
+        }
+    </table>
+</div>

@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>jOrgChart - A jQuery OrgChart Plugin</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/jquery.jOrgChart.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <link href="css/prettify.css" type="text/css" rel="stylesheet" />        
+    <script src="../jquery-1.7.1.min.js"></script>
+    <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>-->
+    <script src="jquery.jOrgChart.js"></script>
+    <script>
+        jQuery(document).ready(function () {
+            $("#org").jOrgChart({
+                chartElement: '#chart',
+                dragAndDrop: true
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <ul id="org" style="display: none">
+        <li>CEO: Jack Paul      
+            <ul>
+                <li id="beer">CTO: Tom Lee</li>
+                <li>CIO: Mary lou          
+                    <a href="http://www.gbtags.com" target="_blank">
+                        <div style="padding: 5px;">about</div>
+                    </a>
+                    <ul>
+                        <li>Manager: Alice lou</li>
+                        <li>
+                            <a href="http://www.gbtags.com" target="_blank">Senior Manager: Hua li</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>CFO: John sall</li>
+                <li class="collapsed">VP: Rick langston          
+                    <ul>
+                        <li>Topdeck</li>
+                        <li>Reese's Cups</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <div id="chart" class="orgChart"></div>
+
+    <script>
+        jQuery(document).ready(function () {
+
+            /* Custom jQuery for the example */
+            $("#show-list").click(function (e) {
+                e.preventDefault();
+
+                $('#list-html').toggle('fast', function () {
+                    if ($(this).is(':visible')) {
+                        $('#show-list').text('Hide underlying list.');
+                        $(".topbar").fadeTo('fast', 0.9);
+                    } else {
+                        $('#show-list').text('Show underlying list.');
+                        $(".topbar").fadeTo('fast', 1);
+                    }
+                });
+            });
+
+            $('#list-html').text($('#org').html());
+
+            $("#org").bind("DOMSubtreeModified", function () {
+                $('#list-html').text('');
+
+                $('#list-html').text($('#org').html());
+
+            });
+        });
+    </script>
+
+</body>
+</html>

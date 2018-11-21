@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "团队编辑-指效OA";
+}
+<link href="~/dist/lib/chosen/chosen.min.css" rel="stylesheet" />
+<script src="~/dist/lib/chosen/chosen.min.js"></script>
+<form id="teamForm" method="post">
+    <table class="table table-form table-hover no-td-padding">
+        <tbody>
+            <tr>
+                <td>
+                    <select data-placeholder="选择一个宠物..." class="chosen-select form-control" tabindex="2">
+                        <option value=""></option>
+                        <option value="cat">小猫</option>
+                        <option value="fish">金鱼</option>
+                        <option value="dragon">龙</option>
+                        <option value="mammoth">猛犸</option>
+                        <option value="gollum">咕噜</option>
+                    </select>
+                </td>
+                <td class="w-180px">
+                    <select data-placeholder="选择一个权限..." id="power" class="chosen-select form-control" tabindex="2">
+                        <option value=""></option>
+                        <option value="默认"></option>
+                        <option value="管理员">小猫</option>
+                        <option value="受限">金鱼</option>
+                    </select>
+                </td>
+                <td class="w-70px"></td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="member[1]" id="member1" class="form-control chosen" onchange="updateMember()" style="display: none;">
+                        <option value="" selected="selected" data-keys=" "></option>
+                        <option value="demo" data-keys="demo d" disabled="">demo</option>
+                        <option value="zhangsan" data-keys="zhanghuiji zhj">张会计</option>
+                        <option value="demo1" data-keys="demo1 dm1">德魔1</option>
+                        <option value="demo2" data-keys="daxian dx">大仙</option>
+                        <option value="demo3" data-keys="lilili lll">李丽丽</option>
+                        <option value="demo4" data-keys="leileilei lll">雷磊磊</option>
+                        <option value="demo5" data-keys="wangwangwang www">王旺旺</option>
+                        <option value="demo6" data-keys="zhongyu zy">钟于</option>
+                        <option value="demo7" data-keys="baobaobao bbb" disabled="">包宝宝</option>
+                        <option value="demo8" data-keys="chengchengcheng ccc">成程程</option>
+                        <option value="demo9" data-keys="fengyan fy">风言</option>
+                        <option value="demo10" data-keys="zhengzhenzhen zzz">郑珍珍</option>
+                        <option value="111" data-keys="1 1">1</option>
+                    </select><div class="chosen-container chosen-container-single" style="width: 100%;" title="" id="member1_chosen"><a class="chosen-single chosen-single-with-deselect chosen-default" tabindex="-1"><span title=""></span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off"></div><ul class="chosen-results"></ul></div></div>
+                </td>
+                <td class="w-180px">
+                    <select name="role[1]" id="role1" class="form-control chosen" style="display: none;">
+                        <option value="member" selected="selected" data-keys="moren mr">默认</option>
+                        <option value="senior" data-keys="guanliyuan gly">管理员</option>
+                        <option value="limited" data-keys="shouxian sx">受限</option>
+                    </select><div class="chosen-container chosen-container-single" style="width: 100%;" title="" id="role1_chosen"><a class="chosen-single" tabindex="-1"><span title="默认">默认</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off"></div><ul class="chosen-results"><li class="active-result result-selected" title="" data-option-array-index="0" style=""><em></em>默认</li><li class="active-result" title="" data-option-array-index="1" style=""><em></em>管理员</li><li class="active-result" title="" data-option-array-index="2" style=""><em></em>受限</li></ul></div></div>
+                </td>
+                <td class="w-60px"><i class="btn btn-mini icon-plus"></i> <i class="btn btn-mini icon-remove"></i></td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="member[2]" id="member2" class="form-control chosen" onchange="updateMember()" style="display: none;">
+                        <option value="" selected="selected" data-keys=" "></option>
+                        <option value="demo" data-keys="demo d" disabled="">demo</option>
+                        <option value="zhangsan" data-keys="zhanghuiji zhj">张会计</option>
+                        <option value="demo1" data-keys="demo1 dm1">德魔1</option>
+                        <option value="demo2" data-keys="daxian dx">大仙</option>
+                        <option value="demo3" data-keys="lilili lll">李丽丽</option>
+                        <option value="demo4" data-keys="leileilei lll">雷磊磊</option>
+                        <option value="demo5" data-keys="wangwangwang www">王旺旺</option>
+                        <option value="demo6" data-keys="zhongyu zy">钟于</option>
+                        <option value="demo7" data-keys="baobaobao bbb" disabled="">包宝宝</option>
+                        <option value="demo8" data-keys="chengchengcheng ccc">成程程</option>
+                        <option value="demo9" data-keys="fengyan fy">风言</option>
+                        <option value="demo10" data-keys="zhengzhenzhen zzz">郑珍珍</option>
+                        <option value="111" data-keys="1 1">1</option>
+                    </select><div class="chosen-container chosen-container-single" style="width: 100%;" title="" id="member2_chosen"><a class="chosen-single chosen-single-with-deselect chosen-default" tabindex="-1"><span title=""></span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off"></div><ul class="chosen-results"></ul></div></div>
+                </td>
+                <td class="w-180px">
+                    <select name="role[2]" id="role2" class="form-control chosen" style="display: none;">
+                        <option value="member" selected="selected" data-keys="moren mr">默认</option>
+                        <option value="senior" data-keys="guanliyuan gly">管理员</option>
+                        <option value="limited" data-keys="shouxian sx">受限</option>
+                    </select><div class="chosen-container chosen-container-single" style="width: 100%;" title="" id="role2_chosen"><a class="chosen-single" tabindex="-1"><span title="默认">默认</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off"></div><ul class="chosen-results"><li class="active-result" title="" data-option-array-index="0" style=""><em></em>默认</li><li class="active-result" title="" data-option-array-index="1" style=""><em></em>管理员</li><li class="active-result result-selected" title="" data-option-array-index="2" style=""><em></em>受限</li></ul></div></div>
+                </td>
+                <td class="w-60px"><i class="btn btn-mini icon-plus"></i> <i class="btn btn-mini icon-remove"></i></td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="member[3]" id="member3" class="form-control chosen" onchange="updateMember()" style="display: none;">
+                        <option value="" selected="selected" data-keys=" "></option>
+                        <option value="demo" data-keys="demo d" disabled="">demo</option>
+                        <option value="zhangsan" data-keys="zhanghuiji zhj">张会计</option>
+                        <option value="demo1" data-keys="demo1 dm1">德魔1</option>
+                        <option value="demo2" data-keys="daxian dx">大仙</option>
+                        <option value="demo3" data-keys="lilili lll">李丽丽</option>
+                        <option value="demo4" data-keys="leileilei lll">雷磊磊</option>
+                        <option value="demo5" data-keys="wangwangwang www">王旺旺</option>
+                        <option value="demo6" data-keys="zhongyu zy">钟于</option>
+                        <option value="demo7" data-keys="baobaobao bbb" disabled="">包宝宝</option>
+                        <option value="demo8" data-keys="chengchengcheng ccc">成程程</option>
+                        <option value="demo9" data-keys="fengyan fy">风言</option>
+                        <option value="demo10" data-keys="zhengzhenzhen zzz">郑珍珍</option>
+                        <option value="111" data-keys="1 1">1</option>
+                    </select><div class="chosen-container chosen-container-single" style="width: 100%;" title="" id="member3_chosen"><a class="chosen-single chosen-single-with-deselect chosen-default" tabindex="-1"><span title=""></span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off"></div><ul class="chosen-results"></ul></div></div>
+                </td>
+                <td class="w-180px">
+                    <select name="role[3]" id="role3" class="form-control chosen" style="display: none;">
+                        <option value="member" selected="selected" data-keys="moren mr">默认</option>
+                        <option value="senior" data-keys="guanliyuan gly">管理员</option>
+                        <option value="limited" data-keys="shouxian sx">受限</option>
+                    </select><div class="chosen-container chosen-container-single" style="width: 100%;" title="" id="role3_chosen"><a class="chosen-single" tabindex="-1"><span title="默认">默认</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off"></div><ul class="chosen-results"><li class="active-result result-selected" title="" data-option-array-index="0" style=""><em></em>默认</li><li class="active-result" title="" data-option-array-index="1" style=""><em></em>管理员</li><li class="active-result" title="" data-option-array-index="2" style=""><em></em>受限</li></ul></div></div>
+                </td>
+                <td class="w-60px"><i class="btn btn-mini icon-plus"></i> <i class="btn btn-mini icon-remove"></i></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="alert alert-info">
+        <p title="管理员：可以查看、编辑、删除所有任务。
+默认：可以查看、编辑所有任务，删除与自己相关的任务。
+受限：只能查看、编辑与自己相关的任务。">管理员拥有所有权限，默认成员不可删除与自己无关的任务，受限成员仅可操作自己相关任务。</p>
+    </div>
+    <div class="text-center"> <button type="submit" id="submit" class="btn btn-primary" data-loading="稍候...">保存</button></div>
+</form>

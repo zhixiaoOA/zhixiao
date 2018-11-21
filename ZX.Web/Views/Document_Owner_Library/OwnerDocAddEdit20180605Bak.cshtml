@@ -1,0 +1,465 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model Document_Manager
+@{
+    ViewBag.Title = "个人文档编辑-指效";
+}
+<link href="~/dist/lib/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/res/theme/default/style.css" rel="stylesheet" />
+
+<link rel='stylesheet' href='~/res/theme/default/style.css?v=4.6.1' type='text/css' media='screen' />
+<link rel='stylesheet' href='~/res/theme/default/style.css?v=4.6.1' type='text/css' media='print' />
+<link rel='stylesheet' href='~/res/theme/default/admin.css?v=4.6.1' type='text/css' media='screen' />
+<link rel='stylesheet' href='~/res/theme/default/admin.css?v=4.6.1' type='text/css' media='print' />
+
+<!--文本框内嵌树形-->
+<link href="/Scripts/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link href="/Scripts/zTree/css/demo.css" rel="stylesheet" />
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+
+
+<script src="~/dist/lib/chosen/chosen.min.js"></script>
+<script src="~/Scripts/layer/layer.js"></script>
+<script src="~/Scripts/layer/layer.tools.js"></script>
+
+
+<script src="/Scripts/zTree/js/jquery.ztree.core-3.1.js" type="text/javascript" charset="utf-8"></script>
+<script src="/Scripts/zTree/js/jquery.ztree.excheck-3.1.js" type="text/javascript"></script>
+<script src="/Scripts/zTree/js/jquery.ztree.all-3.1.js" type="text/javascript"></script>
+
+
+
+<!--百度文本编辑器JS文件-->
+<script type="text/javascript" charset="utf-8" src="~/Scripts/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/Scripts/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/Scripts/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="/Scripts/framework.js"></script>
+<script src="~/Scripts/layui/layui.all.js"></script>
+
+<script language='Javascript'>if (typeof (v) != "object") v = {}; v.mid= "@ViewBag.mid";</script>
+<script language='Javascript'>v.lang = { "confirmDelete": "\u60a8\u786e\u5b9a\u8981\u6267\u884c\u5220\u9664\u64cd\u4f5c\u5417\uff1f", "confirmFinish": "\u60a8\u786e\u5b9a\u8981\u6267\u884c\u5b8c\u6210\u64cd\u4f5c\u5417\uff1f", "deleteing": "\u5220\u9664\u4e2d", "doing": "\u5904\u7406\u4e2d", "timeout": "\u7f51\u7edc\u8d85\u65f6,\u8bf7\u91cd\u8bd5", "confirmDiscardChanges": "\u8868\u5355\u5df2\u66f4\u6539\uff0c\u786e\u5b9a\u5173\u95ed\uff1f", "yes": "\u662f", "no": "\u5426" };</script>
+
+<script language='javascript'>
+    $("body").children("div[class='container']").attr("class", "m-company-setbasic");
+</script>
+<div id="sysDTypeTree" class="menuContent" style="display: none; position: absolute;">
+    <ul id="treeDocType" class="ztree" style="margin-top: 0;"></ul>
+</div>
+
+<input type="hidden" id="txtDTypeTree" value="@ViewBag.TreeJson" />
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="isPrivate" value="@ViewBag.IsPrivate">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <nav id='menu'>
+        <ul class='nav'>
+            <li>
+                <a href='javascript:;'>@Model.DTitle</a>
+            </li>
+            <li class='divider angle'></li>
+        </ul>
+    </nav>
+    <div class='panel with-menu page-content' style="float:left">
+        <div class='panel-heading'>
+            <strong><small class='text-muted'><i class='icon icon-plus'></i></small> 创建文档</strong>
+        </div>
+        <div class='panel-body'>
+            <form class="form-horizontal" method='post' id='ajaxForm' action="DocSaveData">
+                <input type="hidden" id="FK_TypeId" name="FK_TypeId" value="@ViewBag.FK_TypeId">
+                <input type="hidden" id="Id" name="Id" value="@Model.Id">
+                <div class="form-group">
+                    <label for="FK_TypeId" class="col-sm-2">
+                        所属分类
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        <div class="input-group">
+                            <input type='text' placeholder='类目' id='txtDTypeParent' value='@(ViewBag.DTypeName ?? "顶级")' class='form-control' readonly='readonly' onclick='showSysDocTypeTree()' />
+                            <label class="input-group-addon">
+                                @{
+                                    if (ViewBag.IsPrivate == 1)
+                                    {
+                                        <input type="checkbox" name="IsPrivate" disabled value="@ViewBag.IsPrivate" id="IsPrivate" checked>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" name="IsPrivate" disabled value="@ViewBag.IsPrivate" id="IsPrivate">
+                                    }
+                                }
+
+                            </label>
+                            <span class="input-group-addon">设为私密</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="div_AuthUser" class="form-group">
+                    <label for="AuthUserId" class="col-sm-2">
+                        授权用户
+                    </label>
+                    <input type="hidden" id="AuthUserId" name="AuthUserId" class="form-control" value="@Model.AuthUserId" placeholder="授权用户">
+                    <div class="col-md-10 col-sm-10">
+                        <select data-placeholder="选择用户..." class="chosen-select form-control" tabindex="2" multiple="">
+                            @{
+                                if (ViewBag.AuthUserList != null)
+                                {
+                                    foreach (var item in ViewBag.AuthUserList as IEnumerable<SelectListItem>)
+                                    {
+                                        bool bl = true;
+                                        if (Model.AuthUserId.IsNotNullOrEmpty())
+                                        {
+                                            List<string> AuthUserList = Model.AuthUserId.Split(',').ToList();
+
+                                            if (AuthUserList.Contains(item.Value))
+                                            {
+                                                <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                                bl = false;
+                                                continue;
+                                            }
+                                        }
+
+                                        if (bl)
+                                        {
+                                            <option value="@item.Value" data-keys="@item.Value"> @item.Text </option>
+                                        }
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="div_AuthRole">
+                    <input type="hidden" id="AuthRole" name="AuthRole" value="@Model.AuthRole" placeholder="授权角色" class="form-control">
+                    <label for="RoleList" class="col-sm-2">
+                        授权分组
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        @{
+                            List<Sys_Role> list = ViewBag.RoleListList;
+                            if (list != null)
+                            {
+                                foreach (var item in list)
+                                {
+                                    bool bl = true;
+                                    if (!Model.AuthRole.IsNullOrEmpty())
+                                    {
+                                        List<string> authRole = Model.AuthRole.Split(',').ToList();
+                                        if (authRole.Contains(item.Id.ToString()))
+                                        {
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="visitorsList" value="@item.Id" checked> @item.RName
+                                            </label>
+                                            bl = false;
+                                            continue;
+                                        }
+                                    }
+                                    if (bl)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="visitorsList" value="@item.Id"> @item.RName
+                                        </label>
+                                    }
+
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" id="DType" name="DType" value="@Model.DType" placeholder="文档类型" class="form-control">
+                    <label for="DType" class="col-sm-2">
+                        文档类型
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        @{
+                            switch (Model.DType)
+                            {
+                                case 0:
+                                    {
+                                        <label class='radio-inline'>
+                                            <input type='radio' name='dtype' value='text' checked='checked' onclick=setType(this.value) id='typetext' />文档
+                                            <input type='radio' name='dtype' value='url' onclick=setType(this.value) id='typeurl' />链接
+                                        </label>
+                                        break;
+                                    }
+                                case 10:
+                                    {
+                                        <label class='radio-inline'>
+                                            <input type='radio' name='dtype' value='text' onclick=setType(this.value) id='typetext' />文档
+                                            <input type='radio' name='dtype' value='url' checked='checked' onclick=setType(this.value) id='typeurl' />链接
+                                        </label>
+                                        break;
+                                    }
+                            }
+
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="DTitle" class="col-sm-2">
+                        文档标题
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        <input type="text" id="DTitle" name="DTitle" value="@Model.DTitle" placeholder="标题" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="div_DUrl">
+                    <label for="DUrl" class="col-sm-2">
+                        文档URL
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        <input type="text" id="DUrl" name="DUrl" value="@Model.DUrl" placeholder="URL" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="div_DContent">
+                    <label for="DContent" class="col-sm-2">
+                        文档正文
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        <textarea id="DContent" name="DContent" rows='7'>@Model.DContent</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="DKey" class="col-sm-2">
+                        关键字
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        <input type="text" id="DKey" name="DKey" value="@Model.DKey" placeholder="关键字" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="DAbs" class="col-sm-2">
+                        文档摘要
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        <textarea name='DAbs' id='DAbs' class='form-control' rows=3>@Model.DAbs</textarea>
+                    </div>
+                </div>
+                <div id="div_Attach" class="form-group">
+                    <label for="Attach" class="col-sm-2">
+                        附件
+                    </label>
+                    <div class="col-md-10 col-sm-10">
+                        <input type="hidden" name="Attach" id="Attach" value="@Model.Attach" />
+                        <button type="button" class="layui-btn" id="btnUpload">上传附件</button>
+                        <label id="lblAttach">@Model.Attach</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        @{
+                            try
+                            {
+                                List<Sys_Button> btnList = ViewBag.RoleButtonList;
+                                List<Sys_Button> currentBtn = new List<Sys_Button>();
+                                if (btnList.Count > 0)
+                                {
+                                    currentBtn = btnList.Where(l => l.BGroup == 29 && l.BIsUse == 0).ToList();
+                                    if (currentBtn.Count > 0)
+                                    {
+                                        foreach (var item in currentBtn)
+                                        {
+                                            string className = "btn btn-primary";
+                                            if (item.BName.Contains("返回"))
+                                            {
+                                                className = "btn btn-back";
+                                            }
+                                            <a href='javascript:;' class='@className' onclick="@item.BOptionFun" val="@Model.Id">@item.BName</a>
+                                        }
+
+                                    }
+                                }
+                            }
+                            catch { }
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src='~/res/js/jquery/form/min.js?v=4.6.2' type='text/javascript'></script>
+<script language='javascript'>
+    var edtor = initUEditor('DContent');
+
+    var menuSetting = {
+        view: {
+            dblClickExpand: false
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onClick: onDocTypeClick
+        }
+    }; //初始化树形分类
+
+    var menuNodes = eval($("#txtDTypeTree").val());
+    menuTree = $.fn.zTree.init($("#treeDocType"), menuSetting, menuNodes);
+
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+        search_contains: true         // 从任意位置开始检索
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#AuthUserId").val($(this).val());
+    });
+
+    $("input[name='visitorsList']").click(function () {
+        var visitorsList = "";
+        $("input:checkbox[name='visitorsList']:checked").each(function () {
+            visitorsList += $(this).val() + ",";
+        });
+        if (visitorsList.length > 0) {
+            $("#AuthRole").val(visitorsList.substring(0, visitorsList.length - 1));
+        }
+    });
+
+    $(function () {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/UploadAttach'
+                , accept: 'file'
+                , data: { direName: "/Doc/Files" }
+                , done: function (res) {
+                    $("#Attach").val(res.Data);
+                    $("#lblAttach").text(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+    //保存
+    function saveData() {
+        $("#ajaxForm").submit();
+    }
+
+    $("#ajaxForm").Validform({
+        tiptype: 3,
+        callback: function (form) {
+            win.showLoading("正在保存...");
+            $("#ajaxForm").ajaxSubmit(function (data) {
+                if (data.Code == 300) {
+                    win.alert(data.Message);
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+
+                    });
+                }
+            });
+            return false;
+        }
+    });
+
+    /**
+     * Check file size.
+     *
+     * param  obj $obj
+     * access public
+     * return void
+     */
+    function checkSize(obj) {
+        if (typeof ($(obj)[0].files) != 'undefined') {
+            var maxUploadInfo = '2M';
+            var sizeType = { 'K': 1024, 'M': 1024 * 1024, 'G': 1024 * 1024 * 1024 };
+            var unit = maxUploadInfo.replace(/\d+/, '');
+            var maxUploadSize = maxUploadInfo.replace(unit, '') * sizeType[unit];
+            var fileSize = 0;
+            $(obj).parents('#fileform').find(':file').each(function () {
+                if ($(this).val()) fileSize += $(this)[0].files[0].size;
+            });
+            if (fileSize > maxUploadSize) {
+                alert('文件大小已经超过限制，不能成功上传！');
+                $(obj).parents('#fileform').find(':file').each(function () {
+                    if ($(this).val()) $(this).val('');
+                });
+            }
+        }
+    }
+
+    /**
+     * Show the upload max filesize of config.
+     */
+    function maxFilesize() { return "(<span class='red'>2M</span>)"; }
+
+    /**
+     * Add a file input control.
+     *
+     * param  object $clickedButton
+     * access public
+     * return void
+     */
+    function addFile(clickedButton) {
+        fileRow = null;
+        fileRow = fileRow.replace('$i', $('.fileID').size() + 1);
+        $(clickedButton).closest('.fileBox').after(fileRow);
+
+        updateID();
+    }
+
+    /**
+     * Delete a file input control.
+     *
+     * param object $clickedButton
+       access public
+       return void
+     */
+    function delFile(clickedButton) {
+        if ($('.fileBox').size() == 1) return;
+        $(clickedButton).closest('.fileBox').remove();
+        updateID();
+    }
+
+    /**
+     * Update the file id labels.
+     *
+     * access public
+     * return void
+     */
+    function updateID() {
+        i = 1;
+        $('.fileID').each(function () { $(this).html(i++) });
+    }
+
+    //点击选择分类
+    function onDocTypeClick(e, treeId, treeNode) {
+        $("#FK_TypeId").val(treeNode.id);
+        $("#txtDTypeParent").val(treeNode.name);
+        hideDocType();
+    }
+    //显示分类
+    function showSysDocTypeTree() {
+        var cityObj = $("#txtDTypeParent");
+        var cityOffset = $("#txtDTypeParent").offset();
+        $("#treeDocType").width(cityObj.width());
+        $("#sysDTypeTree").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("#sysDTypeTree").css("z-index", "10")
+        $("body").bind("mousedown", onAddDocTypeBodyDown);
+    }
+    //隐藏分类
+    function hideDocType() {
+        $("#sysDTypeTree").fadeOut("fast");
+        $("body").unbind("mousedown", onAddDocTypeBodyDown);
+    }
+    //隐藏分类
+    function onAddDocTypeBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysDTypeTree" || $(event.target).parents("#sysDTypeTree").length > 0)) {
+            hideDocType();
+        }
+    }
+
+
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>

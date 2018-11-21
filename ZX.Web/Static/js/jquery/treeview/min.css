@@ -1,0 +1,94 @@
+﻿/*treeview*/
+.treeview .hitarea {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+    .treeview .hitarea:before {
+        color: #999;
+        content: '\e710';
+        font-family: ZenIcon;
+        transition: all 0.3s;
+    }
+
+.treeview li:hover .hitarea:before {
+    color: #2973EA;
+}
+
+.treeview .hitarea.collapsable-hitarea:before {
+    content: '\e712';
+}
+
+.treeview li {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+    .treeview li > .hitarea {
+        top: 4px;
+        left: 4px
+    }
+
+.tree-animate.treeview li.has-list.open > ul:after {
+    top: -5px;
+    bottom: 12px;
+    left: -11px;
+}
+
+.treeview ul > li:after {
+    position: absolute;
+    top: 11px;
+    left: -10px;
+    z-index: 1;
+    display: block;
+    width: 22px;
+    content: ' ';
+    border-top: 1px dotted #999;
+}
+
+.treeview ul > li:before,
+.treeview ul > li.has-list:before {
+    position: absolute;
+    top: -12px;
+    bottom: 13px;
+    left: -11px;
+    display: block;
+    width: auto;
+    height: auto;
+    content: ' ';
+    background: none;
+    border: none;
+    border-left: 1px dotted #999;
+}
+
+.treeview ul > li:last-child:before {
+    bottom: auto;
+    height: 23px;
+}
+
+.treeview ul > li:first-child:before {
+    top: -7px;
+}
+
+.treeview ul > li.tree-single-item:before {
+    height: 19px;
+}
+
+.treeview ul > li.has-list:after {
+    width: 14px;
+}
+
+.treeview ul > li.drag-shadow:after {
+    display: none;
+}
+
+.tree-folders.treeview ul > li:first-child:before {
+    top: -6px;
+}
+
+.tree-folders.treeview li.has-list.open > ul:after {
+    top: 16px;
+}

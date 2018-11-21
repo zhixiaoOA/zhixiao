@@ -1,0 +1,823 @@
+﻿@using ZX.Model
+@using ZX.BLL
+@using ZX.Tools
+@using System.Linq
+@model ZX.Model.LeftMenu
+@{
+    ViewBag.Title = ZXConfig.SYSNAME;
+    int userId = Session["UserId"].ToInt();
+    int positionId = Session["PositionId"].ToInt();
+    List<SelectListItem> list = ViewBag.UserList;
+    DateTime? currentTime = ViewBag.CurrentTime;
+}
+<!DOCTYPE html>
+<html>
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel='icon' href='/favicon.ico' type='image/x-icon' />
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
+    <title>首页-指效OA</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Static/styles/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="/Static/css/temp_task/tempTask.css" />
+    <link href="/Static/js/layui/css/layui.css" rel="stylesheet" />
+    <script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+    <script src="/Static/js/layui/layui.js"></script>
+    <title>@ViewBag.Title</title>
+    <script language='Javascript'>
+            var config = {
+               "webRoot": "\@ViewBag.webRoot/"
+            , "appName": "sys"
+            , "cookieLife": 30
+            , "requestType": "GET"
+            , "requestFix": "-"
+            , "moduleVar": "m"
+            , "methodVar": "f"
+            , "viewVar": "t"
+            , "defaultView": "html"
+            , "themeRoot": "\/theme\/"
+            , "currentModule": "index"
+            , "currentMethod": "index"
+            , "clientLang": "zh-cn"
+            , "requiredFields": ""
+            , "save": "\u4fdd\u5b58"
+            /**/
+            /**/
+            , "router": "@ViewBag.router"
+            /**/
+            /**/
+            , "runMode": "front"
+            , "timeout": 30000
+            , "pingInterval": 60
+        }
+    </script>
+
+    <script language='Javascript'>if (typeof (v) != "object") v = {}; v.mid = "@ViewBag.mid";</script>
+    <style>
+        .categoryButton, .categoryMenu li button {
+            height: 40px;
+            width: 40px;
+            padding: 6px;
+            text-align: center;
+        }
+
+            .categoryButton .icon, .categoryMenu li .app-btn .icon {
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 28px;
+                text-align: center;
+                text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+                border-radius: 5px;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+                display: inline-block;
+                font-size: 12px;
+                font-weight: normal;
+                min-width: 28px;
+            }
+
+        .categoryMenu {
+            opacity: 1;
+            left: 39px;
+            padding: 0px 5px 0px 5px;
+        }
+
+            .categoryMenu li {
+                float: left;
+            }
+
+                .categoryButton.active, .categoryMenu li button.active {
+                    background-color: rgba(255, 255, 255, 0.2);
+                    color: rgba(255, 255, 255, 0.85);
+                }
+
+        .circular {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            float: left;
+            margin-right: 5px;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .Orange {
+            background-color: Orange;
+        }
+
+        .rows {
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+<body class='m-index-index'>
+    @Html.Raw(ViewBag.SysAdminMainNavbar)
+    <!-- Desktop -->
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid" />
+    <div id='desktop' class='fullscreen-mode'>
+
+        <div id='home' class='fullscreen fullscreen-active unselectable'>
+
+            <div id='dashboardWrapper'>
+                <div class='panels-container dashboard' id='dashboard' data-confirm-remove-block='确定移除区块【{0}】吗？'>
+                    <div class='rows'>
+                        <div class="panel-box">
+                            <div class="panel-title"><span class="panel-title-text">我的项目任务</span></div>
+                            <div class="panel-row">
+                                <table class="table table-data table-hover table-fixed block-project">
+                                    <tbody>
+                                        @{
+                                            int topCount = 10;
+                                            //1-指派给我 2-由我创建 3-由我完成 4-由我关闭 5-由我取消
+                                            List<Project_TaskModel> taskList = new List<Project_TaskModel>();
+                                            string orderBy = "AsTime";
+                                            try
+                                            {
+                                                taskList = Project_TaskBLL.GetProjectTaskTopList(topCount, " (Assigned=" + userId + " OR TSuccess=" + userId + " OR CreateUserId=" + userId + ")", orderBy);
+                                            }
+                                            catch { }
+                                        }
+                                        <tr>
+                                            <td class="task-tab-td-left">任务名称</th>
+                                            <td class="task-tab-td-center" title="按工时计算">进度</th>
+                                            <td class="task-tab-td-right" title="状态">状态</th>
+                                        </tr>
+                                        @{
+                                            foreach (var task in taskList)
+                                            {
+                                                <tr data-url="javascript:;" class="text-center" style="">
+                                                    @{
+                                                        decimal doneHours = 0;//已耗时
+                                                        decimal predictHours = 0;//预估剩余工时
+                                                        decimal totalTExpected = 0; //获取项目总共最初预计，用于亮灯控制判断
+                                                        try
+                                                        {
+                                                            doneHours = task.ConsumTime.ToInt();
+                                                            predictHours = task.TheTime.ToInt();
+                                                        }
+                                                        catch { }
+
+
+                                                        decimal percent = 0;
+                                                        try
+                                                        {
+                                                            percent = doneHours / (doneHours + predictHours) * 100;
+
+                                                            percent = System.Decimal.Round(percent, 2);
+                                                        }
+                                                        catch { }
+
+                                                        totalTExpected += task.TExpected.ToInt();
+                                                    }
+                                                    <td class="task-tab-td-left" title="@task.TName">
+                                                        @{
+                                                            //任务结束前一天 亮黄灯控制
+                                                            TimeSpan ts = Convert.ToDateTime(task.PEndTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                                            if (ts.Days == 1 && task.TState != 4)
+                                                            {
+                                                                <div class="circular Orange" title="仅剩一天时间"></div>
+                                                            }
+                                                            if (ts.Days == 0 && task.TState != 4)
+                                                            {
+                                                                <div class="circular Orange" title="即将超时"></div>
+                                                            }
+                                                            //超时
+                                                            if (ts.Days < 0 && task.TState != 4)
+                                                            {
+                                                                <div class="circular red" title="已超时@(ts.Days*-1)天"></div>
+                                                            }
+
+                                                        }
+                                                        <a href="javascript:;" onclick="goProjectTask(this)" val="@task.Id">@task.TName</a>
+                                                    </td>
+
+                                                    <td class="task-tab-td-center" title="@(percent + " %")">
+                                                        <div class="layui-progress layui-progress-big" lay-showPercent="true">
+                                                            <div class="layui-progress-bar layui-bg-red" lay-percent="@(percent + "%")"></div>
+                                                        </div>
+                                                    </td>
+                                                    @{
+                                                        string tStatusName = "未知";
+                                                        switch (task.TState.ToInt())
+                                                        {
+                                                            case 1:
+                                                                {
+                                                                    tStatusName = "未完成";
+
+                                                                    break;
+                                                                }
+                                                            case 2:
+                                                                {
+                                                                    tStatusName = "未开始";
+
+                                                                    break;
+                                                                }
+                                                            case 3:
+                                                                {
+                                                                    tStatusName = "进行中";
+
+                                                                    break;
+                                                                }
+                                                            case 4:
+                                                                {
+                                                                    tStatusName = "已完成";
+                                                                    break;
+                                                                }
+                                                            case 5:
+                                                                {
+                                                                    tStatusName = "已取消";
+                                                                    break;
+                                                                }
+                                                            case 6:
+                                                                {
+                                                                    tStatusName = "已关闭";
+                                                                    break;
+                                                                }
+                                                        }
+
+                                                    }
+
+
+                                                    <td class="task-tab-td-right">@tStatusName</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-box">
+                            <div class="panel-title"><span class="panel-title-text">新闻</span></div>
+                            <div class="panel-row">
+                                <table class="table table-data table-hover table-fixed block-project">
+                                    <tbody>
+                                        @{
+                                            List<News> newList = new List<News>();
+                                            newList = NewsBLL.GetNewsTopList(10, -1, 10).ToList<News>();
+
+                                            foreach (var newItem in newList)
+                                            {
+                                                <tr data-url="javascript:;" class="text-center" style="">
+                                                    <td class="task-tab-td-left" title="@newItem.DName">
+                                                        <a href="javascript:;" onclick="newlook(this)" val="@newItem.Id,'新闻'">@newItem.DName</a>
+                                                    </td>
+                                                    @{
+                                                        string userName = list.Where(l => l.Value == newItem.CreateUserId + "").FirstOrDefault().Text;
+                                                    }
+                                                    <td class="task-tab-td-center" title="@userName">
+                                                        @userName
+                                                    </td>
+                                                    <td class="task-tab-td-right" title="@newItem.CreateTime">@newItem.CreateTime.ToShortDate()</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-box">
+                            <div class="panel-title"><span class="panel-title-text">需我审批</span></div>
+                            <div class="panel-row">
+                                <table class="table table-data table-hover table-fixed block-project">
+                                    <tbody>
+                                        <tr>
+                                            <td class="task-tab-td-left">名称</th>
+                                            <td class="task-tab-td-center">申请人</th>
+                                            <td class="task-tab-td-center" title="流转节点">节点</th>
+                                            <td class="task-tab-td-right" title="流转节点">状态</th>
+                                        </tr>
+                                        @{
+                                            //获取相关审批
+                                            List
+                                            <AllApplyNotice>
+                                                allApplyNoticeList = new List<AllApplyNotice>
+                                                    ();
+                                            int fk_CompanyPositionId = 0;
+
+                                            fk_CompanyPositionId = positionId.ToInt();
+
+                                            if (fk_CompanyPositionId != 0)
+                                            {
+                                                allApplyNoticeList = AllApplyNoticeBLL.GetAllApplyNoticeList(fk_CompanyPositionId);
+
+                                                if (allApplyNoticeList.Count > 0)
+                                                {
+                                                    foreach (var applyNotice in allApplyNoticeList)
+                                                    {
+                                                        <tr data-url="javascript:;" class="text-center" style="">
+                                                            <td class="text-left" title="@applyNotice.ADesc">
+                                                                <a href="@applyNotice.ApplyAction">@applyNotice.Title</a>
+                                                            </td>
+                                                            <td class="text-left">@applyNotice.RealName</td>
+                                                            <td>
+                                                                @applyNotice.FlowName
+                                                            </td>
+                                                            @{
+                                                                string tStatusName = "未知";
+                                                                switch (applyNotice.CurrentState.ToInt())
+                                                                {
+                                                                    case 0:
+                                                                        {
+                                                                            tStatusName = "新申请";
+                                                                            break;
+                                                                        }
+                                                                    case 1:
+                                                                        {
+                                                                            tStatusName = "审批中";
+
+                                                                            break;
+                                                                        }
+                                                                }
+                                                            }
+                                                            <td class="text-right">@tStatusName</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-box">
+                            <div class="panel-title"><span class="panel-title-text">我的临时任务</span></div>
+                            <div class="panel-row">
+                                <table class="table table-data table-hover table-fixed block-project">
+                                    <tbody>
+                                        @{
+                                            List<Temporary_TaskModel> temporaryTaskList = new List<Temporary_TaskModel>();
+                                            temporaryTaskList = Temporary_TaskBLL.GetTemporary_TaskBlockList(10, " (Assigned=" + userId + " OR TSuccess=" + userId + " OR CreateUserId=" + userId + ")", " AsTime");
+                                        }
+                                        <tr>
+                                            <td class="task-tab-td-left">任务名称</th>
+                                            <td class="task-tab-td-center" title="按工时计算">进度</th>
+                                            <td class="task-tab-td-right" title="状态">状态</th>
+                                        </tr>
+                                        @{
+                                            foreach (var temporaryTask in temporaryTaskList)
+                                            {
+                                                <tr data-url="javascript:;" style="">
+                                                    @{
+                                                        decimal doneHours = 0;//已耗时
+                                                        decimal predictHours = 0;//预估剩余工时
+                                                        decimal totalTExpected = 0; //获取项目总共最初预计，用于亮灯控制判断
+                                                        try
+                                                        {
+                                                            doneHours = temporaryTask.ConsumTime.ToInt();
+                                                            predictHours = temporaryTask.TheTime.ToInt();
+                                                        }
+                                                        catch { }
+
+
+                                                        decimal percent = 0;
+                                                        try
+                                                        {
+                                                            percent = doneHours / (doneHours + predictHours) * 100;
+
+                                                            percent = System.Decimal.Round(percent, 2);
+                                                        }
+                                                        catch { }
+
+                                                        totalTExpected += temporaryTask.TExpected.ToInt();
+                                                    }
+                                                    <td class="task-tab-td-left" title="@temporaryTask.TName">
+                                                        @{
+                                                            //任务结束前一天 亮黄灯控制
+                                                            TimeSpan ts = Convert.ToDateTime(temporaryTask.AsTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                                            if (ts.Days == 1 && temporaryTask.TState != 4)
+                                                            {
+                                                                <div class="circular Orange" title="仅剩一天时间"></div>
+                                                            }
+                                                            //超时
+                                                            if (ts.Days < 0 && temporaryTask.TState != 4)
+                                                            {
+                                                                <div class="circular red" title="已超时@(ts.Days*-1)天"></div>
+                                                            }
+                                                        }
+                                                        <a href="javascript:;" onclick="goTemporary_Task(this)" val="@temporaryTask.Id">@temporaryTask.TName</a>
+                                                    </td>
+
+                                                    <td class="task-tab-td-center" title="@(percent + " %")">
+                                                        <div class="layui-progress layui-progress-big" lay-showPercent="true">
+                                                            <div class="layui-progress-bar layui-bg-red" lay-percent="@(percent + "%")"></div>
+                                                        </div>
+                                                    </td>
+                                                    @{
+                                                        string tStatusName = "未知";
+                                                        switch (temporaryTask.TState.ToInt())
+                                                        {
+                                                            case 1:
+                                                                {
+                                                                    tStatusName = "未完成";
+
+                                                                    break;
+                                                                }
+                                                            case 2:
+                                                                {
+                                                                    tStatusName = "未开始";
+
+                                                                    break;
+                                                                }
+                                                            case 3:
+                                                                {
+                                                                    tStatusName = "进行中";
+
+                                                                    break;
+                                                                }
+                                                            case 4:
+                                                                {
+                                                                    tStatusName = "已完成";
+                                                                    break;
+                                                                }
+                                                            case 5:
+                                                                {
+                                                                    tStatusName = "已取消";
+                                                                    break;
+                                                                }
+                                                            case 6:
+                                                                {
+                                                                    tStatusName = "已关闭";
+                                                                    break;
+                                                                }
+                                                        }
+
+                                                    }
+
+                                                    <td class="task-tab-td-right">@tStatusName</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-box">
+                            <div class="panel-title"><span class="panel-title-text">公告</span></div>
+                            <div class="panel-row">
+                                <table class="table table-data table-hover table-fixed block-project">
+                                    <tbody>
+                                        @{
+                                            List<News> noticeList = new List<News>();
+                                            noticeList = NewsBLL.GetNewsTopList(10, -1, 0).ToList<News>();
+                                            foreach (var newItem in noticeList)
+                                            {
+                                                <tr data-url="javascript:;" class="text-center" style="">
+                                                    <td class="text-left" title="@newItem.DName">
+                                                        <a href="javascript:;" onclick="newlook(this)" val="@newItem.Id,公告">@newItem.DName</a>
+                                                    </td>
+                                                    @{
+                                                        string userName = list.Where(l => l.Value == newItem.CreateUserId + "").FirstOrDefault().Text;
+                                                    }
+                                                    <td class="text-right w-100px" title="@userName">
+                                                        @userName
+                                                    </td>
+                                                    <td class="text-right w-100px" title="@newItem.CreateTime">@newItem.CreateTime.ToShortDate()</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-box">
+                            <div class="panel-title"><span class="panel-title-text">我提交的审批</span></div>
+                            <div class="panel-row">
+                                <table class="table table-data table-hover table-fixed block-project">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left">名称</th>
+                                            <td class="text-center w-120px" title="流程节点">节点</th>
+                                            <td class="text-right w-100px" title="审批状态">状态</th>
+                                        </tr>
+                                        @{
+                                            //获取相关审批
+                                            List<AllApplyNotice> myCreateApplyNoticeList = new List<AllApplyNotice>();
+                                            if (userId != 0)
+                                            {
+                                                myCreateApplyNoticeList = AllApplyNoticeBLL.GetMyCreateApplyNoticeList(userId);
+
+                                                if (myCreateApplyNoticeList.Count > 0)
+                                                {
+                                                    foreach (var applyNotice in myCreateApplyNoticeList)
+                                                    {
+                                                        <tr data-url="javascript:;" class="text-center" style="">
+                                                            <td class="text-left" title="@applyNotice.ADesc">
+                                                                <a href="@applyNotice.ApplyAction">@applyNotice.Title</a>
+                                                            </td>
+                                                            <td>
+                                                                @applyNotice.FlowName
+                                                            </td>
+                                                            @{
+                                                                string tStatusName = "未知";
+                                                                switch (applyNotice.CurrentState.ToInt())
+                                                                {
+                                                                    case 0:
+                                                                        {
+                                                                            tStatusName = "新申请";
+                                                                            break;
+                                                                        }
+                                                                    case 1:
+                                                                        {
+                                                                            tStatusName = "审批中";
+                                                                            break;
+                                                                        }
+                                                                    case 2:
+                                                                        {
+                                                                            tStatusName = "已审批";
+                                                                            break;
+                                                                        }
+                                                                    case 3:
+                                                                        {
+                                                                            tStatusName = "驳回";
+                                                                            break;
+                                                                        }
+                                                                }
+                                                            }
+                                                            <td class="text-right">@tStatusName</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='deskContainer'></div>
+        <div id='modalContainer'></div>
+    </div>
+    <input type="hidden" id="noticeBoxShow" value="false" />
+    <div id="noticeBox" style="display:none">
+    </div>
+    <div id='categoryTpl' class='hide'>
+        <ul id='categoryMenucategoryid' class='category categoryMenu dropdown-menu fade' data-id='categoryid'></ul>
+    </div>
+    <script>
+        var ipsLang = {};
+        ipsLang["confirmClose"] = "确认要关闭　【{0}】 吗？";
+        ipsLang["entryNotFindTip"] = "应用没有找到！";
+        ipsLang["busyTip"] = "应用正忙，请稍候...";
+        ipsLang["reloadText"] = "刷新";
+        ipsLang["closeText"] = "关闭";
+        ipsLang["openText"] = "打开";
+        ipsLang["removeText"] = "移除";
+        ipsLang["fixToMenuText"] = "左侧显示";
+        ipsLang["removeFromMenuText"] = "左侧移除";
+        ipsLang["deleteEntryText"] = "删除应用";
+        ipsLang["removedEntry"] = "应用【{0}】已删除";
+        ipsLang["confirmRemoveEntry"] = "确定移除应用【{0}】吗？";
+        ipsLang["showWindowText"] = "显示";
+        ipsLang["confirmRemoveBlock"] = "确定要删除区块 【{0}】 吗？";
+        ipsLang["removedBlock"] = "区块已删除";
+        ipsLang["hiddenBlock"] = "区块已隐藏";
+        ipsLang["orderdBlocksSaved"] = "排序已保存";
+        ipsLang["moreOptionTip"] = "显示另外 {0} 个应用";
+        ipsLang["confirmCloseBrowser"] = "提示：当前有打开的应用窗口";
+    </script>
+    <script language='Javascript'>
+        var $ = parent.$;
+        $(function () {
+
+            $(document).on('mouseover', '.categoryButton', function () {
+                $('.categoryButton').not('.open').removeClass('active');
+                $(this).addClass('active');
+                var id = $(this).data('id');
+                var menu = $('#categoryMenu' + id);
+                var lis = menu.find('li');
+                var color = $('body').css('background-color');
+                menu.css({ 'background-color': color, 'top': $(this).offset().top - 3, 'width': 40 * lis.size() + 20 });
+                $('.categoryMenu').not(menu).hide();
+                menu.show();
+            });
+
+            $(document).on('mouseover', '.categoryMenu li .app-btn', function () {
+                $('.categoryMenu li .app-btn').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $(document).on('mouseout', '.categoryMenu li .app-btn', function () {
+                $('.categoryMenu li .app-btn').removeClass('active');
+                var id = $(this).parents('.categoryMenu').data('id');
+                if (!$('#category' + id).hasClass('open')) $('#category' + id).removeClass('active');
+            });
+
+            $(document).on('click', '.categoryMenu li .app-btn', function () {
+                $('.categoryMenu').hide();
+                $('.categoryButton').removeClass('active');
+
+                var id = $(this).parents('.categoryMenu').data('id');
+                $('#category' + id).addClass('open active');
+            });
+
+            $(document).on('mouseover', '#leftBar #apps-menu .bar-menu li .app-btn', function () {
+                $('.categoryButton').not(this).not('.open').removeClass('active');
+                if (!$(this).hasClass('categoryButton')) $('.categoryMenu').hide();
+            });
+
+            $(document).on('click', '#leftBar #apps-menu .bar-menu li .app-btn', function () {
+                $('.categoryButton').removeClass('active');
+                $('.categoryMenu').hide();
+            });
+
+            $(document).on('click', '#bottomBar #taskbar .bar-menu li .app-btn', function () {
+                $('.categoryButton').removeClass('active');
+                var dataid = $(this).data('id');
+                $('.categoryMenu li .app-btn').each(function () {
+                    if ($(this).data('id') == dataid) {
+                        var id = $(this).parents('.categoryMenu').data('id');
+                        $('#category' + id).addClass('active');
+                        return;
+                    }
+                });
+            });
+            $(document).mouseover(function (e) {
+                $('.categoryMenu').each(function () {
+                    if ($(this).is(':visible')) {
+                        var dataid = $(this).data('id');
+                        var button = $('#category' + dataid);
+                        var top = button.offset().top;
+                        var left = button.offset().left;
+                        var right = left + button.width() + $(this).width();
+                        var bottom = top + button.height() + $(this).height();
+                        if (e.pageX < left || e.pageX > right || e.pageY < top || e.pageY > bottom) {
+                            $(this).hide();
+                        }
+                    }
+                });
+            });
+
+            getNotickList();
+        });
+
+        function sortEntries(orders, callback) {
+            $.post(createLink('entry', 'customSort'), orders, function (data) {
+                callback && callback(data.result == 'success');
+            }, 'json');
+        }
+        function updateEntryMenu(et, callback) {
+            $.post(createLink('entry', 'updateEntryMenu'), et, function (data) {
+                callback && callback(data.result == 'success');
+            }, 'json');
+        }
+        function deleteEntry(et, callback) {
+            $.getJSON(createLink('entry', 'delete', 'code=' + et.code), function (data) {
+                callback && callback(data.result == 'success');
+            });
+        }
+
+        function hiddenBlock(index) {
+            $.getJSON(createLink('block', 'delete', 'index=' + index + '&app=sys&type=hidden'), function (data) {
+                if (data.result != 'success') {
+                    alert(data.message);
+                    return false;
+                }
+                reloadHome();
+                $.zui.messager.info(ipsLang["hiddenBlock"]);
+            })
+        }
+
+        function initAttendButton() {
+            $('.signin').click(function () {
+                $.getJSON(createLink('oa.attend', 'signin'), function (data) {
+                    if (data.result == 'success') $.zui.messager.success(data.message);
+                    if (data.result == 'fail') $.zui.messager.info(data.message);
+                });
+            });
+            $('.signout').click(function () {
+                $.getJSON(createLink('oa.attend', 'signout'), function (data) {
+                    if (data.result == 'success') window.location.href = createLink('user', 'logout');
+                    if (data.result == 'fail') $.zui.messager.info(data.message);
+                });
+            });
+        }
+        function showUserInfo() {
+            win.open("/Sys_User/UserInfo", 770, 700, "个人信息");
+        }
+        function addBlock(mid) {
+            return;
+        }
+
+        function deleteBlock(index) {
+            $.getJSON(createLink('block', 'delete', 'index=' + index), function (data) {
+                if (data.result != 'success') {
+                    alert(data.message);
+                    return false;
+                }
+            })
+        }
+        function sortBlocks(orders) {
+            var oldOrder = new Array();
+            var newOrder = new Array();
+            for (i in orders) {
+                oldOrder.push(i.replace('block', ''));
+                newOrder.push(orders[i]);
+            }
+
+            $.getJSON(createLink('block', 'sort', 'oldOrder=' + oldOrder.join(',') + '&newOrder=' + newOrder.join(',')), function (data) {
+
+                if (data.result != 'success') return false;
+
+                $('#dashboard .panel').each(function () {
+                    var index = $(this).data('order');
+                    /* Update new index for block id edit and delete. */
+                    $(this).attr('id', 'block' + index).attr('data-id', index).data('url', createLink('block', 'printBlock', 'index=' + index));
+                    $(this).find('.panel-actions .edit-block').attr('href', createLink('block', 'admin', 'index=' + index));
+                });
+
+                $.zui.messager.success(config.ordersSaved);
+            });
+        }
+
+        function resizeBlock(event) {
+            var blockID = event.element.find('.panel').data('blockid');
+            var data = event.type == 'vertical' ? event.height : event.grid;
+            $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=' + event.type + '&data=' + data), function (data) {
+                if (data.result !== 'success') event.revert();
+            });
+        }
+
+        function newlook(obj) {
+            var valInfo = $(obj).attr("val");
+            var valArray = valInfo.split(',');
+            win.open("/news/Readonly?id=" + valArray[0], 900, 580, valArray[1]);
+        }
+        var ref;
+        function getNotickList() {
+            $.post("/Home/GetNotickHtml", function (data) {
+                if (data.Code == 200) {
+                    $("#noticeBox").html(data.Data);
+                    $("#noticeBox").show("slow");
+                    //定时渐出
+                    setTimeout(function () {
+                        if ($("#noticeBoxShow").val() == "false") {
+                            $("#noticeBox").hide("slow");
+                        }
+                    }, 10 * 1000);
+                } else {
+                    clearInterval(ref);
+                }
+            });
+        }
+
+        //设置定时刷新
+        ref = setInterval(function () {
+            getNotickList();
+        }, 5 * 60 * 1000);
+        //每5分钟执行一次getNotickList()方法
+
+        // onmouseover = "stopDivHide()" onmouseout= "continueDivHide()"
+        //鼠标悬停站内通知时触发
+
+        $("#noticeBox").mouseover(
+            function () {
+                $("#noticeBoxShow").val("true");
+            }
+        );
+
+        //鼠标离开站内通知时触发
+        $("#noticeBox").mouseleave(
+            function () {
+                $("#noticeBoxShow").val("false");
+                setTimeout(function () {
+                    if ($("#noticeBoxShow").val() == "false") {
+                        $("#noticeBox").hide("slow");
+                    }
+                }, 10 * 1000);//10秒渐出
+            }
+        );
+
+        //项目查看
+        function goProjectTask(obj) {
+            var taskInfo = $(obj).attr("val");
+            var tArray = taskInfo.split(',');
+            win.open("/Project_Task/Readonly?Id=" + tArray[0] + "&mid=" + $("#currentMid").val(), 1000, 700, "项目任务查看");
+        }
+
+        function goTemporary_Task(obj) {
+            var taskInfo = $(obj).attr("val");
+            var tArray = taskInfo.split(',');
+            win.open("/Temporary_Task/Readonly?Id=" + tArray[0] + "&mid=" + $("#currentMid").val(), 1000, 700, "临时任务查看");
+        }
+
+        function updatePwd() {
+            win.open("/Sys_User/UpdatePwd", 700, 352, "修改密码");
+        }
+    </script>
+</body>
+</html>

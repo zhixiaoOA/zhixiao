@@ -1,0 +1,212 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.My_Agenda
+@{
+    ViewBag.Title = "待办指派-指效";
+    int userId = Session["UserId"].ToInt();
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/js/layui/css/layui.css" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<script src="/Static/js/zui/zui.min.js"></script>
+<script src="/Static/js/layer/layer.js"></script>
+<script src="/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/datetimepicker/datetimepicker.min.js"></script>
+<style>
+    .form-group {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<form id="doForm" method="post" class="form-horizontal" style="padding-top: 38px;" action="/My_Agenda/PointSave">
+    <input type="hidden" id="Id" name="Id" value="@Model.Id">
+    <input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <input type="hidden" name="AIsUndetermined" id="AIsUndetermined" value="@Model.AIsUndetermined" />
+    <input type="hidden" name="AIsNotSet" id="AIsNotSet" value="@Model.AIsNotSet" />
+    <input type="hidden" name="AAssigned" id="AAssigned" value="@Model.AAssigned" />
+
+    <div class="form-group">
+        <label for="Assigned" class="col-sm-2">指派给</label>
+        <div class="col-md-6 col-sm-10">
+            <select name="selAAssigned" id="selAAssigned" class="chosen-select form-control">
+                <option value="" data-keys=""></option>
+                @{
+                    try
+                    {
+                        List<SelectListItem> selectItemsAssigned = ViewBag.ListTeam;
+                        foreach (var item in selectItemsAssigned)
+                        {
+                            if (Model.AAssigned != null)
+                            {
+                                if (Model.AAssigned.ToString() == item.Value)
+                                {
+                                    <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                    continue;
+                                }
+                                <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                    catch
+                    { }
+
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="TheTime" class="col-sm-2">
+            起止时间
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <div class="input-group w-200px" id="datepicker">
+                <span class="input-group-addon">
+                    日期
+                </span>
+                <span class="input-group-addon">
+                    <input type="text" name="ADate" id="ADate" value="@Model.ADate.ToShortDate()" class="form-control form-date" style="width: 200px;">
+                </span>
+                <span class="input-group-addon">
+                    <label class="checkbox-inline"><input type="checkbox" name="switchADate" onclick="switchADateClick(this)"> 待定</label>
+                </span>
+                <span class="input-group-addon ">
+                    <input type="text" class="form-control form-time" name="AStartmmhh" id="AStartmmhh" placeholder="hh:mm" style="width: 80px;" value="@Model.AStartmmhh">
+                </span>
+                <span class="input-group-addon ">
+                    <input type="text" class="form-control form-time" name="AEndmmhh" id="AEndmmhh" placeholder="hh:mm" style="width: 80px;" value="@Model.AEndmmhh">
+                </span>
+                <span class="input-group-addon">
+                    <label class="checkbox-inline"><input type="checkbox" name="switchDate" onclick="switchDateFeature(this)"> 待定</label>
+                </span>
+            </div>
+        </div>
+    </div>
+    @{
+        try
+        {
+            bool bl = true;
+            //判断是否指派或者自己创建
+            if (Model.AAssigned.ToInt() == userId || Model.CreateUserId == userId)
+            {
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        @Html.Raw(ViewBag.CurrentBtnList29)
+                    </div>
+                </div>
+                bl = false;
+            }
+            //是否已经开放权限，如没有，继续走角色设定权限
+            if (bl)
+            {
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        @Html.Raw(ViewBag.CurrentBtnList29)
+                    </div>
+                </div>
+            }
+        }
+        catch { }
+    }
+</form>
+<script type="text/javascript">
+    // 仅选择日期
+    $(".form-date").datetimepicker(
+        {
+            language: "zh-CN",
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            format: "yyyy-mm-dd"
+        });
+
+    // 选择时间
+    $(".form-time").datetimepicker({
+        language: "zh-CN",
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0,
+        format: 'hh:ii'
+    });
+
+
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+        search_contains: true         // 从任意位置开始检索
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#AAssigned").val($(this).val());
+
+    });
+
+    function saveData() {
+        $("#doForm").submit();
+    }
+
+    $("#doForm").Validform({
+        tiptype: 3,
+        callback: function (form) {
+            win.showLoading("正在保存...");
+            $("#doForm").ajaxSubmit(function (data) {
+                if (data.Code == 300) {
+                    win.alert("保存失败");
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        win.hideLoading();
+                        window.parent.location.reload();//刷新当前页面.
+                        win.close();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+
+    //待定
+    function switchADateClick(switcher) {
+        if (switcher.checked) {
+            $("#ADate").attr("disabled", "disabled")
+            $("#AIsUndetermined").val(0);
+        } else {
+            $("#ADate").removeAttr("disabled")
+            $("#AIsUndetermined").val(1);
+        }
+    }
+
+    //暂未设定时间复选框选中事件
+    function switchDateFeature(switcher) {
+        if (switcher.checked) {
+            $("#AStartmmhh").attr("disabled", "disabled")
+            $("#AEndmmhh").attr("disabled", "disabled")
+            $("#AIsNotSet").val(0);
+
+        } else {
+            $("#AStartmmhh").removeAttr("disabled")
+            $("#AEndmmhh").removeAttr("disabled")
+            $("#AIsNotSet").val(1);
+        }
+    }
+</script>

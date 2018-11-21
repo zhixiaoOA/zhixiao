@@ -1,0 +1,105 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MyGooodsUse
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Sys_User> userList = ViewBag.UserList ?? new List<Sys_User>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>所需物品领用审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/MyGooodsUse/SaveApproval" method="post" class="form" id="formMyGooodsUse">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <td colspan="8" class="text-center">
+                            <strong>所需物品领用单</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">姓名</th>
+                        <td>
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-100px'>部门</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-100px'>日期</th>
+                        <td>
+                            @(Model.AddTime.ToDateFormat("yyyy-MM-dd"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">类别</th>
+                        <th class="text-center">烟</th>
+                        <th class="text-center">酒</th>
+                        <th class="text-center">其他</th>
+                        <th class="text-center" colspan="2">总经理审批</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">名称</th>
+                        <td>
+                            @Model.YanName
+                        </td>
+                        <td>
+                            @Model.JiuName
+                        </td>
+                        <td>
+                            @Model.OtherName
+                        </td>
+                        <td colspan="2" rowspan="2">
+                            @{
+                                string userSign0 = "";
+                                try
+                                {
+                                    userSign0 = userList[0].USgin;
+                                }
+                                catch { }
+                                //如果申请单只走部门负责人审批,则仅仅显示部门负责人
+                                if (userSign0.IsNotNullOrEmpty())
+                                {
+                                    <img src="@userSign0" style="width:200px;height:50px;margin-left:7px;" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">数量</th>
+                        <td>
+                            @(Model.YanCount + Model.YanUnitName)
+                        </td>
+                        <td>
+                            @(Model.JiuCount + Model.JiuUnitName)
+                        </td>
+                        <td>
+                            @(Model.OtherCount + Model.OrtherUnitName)
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        onprint();
+    });
+    function printHtml(html) {
+        var bodyHtml = html;
+        document.body.innerHTML = html;
+        window.print();
+        document.body.innerHTML = bodyHtml;
+    }
+    function onprint() {
+        var html = $(".panel-body").html();
+        printHtml(html);
+    }
+</script>

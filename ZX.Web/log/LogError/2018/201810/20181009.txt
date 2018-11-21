@@ -1,0 +1,1708 @@
+
+ 
+记录时间：2018-10-09 10:08:48,315 
+线程ID:[15] 
+日志级别：  ERROR 
+错误描述：查询文档信息时异常
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'Postfix' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.Document_Company_LibraryController.GetDocumentListByLibraryId(Int32 libraryId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_Company_LibraryController.cs:行号 473
+ClientConnectionId:1c7a6415-3185-4bcd-831d-15335a8d032e
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 10:16:07,239 
+线程ID:[20] 
+日志级别：  ERROR 
+错误描述：查询文档信息时异常
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'Postfix' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.Document_Company_LibraryController.GetDocumentListByLibraryId(Int32 libraryId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_Company_LibraryController.cs:行号 473
+ClientConnectionId:1c7a6415-3185-4bcd-831d-15335a8d032e
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 10:19:47,448 
+线程ID:[17] 
+日志级别：  ERROR 
+错误描述：查询文档信息时异常
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'Postfix' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.Document_Company_LibraryController.GetDocumentListByLibraryId(Int32 libraryId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_Company_LibraryController.cs:行号 473
+ClientConnectionId:1c7a6415-3185-4bcd-831d-15335a8d032e
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 10:21:00,919 
+线程ID:[12] 
+日志级别：  ERROR 
+错误描述：查询文档信息时异常
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'Postfix' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.Document_Company_LibraryController.GetDocumentListByLibraryId(Int32 libraryId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_Company_LibraryController.cs:行号 473
+ClientConnectionId:1c7a6415-3185-4bcd-831d-15335a8d032e
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 10:21:15,024 
+线程ID:[7] 
+日志级别：  ERROR 
+错误描述：列名 'Postfix' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'Postfix' 无效。
+   在 ZX.DAL.DBBase`1.AddModel(T t) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 43
+   在 ZX.BLL.BaseBLL`2.AddModel(T t) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 23
+   在 ZX.Web.Controllers.Document_ManagerController.SaveData() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 656
+ClientConnectionId:1c7a6415-3185-4bcd-831d-15335a8d032e
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 10:26:43,404 
+线程ID:[30] 
+日志级别：  ERROR 
+错误描述：列名 'Postfix' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'Postfix' 无效。
+   在 ZX.DAL.DBBase`1.AddModel(T t) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 43
+   在 ZX.BLL.BaseBLL`2.AddModel(T t) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 23
+   在 ZX.Web.Controllers.Document_ManagerController.SaveData() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 656
+ClientConnectionId:1c7a6415-3185-4bcd-831d-15335a8d032e
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 11:40:08,495 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Document_ManagerController.AddEdit(Nullable`1 id, Nullable`1 fk_TypeId, Int32 libraryId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 495
+
+ 
+记录时间：2018-10-09 11:42:05,666 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Document_ManagerController.AddEdit(Nullable`1 id, Nullable`1 fk_TypeId, Int32 libraryId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 495
+
+ 
+记录时间：2018-10-09 11:43:05,038 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Document_ManagerController.Readonly() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 557
+
+ 
+记录时间：2018-10-09 11:43:44,326 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Document_ManagerController.Readonly() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 557
+
+ 
+记录时间：2018-10-09 11:50:05,040 
+线程ID:[15] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Document_ManagerController.AddEdit(Nullable`1 id, Nullable`1 fk_TypeId, Int32 libraryId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 495
+
+ 
+记录时间：2018-10-09 11:50:09,096 
+线程ID:[15] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.Document_ManagerController.Readonly() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Document_ManagerController.cs:行号 557
+
+ 
+记录时间：2018-10-09 14:32:02,779 
+线程ID:[12] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:32:12,056 
+线程ID:[11] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:32:13,097 
+线程ID:[14] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:32:15,616 
+线程ID:[11] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:32:19,398 
+线程ID:[11] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:34:16,289 
+线程ID:[12] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:34:44,361 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:35:50,243 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:36:00,275 
+线程ID:[22] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:36:05,652 
+线程ID:[22] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:36:08,679 
+线程ID:[21] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:37:05,466 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:41:00,617 
+线程ID:[29] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:41:09,751 
+线程ID:[29] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:43:38,391 
+线程ID:[28] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:43:51,616 
+线程ID:[35] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:791f8037-e4db-4d13-bd76-11567474c5ee
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:44:45,080 
+线程ID:[45] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:16521540-cb5a-4c0f-9641-ccb48bb9cda1
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:44:54,835 
+线程ID:[31] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:16521540-cb5a-4c0f-9641-ccb48bb9cda1
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:45:27,537 
+线程ID:[39] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:16521540-cb5a-4c0f-9641-ccb48bb9cda1
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:46:46,632 
+线程ID:[39] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:16521540-cb5a-4c0f-9641-ccb48bb9cda1
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:47:37,826 
+线程ID:[32] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:16521540-cb5a-4c0f-9641-ccb48bb9cda1
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:57:32,092 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:35ba9772-42e4-44fc-ac8a-4f6941bce21b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:58:18,371 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:35ba9772-42e4-44fc-ac8a-4f6941bce21b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 14:58:28,008 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:35ba9772-42e4-44fc-ac8a-4f6941bce21b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:02:23,822 
+线程ID:[29] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:35ba9772-42e4-44fc-ac8a-4f6941bce21b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:05:09,796 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:35ba9772-42e4-44fc-ac8a-4f6941bce21b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:05:45,711 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:35ba9772-42e4-44fc-ac8a-4f6941bce21b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:09:15,545 
+线程ID:[11] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:c6e77358-5d21-48cd-b711-b74ba069d16b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:13:58,227 
+线程ID:[11] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:c6e77358-5d21-48cd-b711-b74ba069d16b
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:20:11,819 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:95993350-7d91-4d39-a62b-db26fe5a2cdf
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:21:54,821 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:95993350-7d91-4d39-a62b-db26fe5a2cdf
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:22:02,387 
+线程ID:[14] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:95993350-7d91-4d39-a62b-db26fe5a2cdf
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:22:44,189 
+线程ID:[14] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:95993350-7d91-4d39-a62b-db26fe5a2cdf
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:22:47,987 
+线程ID:[14] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:95993350-7d91-4d39-a62b-db26fe5a2cdf
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:22:51,606 
+线程ID:[14] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:95993350-7d91-4d39-a62b-db26fe5a2cdf
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 15:28:58,183 
+线程ID:[22] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:28:58,696 
+线程ID:[29] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:32:47,188 
+线程ID:[35] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:32:47,706 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:33:04,476 
+线程ID:[29] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.RecursionGetFirstMenu(List`1 menuList, Int32 mid) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 298
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 166
+
+ 
+记录时间：2018-10-09 15:33:04,492 
+线程ID:[29] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:33:18,761 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:33:19,269 
+线程ID:[35] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:33:30,850 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:33:31,365 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:34:18,887 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:34:19,373 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:34:24,720 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:34:25,231 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:34:47,700 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.RecursionGetFirstMenu(List`1 menuList, Int32 mid) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 298
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 166
+
+ 
+记录时间：2018-10-09 15:34:47,715 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:38:38,898 
+线程ID:[35] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.RecursionGetFirstMenu(List`1 menuList, Int32 mid) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 298
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 166
+
+ 
+记录时间：2018-10-09 15:38:38,912 
+线程ID:[35] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:38:49,239 
+线程ID:[35] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:38:49,763 
+线程ID:[53] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:50:39,426 
+线程ID:[36] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:50:39,975 
+线程ID:[61] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:50:44,816 
+线程ID:[36] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.RecursionGetFirstMenu(List`1 menuList, Int32 mid) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 298
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 166
+
+ 
+记录时间：2018-10-09 15:50:44,828 
+线程ID:[36] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:54:24,248 
+线程ID:[58] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:54:24,767 
+线程ID:[60] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 15:57:44,331 
+线程ID:[60] 
+日志级别：  ERROR 
+错误描述：列名 'DeptName' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'DeptName' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.AssetsUseController.AddEdit(Nullable`1 id) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\AssetsUseController.cs:行号 119
+ClientConnectionId:43659dce-6a5e-49c7-8111-86352170f5e3
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 16:00:04,523 
+线程ID:[76] 
+日志级别：  ERROR 
+错误描述：列名 'DeptName' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'DeptName' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.AssetsUseController.AddEdit(Nullable`1 id) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\AssetsUseController.cs:行号 119
+ClientConnectionId:43659dce-6a5e-49c7-8111-86352170f5e3
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 16:00:25,008 
+线程ID:[76] 
+日志级别：  ERROR 
+错误描述：列名 'DeptName' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'DeptName' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.AssetsUseController.AddEdit(Nullable`1 id) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\AssetsUseController.cs:行号 119
+ClientConnectionId:43659dce-6a5e-49c7-8111-86352170f5e3
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 16:01:12,123 
+线程ID:[76] 
+日志级别：  ERROR 
+错误描述：值不能为 null。
+参数名: source
+ 
+System.ArgumentNullException: 值不能为 null。
+参数名: source
+   在 System.Linq.GroupedEnumerable`3..ctor(IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   在 System.Linq.Enumerable.GroupBy[TSource,TKey](IEnumerable`1 source, Func`2 keySelector)
+   在 ZX.Web.Controllers.AssetsUseController.SaveData() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\AssetsUseController.cs:行号 144
+
+ 
+记录时间：2018-10-09 16:02:19,095 
+线程ID:[76] 
+日志级别：  ERROR 
+错误描述：列名 'DeptName' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'DeptName' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.AssetsUseController.AddEdit(Nullable`1 id) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\AssetsUseController.cs:行号 119
+ClientConnectionId:43659dce-6a5e-49c7-8111-86352170f5e3
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 16:02:30,592 
+线程ID:[76] 
+日志级别：  ERROR 
+错误描述：值不能为 null。
+参数名: source
+ 
+System.ArgumentNullException: 值不能为 null。
+参数名: source
+   在 System.Linq.GroupedEnumerable`3..ctor(IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   在 System.Linq.Enumerable.GroupBy[TSource,TKey](IEnumerable`1 source, Func`2 keySelector)
+   在 ZX.Web.Controllers.AssetsUseController.SaveData() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\AssetsUseController.cs:行号 144
+
+ 
+记录时间：2018-10-09 16:03:31,232 
+线程ID:[39] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:03:31,753 
+线程ID:[47] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:03:37,349 
+线程ID:[40] 
+日志级别：  ERROR 
+错误描述：列名 'DeptName' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 列名 'DeptName' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(AiExpConditions`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 469
+   在 ZX.BLL.BaseBLL`2.GetList(Expression`1 exp) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 194
+   在 ZX.Web.Controllers.AssetsUseController.AddEdit(Nullable`1 id) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\AssetsUseController.cs:行号 119
+ClientConnectionId:43659dce-6a5e-49c7-8111-86352170f5e3
+Error Number:207,State:1,Class:16
+
+ 
+记录时间：2018-10-09 16:07:42,210 
+线程ID:[46] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:07:42,718 
+线程ID:[43] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:07:48,669 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:08:06,777 
+线程ID:[50] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:08:20,096 
+线程ID:[50] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:08:20,610 
+线程ID:[43] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:09:09,772 
+线程ID:[57] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:11:18,290 
+线程ID:[50] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:11:39,965 
+线程ID:[43] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:17:40,477 
+线程ID:[40] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:17:40,978 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:17:43,665 
+线程ID:[40] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:17:44,164 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:17:44,656 
+线程ID:[40] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:18:42,326 
+线程ID:[31] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:18:52,419 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:18:52,939 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:19:12,233 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:24:43,113 
+线程ID:[23] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:24:43,643 
+线程ID:[11] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:41,724 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:42,239 
+线程ID:[23] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:44,895 
+线程ID:[23] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:45,408 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:50,262 
+线程ID:[31] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:50,768 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:52,222 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:25:52,729 
+线程ID:[31] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:26:27,786 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:26:28,295 
+线程ID:[56] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:26:57,683 
+线程ID:[16] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:26:58,189 
+线程ID:[31] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:27:02,120 
+线程ID:[16] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:29:28,536 
+线程ID:[35] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:29:37,111 
+线程ID:[49] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:30:02,653 
+线程ID:[31] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:30:03,172 
+线程ID:[24] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:35:11,460 
+线程ID:[49] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 16:35:11,976 
+线程ID:[11] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-09 17:19:52,145 
+线程ID:[52] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:93643438-2de5-4a9d-aa7f-e72b0a3d528c
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-10-09 17:19:59,744 
+线程ID:[52] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:93643438-2de5-4a9d-aa7f-e72b0a3d528c
+Error Number:2812,State:62,Class:16

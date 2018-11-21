@@ -1,0 +1,49 @@
+﻿@using ZX.Tools
+@{
+    ViewBag.Title = "礼品明细-指效OA";
+}
+
+<div class='row page-content with-menu' style="margin-top:0;">
+    <div class='panel'>
+        <div class="panel-body">
+            <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-60px' rowspan="2" style="vertical-align: middle;">序号</th>
+                        <th class='text-left'>申请人</th>
+                        <th class='text-left'>部门</th>
+                        <th class='text-left'>申请理由</th>
+                        <th class='text-left w-120px'>总金额</th>
+                        <th class='text-left w-80px'>当前状态</th>
+                        <th class='text-left w-140px'>申请时间</th>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+    });
+    function getList() {
+        win.showLoading();
+        var userId = @ViewBag.UserId;
+        var startTime = '@ViewBag.StartTime';
+        var endTime = '@ViewBag.EndTime';
+        $.post("/ApprovalStatistical/GetMyGiftBuyDetailed", {
+            userId: userId,
+            startTime:startTime,
+            endTime:endTime
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+</script>
+

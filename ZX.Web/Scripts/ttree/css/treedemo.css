@@ -1,0 +1,21 @@
+.collapsed {
+    display: none;
+}
+
+.adeimg, .ttimage, .parimg, .preimg {
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+.adeimg, .parimg {
+    cursor: pointer;
+}
+
+.grid .gridTbody td {
+    line-height: 0px;
+    height: 25px;
+    line-height: 16px;
+}

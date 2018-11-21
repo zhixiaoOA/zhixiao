@@ -1,0 +1,50 @@
+﻿@using ZX.Tools
+@{
+    ViewBag.Title = "申请单明细-指效OA";
+}
+<div class='row page-content with-menu' style="margin-top:0;">
+    <div class='panel'>
+        <div class="panel-body">
+            <div>
+            </div>
+            <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-60px' rowspan="2" style="vertical-align: middle;">序号</th>
+                        <th class='text-left'>印章名称</th>
+                        <th class='text-left w-140px'>保管人员</th>
+                        <th class='text-left w-140px'>返还时间</th>
+                        <th class='text-left w-80px'>当前状态</th>
+                        <th class='text-left w-140px'>申请时间</th>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+    });
+    function getList() {
+        win.showLoading();
+        var userId = @ViewBag.UserId;
+        var startTime = '@ViewBag.StartTime';
+        var endTime = '@ViewBag.EndTime';
+        $.post("/ApprovalStatistical/GetMySealOutcountDetailed", {
+            userId: userId,
+            startTime:startTime,
+            endTime:endTime
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+</script>

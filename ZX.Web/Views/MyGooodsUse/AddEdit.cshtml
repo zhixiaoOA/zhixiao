@@ -1,0 +1,262 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MyGooodsUse
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    List<Dictionary> listYan = ViewBag.ListYan ?? new List<Dictionary>();
+    List<Dictionary> listJiu = ViewBag.ListJiu ?? new List<Dictionary>();
+    List<Dictionary> listOrther = ViewBag.ListOrther ?? new List<Dictionary>();
+    //List<Approval_User> listAuser = ViewBag.ListAUser ?? new List<Approval_User>();
+    List<Approval> listApproval = ViewBag.ListApproval ?? new List<Approval>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        font-size: 14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>所需物品领用申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/MyGooodsUse/SaveData" method="post" class="form" id="formMyGooodsUse">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-center w-120px">姓名</th>
+                        <td>
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-100px'>部门</th>
+                        <td class="text-center w-200px">
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-100px'>日期</th>
+                        <td>
+                            @(Model.AddTime.ToDateFormat("yyyy-MM-dd"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">类别</th>
+                        <th class="text-center">烟</th>
+                        <th class="text-center" colspan="2">酒</th>
+                        <th class="text-center" colspan="2">其他</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">名称</th>
+                        <td>
+                            <input name="YanName" class="form-control" value="@Model.YanName" />
+                        </td>
+                        <td colspan="2">
+                            <input name="JiuName" class="form-control" value="@Model.JiuName" />
+                        </td>
+                        <td colspan="2">
+                            <input name="OtherName" class="form-control" value="@Model.OtherName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">数量</th>
+                        <td>
+                            <div class="input-group">
+                                <input name="YanCount" class="form-control" value="@Model.YanCount"
+                                       onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this)" />
+                                <span class="input-group-addon fix-border fix-padding"></span>
+                                <select name="YanUnitName" class="form-control">
+                                    @{
+                                        foreach (var item in listYan)
+                                        {
+                                            if (Model.YanUnitName.IsNotNullOrEmpty() && Model.YanUnitName.Equals(item.Name))
+                                            {
+                                                <option selected value="@item.Name">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="input-group">
+                                <input name="JiuCount" class="form-control" value="@Model.JiuCount"
+                                       onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this)" />
+                                <span class="input-group-addon fix-border fix-padding"></span>
+                                <select name="JiuUnitName" class="form-control">
+                                    @{
+                                        foreach (var item in listJiu)
+                                        {
+                                            if (Model.JiuUnitName.IsNotNullOrEmpty() && Model.JiuUnitName.Equals(item.Name))
+                                            {
+                                                <option selected value="@item.Name">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="input-group">
+                                <input name="OtherCount" class="form-control" value="@Model.OtherCount"
+                                       onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this)" />
+                                <span class="input-group-addon fix-border fix-padding"></span>
+                                <select name="OrtherUnitName" class="form-control">
+                                    @{
+                                        foreach (var item in listOrther)
+                                        {
+                                            if (Model.OrtherUnitName.IsNotNullOrEmpty() && Model.OrtherUnitName.Equals(item.Name))
+                                            {
+                                                <option selected value="@item.Name">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="5">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <th>请选择审批流程<span style="color:red">*</span></th>
+                        <td colspan='5'>
+                            <select class="form-control" style="max-width:80%;" name="FK_ApprovalId" datatype="*" nullmsg="请选择审批流程">
+                                <option value="">==请选择==</option>
+                                @foreach (var item in listApproval)
+                                {
+                                    <option value="@item.Id" @(Model.FK_ApprovalId == item.Id ? "selected" : "")>@item.DName</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveCaogao()'>存为草稿</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="submitMsg" value="" />
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#formMyGooodsUse").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                if ($("input[name='Status']").val() == "@ApplyStatus.草稿.ToInt()") {
+                    win.showLoading("正在保存...");
+                    $("#formMyGooodsUse").ajaxSubmit(function (data) {
+                        if (data.Code == 300) {
+                            win.alert(data.Message);
+                        } else if (data.Code == 200) {
+                            win.success($("#submitMsg").val(), function () {
+                                goBack();
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    win.confirm("确认提交审批？", function () {
+                        win.showLoading("正在保存...");
+                        $("#formMyGooodsUse").ajaxSubmit(function (data) {
+                            if (data.Code == 300) {
+                                win.alert(data.Message);
+                            } else if (data.Code == 200) {
+                                win.success($("#submitMsg").val(), function () {
+                                    goBack();
+                                }, 1000);
+                            }
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+    });
+
+
+    function saveCaogao() {
+        $("input[name='Status']").val("@(ApplyStatus.草稿.ToInt())");
+        $("#submitMsg").val("保存草稿成功");
+        $("#formMyGooodsUse").submit();
+    }
+    function saveData() {
+        if(@Model.Id==0)$("input[name='Status']").val("@(ApplyStatus.新申请.ToInt())");
+        $("#submitMsg").val("提交审批成功");
+        $("#formMyGooodsUse").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+
+</script>

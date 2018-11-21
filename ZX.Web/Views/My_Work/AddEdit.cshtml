@@ -1,0 +1,213 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model My_Work
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    List<Approval> listApproval = ViewBag.ListApproval ?? new List<Approval>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+        font-size:14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>加班/调休申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/My_Work/SaveData" method="post" class="form" id="formMy_Work">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-center w-120px">姓名</th>
+                        <td>
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-50px'>部门</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-50px'>职位</th>
+                        <td>
+                            @user.PositionName
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">事由</th>
+                        <td colspan="5">
+                            <textarea style="width:100%;" cols="3" name="ADesc" class='form-control' autocomplete="off" datatype="*" nullmsg="请填写事由">@Model.ADesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">时间</th>
+                        <td colspan="4">
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-10" style="padding-left:0;width: 388px;">
+                                    <div class="input-group">
+                                        <input type="text" class='form-control form-date' id="StartTime" placeholder="开始日期" name="StartTime" value="@Model.StartTime.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:100px;" onblur="getDateDiff()" datatype="*" nullmsg="请填写开始时间" />
+                                        <input type="text" class='form-control form-date' id="stime" placeholder="时间" value="@Model.StartTime.ToDateFormat("HH:00")" onfocus="WdatePicker({dateFmt:'HH:mm'})" style="width:60px;" onblur="getDateDiff()" />
+                                        <span class="input-group-addon">截止日期</span>
+                                        <input type="text" class='form-control form-date' id="EndTime" name="EndTime" placeholder="结束日期" value="@Model.EndTime.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:100px;" onblur="getDateDiff()" datatype="*" nullmsg="请填写截止时间" />
+                                        <input type="text" class='form-control form-date' id="etime" placeholder="时间" value="@Model.EndTime.ToDateFormat("HH:00")" onfocus="WdatePicker({dateFmt:'HH:mm'})" style="width:60px;" onblur="getDateDiff()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span style="line-height:2;" id="iday">@ViewBag.AppLen</span>
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="5">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>请选择审批流程<span style="color:red">*</span></th>
+                        <td colspan='5'>
+                            <select class="form-control" style="max-width:80%;" name="FK_ApprovalId" datatype="*" nullmsg="请选择审批流程">
+                                <option value="">==请选择==</option>
+                                @foreach (var item in listApproval)
+                                {
+                                    <option value="@item.Id" @(Model.FK_ApprovalId == item.Id ? "selected" : "")>@item.DName</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveCaogao()'>存为草稿</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="submitMsg" value="" />
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#formMy_Work").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                if ($("input[name='Status']").val() == "@ApplyStatus.草稿.ToInt()") {
+                    win.showLoading("正在保存...");
+                    if ($.trim($("#stime").val()) != "") $("#StartTime").val($("#StartTime").val() + " " + $("#stime").val());
+                    if ($.trim($("#etime").val()) != "") $("#EndTime").val($("#EndTime").val() + " " + $("#etime").val());
+                    $("#formMy_Work").ajaxSubmit(function (data) {
+                        if (data.Code == 300) {
+                            win.alert(data.Message);
+                        } else if (data.Code == 200) {
+                            win.success($("#submitMsg").val(), function () {
+                                goBack();
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    win.confirm("确认提交审批？", function () {
+                        win.showLoading("正在保存...");
+                        if ($.trim($("#stime").val()) != "") $("#StartTime").val($("#StartTime").val() + " " + $("#stime").val());
+                        if ($.trim($("#etime").val()) != "") $("#EndTime").val($("#EndTime").val() + " " + $("#etime").val());
+                        $("#formMy_Work").ajaxSubmit(function (data) {
+                            if (data.Code == 300) {
+                                win.alert(data.Message);
+                            } else if (data.Code == 200) {
+                                win.success($("#submitMsg").val(), function () {
+                                    goBack();
+                                }, 1000);
+                            }
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+    });
+    function saveCaogao() {
+        $("input[name='Status']").val("@(ApplyStatus.草稿.ToInt())");
+        $("#submitMsg").val("保存草稿成功");
+        $("#formMy_Work").submit();
+    }
+    function saveData() {
+        if(@Model.Id==0)$("input[name='Status']").val("@(ApplyStatus.新申请.ToInt())");
+        $("#submitMsg").val("提交审批成功");
+        $("#formMy_Work").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    function getDateDiff() {
+        if ($("#StartTime").val() != "" && $("#EndTime").val() != "") {
+            var edate = new Date($("#EndTime").val());
+            var mm = edate.getMonth() + 1;
+            var dd = $.trim($("#stime").val()) == "" || $.trim($("#etime").val()) == "" ? edate.getDate() + 1 : edate.getDate();
+            var etime = edate.getFullYear() + "-" + mm + "-" + dd;
+            var btime = $("#StartTime").val() + ($.trim($("#stime").val()) != "" ? " " + $("#stime").val() + ":00" : "");
+            etime = etime + ($.trim($("#etime").val()) != "" ? " " + $("#etime").val() + ":00" : "");
+            var hh = $.admin.getDateDiff(btime, etime, "hh");
+            dd = parseInt(hh / 24);
+            hh = hh % 24;
+            if (hh != 0) {
+                if (dd > 0) {
+                    $("#iday").html("共 " + dd + " 天" + hh + "小时");
+                } else {
+                    $("#iday").html("共 " + hh + "小时");
+                }
+            } else {
+                $("#iday").html("共 " + dd + " 天");
+            }
+        }
+
+    }
+    function printApply(id) {
+        $("#printFrame").attr('src', '/My_Work/My_WorkPrint?id=' + id);
+    }
+</script>

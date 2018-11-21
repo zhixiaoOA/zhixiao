@@ -1,0 +1,55 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Supplier_Type
+@{
+    List<Approval> list = ViewBag.List;
+}
+<form action="/Supplier_Type/SaveData" method="post" class="ui form" id="formSupplier_Type">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>名称</label>
+            <input type="text" name="TName" value="@Model.TName" placeholder="名称" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>名称</label>
+            <input type="text" name="TSort" value="@Model.TSort" placeholder="名称" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need"></span>备注</label>
+            <textarea name="TRemark">@Model.TRemark</textarea>
+        </div>
+    </div>
+    <div class="footer_form">
+        <button type="button" onclick="win.close();" class="btn btn-sm btn-danger">
+            <i class="icon-reply fa icon-only bigger-120">关闭</i>
+        </button>
+        <button type="submit" class="btn btn-sm btn-primary">
+            <i class="icon-save bigger-120">保存</i>
+        </button>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function () {
+        $("#formSupplier_Type").Validform({
+            tiptype: 3,
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#formSupplier_Type").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        parent.getList();
+                        parent.win.success(data.Message);
+                        win.close();
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>

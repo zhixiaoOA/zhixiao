@@ -1,0 +1,119 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Dictionary
+
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .need {
+        color: red;
+    }
+
+    .layui-form-label {
+        width: 100px;
+    }
+
+    .layui-form-item {
+        position: center;
+        margin-left: 80px;
+    }
+
+    .layui-input {
+        width: 60% !important;
+    }
+
+    #submit {
+        position: absolute;
+        left: 35%;
+        top: 60%;
+    }
+
+    #close {
+        position: absolute;
+        left: 50%;
+        top: 60%;
+    }
+</style>
+<form action="/Dictionary/SaveData" method="post" class="layui-form" id="formDictionary" style="padding-top: 30px;">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="ParentId" value="@Model.ParentId" />
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="need">*</span>上级字典</label>
+        <div class="layui-input-block">
+            <input type="text" class='layui-input' placeholder="上级字典" datatype="*" id="txtSysDictionary" value="@(ViewBag.DictionaryName ?? "无")" readonly="readonly" onclick="showSysDictionary();">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="need">*</span>字典名称</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" name="Name" value="@Model.Name" placeholder="字典名称" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="need">*</span>排序</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" name="Sort" value="@Model.Sort" placeholder="排序" autocomplete="off" datatype="*"
+                   onkeypress="$.admin.keyPress(this)"
+                   onkeyup="$.admin.keyUp(this)"
+                   onblur="$.admin.keyBlur(this)">
+        </div>
+    </div>
+    <div class="footer_form">
+        <a href="javascript:;" class="layui-btn" id="close" onclick="win.close();">关闭</a>
+        <a href="javascript:;" class="layui-btn" id="submit" onclick="saveData()">保存</a>
+    </div>
+</form>
+<div id="sysDictionary" class="DictionaryContent" style="display: none; position: absolute;">
+    <ul id="treeSysDictionary" class="ztree" style="margin-top: 0;max-height: 280px;"></ul>
+</div>
+<input type="hidden" id="txtDictionaryzTree" value="@ViewBag.TreeJson" />
+<script type="text/javascript">
+    function saveData() {
+        $("#formDictionary").submit();
+    }
+    var DictionaryTree;
+    $(function () {
+        $("#formDictionary").Validform({
+            tiptype: 3,
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#formDictionary").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        parent.$("#btnSearch").click();
+                        parent.win.success(data.Message);
+                        win.close();
+                    }
+                });
+                return false;
+            }
+        });
+    });
+    //点击选择菜单
+    function onDictionaryClick(e, treeId, treeNode) {
+        $("#formDictionary input[name='ParentId']").val(treeNode.id);
+        $("#txtSysDictionary").val(treeNode.name);
+        hideSysDictionary();
+    }
+    //显示菜单
+    function showSysDictionary() {
+        var cityObj = $("#txtSysDictionary");
+        var cityOffset = $("#txtSysDictionary").offset();
+        $("#treeSysDictionary").width(cityObj.width());
+        $("#sysDictionary").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysDictionaryBodyDown);
+    }
+    //隐藏菜单
+    function hideSysDictionary() {
+        $("#sysDictionary").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysDictionaryBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysDictionaryBodyDown(event) {
+        if (!(event.target.id == "DictionaryBtn" || event.target.id == "sysDictionary" || $(event.target).parents("#sysDictionary").length > 0)) {
+            hideSysDictionary();
+        }
+    }
+</script>

@@ -1,0 +1,213 @@
+﻿@using ZX.Model
+@using ZX.BLL
+@using ZX.Tools
+
+@model Project
+@{
+    ViewBag.Title = "相关文件-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .outer {
+        overflow: auto
+    }
+
+    .doclib-action li {
+        list-style: none
+    }
+
+    .doc-content {
+        overflow-x: scroll;
+    }
+
+    label.checkbox {
+        float: left;
+        margin-right: 10px;
+        width: 100px;
+    }
+
+    input[type=checkbox] {
+        margin-top: 1px;
+    }
+
+    .table-form td + td, .table-form th + th {
+        padding-left: 20px;
+    }
+
+    .icon-2x {
+        font-size: 40px;
+    }
+
+    .libs-group-heading {
+        color: #808080;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+    }
+
+        .libs-group-heading a {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-decoration: none;
+        }
+
+    .libs-group {
+        padding: 10px;
+        height: 84px;
+    }
+
+    .lib {
+        float: left;
+        display: block;
+        width: 80px;
+        padding: 5px;
+        margin: 0px 3px;
+        text-align: center;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .lib .file-icon {
+            margin-bottom: 5px;
+        }
+
+        .lib .lib-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .lib:hover, .lib:focus, .lib:active {
+            border-color: #2e6dad;
+            background-color: #EBF2F9;
+            color: #2e6dad;
+            text-decoration: none;
+        }
+
+    .w-lib-p100 {
+        width: 100%;
+    }
+
+    .w-lib-p50 {
+        width: 45%;
+    }
+
+    .w-lib-p33 {
+        width: 30%;
+    }
+
+    #menu .nav > li > a {
+        display: inline-block;
+    }
+
+    #navBarActions {
+        position: absolute;
+        right: 100px;
+        top: 4px;
+        z-index: 10000;
+    }
+
+    .panel-body > form {
+        max-width: 1200px;
+    }
+
+    #libList .lib .icon-move {
+        display: none;
+        position: relative;
+        top: -20px;
+        right: -70px;
+    }
+
+    #libList .lib:hover .icon-move {
+        display: inline-block;
+        cursor: move;
+    }
+
+    .lib {
+        width: 130px;
+        margin-bottom: 10px;
+    }
+
+    .addbtn {
+        padding-top: 22px;
+        height: 63px;
+        border: 1px dashed #ddd;
+        width: 60px;
+    }
+
+        .addbtn .icon-plus {
+            font-size: 18px;
+            display: block;
+            opacity: 0.5;
+            transition: opacity .2s;
+            text-shadow: 1px 1px 3px rgba(0,0,0,.2);
+        }
+
+        .addbtn:hover .icon-plus {
+            opacity: .9;
+            animation: flash-icon 1s linear alternate infinite
+        }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='row page-content' style="width:98%;">
+    <nav id='menu'>
+        <ul class='nav'>
+            <li>
+                <a href='javascript:;'>@Model.PName</a>
+            </li>
+            <li class='divider angle'></li>
+        </ul>
+    </nav><div id='libs' class='with-menu page-content'>
+        <div class='libs-group clearfix' id='libList'>
+            @{
+                List<Document_Library> list = Document_LibraryBLL.GetList(d => d.Where(t => t.FK_Id == Model.Id));
+                if (list != null)
+                {
+                    foreach (var item in list)
+                    {
+                        <a class="lib " title='@item.DName' href='javascript:;' data-id='8' onclick="jumpProjectDocList(@item.Id)">
+                            <i class='icon icon-move'> </i>
+                            <i class='icon icon-2x icon-folder-open-alt'></i>
+                            <div class='lib-name' title='@item.DName'>@item.DName</div>
+                        </a>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+<script language='Javascript'>
+    function jumpProjectDocList(libraryId) {
+        window.location.href = "/Document_Manager/ProjectDoc?fk_LibraryId=" + libraryId + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    function jumpAddEdit(id, projectId, libType) {
+        var title = (libType == 0) ? "项目文档库" : "自定义文档库";
+        win.open("/Document_Library/AddEdit?id=0&projectId=" + projectId + "&libType=" + libType + "&secondMenuId=17", 770, 363, title);//先收工设定
+    }
+</script>

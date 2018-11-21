@@ -1,0 +1,339 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Project_Block
+@{
+    ViewBag.Title = "编辑区块-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<style>
+    .col-sm-2 {
+        width:14%;
+    }
+</style>
+<form method="post" class="form-horizontal" id="formProject_Block">
+
+    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+    <input type="hidden" name="aMid" id="aMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class="form-group" style="padding-top:16Px;">
+        <label for="BType" class="col-sm-2">区块<span style="color:red">*</span></label>
+        <div class="col-md-6 col-sm-10">
+            <select class="form-control" id="BType" datatype="*" nullmsg="请选择类型">
+                <option value="1" @(Model.BType == 1 ? "selected" : "")>任务列表</option>
+                <option value="2" @(Model.BType == 2 ? "selected" : "")>项目列表</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="BName" class="col-sm-2">
+            区块名称<span style="color:red">*</span>
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="BName" name="BName" value="@Model.BName" placeholder="区块名称" class="form-control" autocomplete="off" datatype="*" nullmsg="请填写缺块名称">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="BColor" class="col-sm-2">外观</label>
+        <div class="col-md-6 col-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon">宽度</span>
+                <select name="BWidth" id="BWidth" class="form-control">
+                    <option value="33" data-keys="1/3">1/3</option>
+                    <option value="50" data-keys="1/2">1/2</option>
+                    <option value="66" data-keys="2/3">2/3</option>
+                    <option value="25" data-keys="1/4">1/4</option>
+                    <option value="75" data-keys="3/4">3/4</option>
+                    <option value="100" data-keys="100%">100%</option>
+                </select>
+                <span class="input-group-addon ">颜色</span>
+                <input type="text" id="BColor" name="BColor" value="@Model.BColor" class="form-control fix-border fix-padding" placeholder="颜色">
+            </div>
+        </div>
+    </div>
+    <div id="div_PTType" class="form-group">
+        <label for="PTType" class="col-sm-2">
+            类型
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select name="PTType" id="PTType" class="form-control">
+                <option value="1">指派给我</option>
+                <option value="2">由我创建</option>
+                <option value="3">由我完成</option>
+                <option value="4">由我关闭</option>
+                <option value="5">由我取消</option>
+            </select>
+            <select name="params[type]" id="paramstype" class="form-control chosen" style="display: none;">
+                <option value="assignedTo" data-keys="zhipaigeiwo zpgw">指派给我</option>
+                <option value="createdBy" data-keys="youwochuangjian ywcj">由我创建</option>
+                <option value="finishedBy" data-keys="youwowancheng ywwc">由我完成</option>
+                <option value="closedBy" data-keys="youwoguanbi ywgb">由我关闭</option>
+                <option value="canceledBy" data-keys="youwoquxiao ywqx">由我取消</option>
+            </select>
+        </div>
+    </div>
+    <div id="div_PState" class="form-group" style="display:none">
+        <label for="PState" class="col-sm-2">
+            状态
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select name="PState" id="PState" class="form-control">
+                @*// 0：有效 10：挂起 20：完成 30：删除*@
+                <option value="1" @(Model.PTState == "1" ? "selected" : "")>我参与的</option>
+                <option value="2" @(Model.PTState == "2" ? "selected" : "")>进行中</option>
+                <option value="3" @(Model.PTState == "3" ? "selected" : "")>已完成</option>
+                <option value="4" @(Model.PTState == "4" ? "selected" : "")>已挂起</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RowCounts" class="col-sm-2">
+            数量<span style="color:red">*</span>
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="RowCounts" name="RowCounts" class="form-control" value="@Model.RowCounts" placeholder="数量" onkeypress="$.admin.keyPress(this)"
+                   onkeyup="$.admin.keyUp(this)"
+                   onblur="$.admin.keyBlur(this)" datatype="*" nullmsg="请输入展示数量">
+        </div>
+    </div>
+    <div id="div_TBOrderBy" class="form-group">
+        <label for="TBOrderBy" class="col-sm-2">
+            排序
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select name="TBOrderBy" id="TBOrderBy" class="form-control">
+                <option value="id_asc">ID 递增</option>
+                <option value="id_desc">ID 递减</option>
+                <option value="pri_asc">优先级递增</option>
+                <option value="pri_desc">优先级递减</option>
+                <option value="deadline_asc">截止日期递增</option>
+                <option value="deadline_desc">截止日期递减</option>
+            </select>
+        </div>
+    </div>
+    <div id="div_PBOrderBy" class="form-group">
+        <label for="PBOrderBy" class="col-sm-2">
+            排序
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select name="PBOrderBy" id="PBOrderBy" class="form-control">
+                <option value="createdDate_asc">创建时间递增</option>
+                <option value="createdDate_desc">创建时间递减</option>
+                <option value="begin_asc">开始时间递增</option>
+                <option value="begin_desc">开始时间递减</option>
+                <option value="end_asc">结束时间递增</option>
+                <option value="end_desc">结束时间递减</option>
+            </select>
+        </div>
+    </div>
+    <div id="div_PTState" class="form-group">
+        <label for="PTState" class="col-sm-2">
+            任务状态
+        </label>
+        <input type="hidden" id="PTState" name="PTState" class="form-control" value="@Model.PTState" placeholder="任务状态">
+        <div class="col-md-6 col-sm-10">
+            <select data-placeholder="选择状态..." class="chosen-select form-control" tabindex="2" multiple="">
+                @{
+                    List<string> selectState = new List<string>();
+                    if (Model.PTState.IsNullOrEmpty())
+                    {
+                        selectState.Add("");
+                    }
+                    else
+                    {
+                        selectState = Model.PTState.Split(',').ToList();
+                    }
+
+                    if (selectState.Contains("1"))
+                    {
+                        <option value="1" data-keys="weiwancheng wwc" selected>未完成</option>
+                    }
+                    else
+                    {
+                        <option value="1" data-keys="weiwancheng wwc">未完成</option>
+                    }
+                    if (selectState.Contains("2"))
+                    {
+                        <option value="2" data-keys="weikaishi wks" selected>未开始</option>
+                    }
+                    else
+                    {
+                        <option value="2" data-keys="weikaishi wks">未开始</option>
+                    }
+                    if (selectState.Contains("3"))
+                    {
+                        <option value="3" data-keys="jinxingzhong jxz" selected>进行中</option>
+                    }
+                    else
+                    {
+                        <option value="3" data-keys="jinxingzhong jxz">进行中</option>
+                    }
+                    if (selectState.Contains("4"))
+                    {
+                        <option value="4" data-keys="yiwancheng ywc" selected>已完成</option>
+                    }
+                    else
+                    {
+                        <option value="4" data-keys="yiwancheng ywc">已完成</option>
+                    }
+                    if (selectState.Contains("5"))
+                    {
+                        <option value="5" data-keys="yiquxiao yqx" selected>已取消</option>
+                    }
+                    else
+                    {
+                        <option value="5" data-keys="yiquxiao yqx">已取消</option>
+                    }
+                    if (selectState.Contains("6"))
+                    {
+                        <option value="6" data-keys="yiguanbi ygb" selected>已关闭</option>
+                    }
+                    else
+                    {
+                        <option value="6" data-keys="yiguanbi ygb">已关闭</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" class="btn btn-primary" data-toggle="popover" data-content="保存成功" onclick="SaveDate()">保存</button>           <span id="spmsg"></span>
+        </div>
+    </div>
+
+</form>
+<script type="text/javascript">
+
+    bTypeChange();
+
+    $("#BType").change(function () {
+        bTypeChange();
+    });
+
+    function bTypeChange() {
+        if ($("#BType").val() == "1") {
+            $("#div_PTType").show();
+            $("#div_PTState").show();
+            $("#div_TBOrderBy").show();
+
+            $("#div_PState").hide();
+            $("#div_PBOrderBy").hide();
+        } else {
+            $("#div_PTType").hide();
+            $("#div_PTState").hide();
+            $("#div_TBOrderBy").hide();
+
+            $("#div_PState").show();
+            $("#div_PBOrderBy").show();
+        }
+    }
+
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+        search_contains: true         // 从任意位置开始检索
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#PTState").val($(this).val());
+
+    });
+
+    $('select.chosen-select')
+
+    //$('[data-toggle="popover"]').popover();
+    function SaveDate() {
+        $("#formProject_Block").submit();
+        win.showLoading("正在处理...");
+        var item = { Id: $("#Id").val(), BType: -1, BName: "", BWidth: "", BColor: "", PTType: "", BOrderBy: "", RowCounts: 0, PTState: "" };
+        //判断区块类型,并给相应的值
+        if ($("#BType").val() == "1") {
+
+            item.PTType = $("#PTType").val();
+            item.BOrderBy = $("#TBOrderBy").val();
+            item.PTState = $("#PTState").val();
+
+        } else {
+            item.BOrderBy = $("#PBOrderBy").val();
+            item.PTState = $("#PState").val();
+        }
+        item.BType = $("#BType").val();
+        item.BName = $("#BName").val();
+        item.BWidth = $("#BWidth").val();
+        item.BColor = $("#BColor").val();
+        item.RowCounts = $("#RowCounts").val();
+
+        var jsonData = JSON.stringify(item);
+
+
+        var remarkText = $("#LogTextRemark").val();
+
+        $.post("/Project_Block/SaveData", { jsonData: jsonData }, function (data) {
+            if (data.Code == 200) {
+                win.success("保存成功", function () {
+                    win.hideLoading();
+                    parent.window.location.reload();//location.href = "/Project/Index?mid=" + $("#aMid").val();
+                    win.close();
+                });
+                setTimeout(function () {
+                    myMessager.hide();
+                    window.location.href = "/Project/Index?mid=" + $("#aMid").val();
+                    win.close();
+                }, 2000);
+            } else {
+                layer.alert(data.Message, { icon: 7 });
+            }
+        }, "json");
+
+
+
+    }
+
+    $("#formProject_Block").Validform({
+        tiptype: function (msg, o, cssctl) {
+            var objtip = $("#spmsg");
+            cssctl(objtip, o.type);
+            objtip.text(msg);
+        },
+        beforeSubmit: function () {
+            $('<div class="loadingWrap"></div>').appendTo("body");
+
+        },
+        callback: function (form) {
+            win.showLoading("正在处理...");
+            $("#ajaxForm").ajaxSubmit(function (data) {
+                win.hideLoading();
+                $(".loadingWrap").remove();
+                if (data.Code == 300) {
+                    layer.alert(data.Message, { icon: 7 });
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        win.hideLoading();
+                        parent.window.location.reload();//location.href = "/Project/Index?mid=" + $("#aMid").val();
+                        win.close();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+</script>

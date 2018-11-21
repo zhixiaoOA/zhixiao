@@ -1,0 +1,142 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Menu_Block_Sort
+@{
+    ViewBag.Title = "区块排序";
+}
+<form action="/Menu_Block_Sort/SaveData" method="post" class="ui form" id="formMenu_Block_Sort">
+    <input type="hidden" name="Id" value="@Model.Id" />
+	<div class="inline fields">
+		<div class="sixteen wide field">
+			<label class="lbltitle"><span class="need">*</span>Id</label>
+			<input type="text" name="Id" value="@Model.Id" placeholder="Id" autocomplete="off" datatype="*">
+		</div>
+	</div>
+	<div class="inline fields">
+		<div class="sixteen wide field">
+			<label class="lbltitle"><span class="need">*</span>FK_Menu_BlockId</label>
+			<input type="text" name="FK_Menu_BlockId" value="@Model.FK_Menu_BlockId" placeholder="FK_Menu_BlockId" autocomplete="off" datatype="*">
+		</div>
+	</div>
+	<div class="inline fields">
+		<div class="sixteen wide field">
+			<label class="lbltitle"><span class="need">*</span>SName</label>
+			<input type="text" name="SName" value="@Model.SName" placeholder="SName" autocomplete="off" datatype="*">
+		</div>
+	</div>
+	<div class="inline fields">
+		<div class="sixteen wide field">
+			<label class="lbltitle"><span class="need">*</span>SortField</label>
+			<input type="text" name="SortField" value="@Model.SortField" placeholder="SortField" autocomplete="off" datatype="*">
+		</div>
+	</div>
+    <div class="footer_form">
+        <button onclick="win.close();" class="btn btn-sm btn-danger">
+            <i class="icon-reply fa icon-only bigger-120">关闭</i>
+        </button>
+        <button type="submit" class="btn btn-sm btn-primary">
+            <i class="icon-save bigger-120">保存</i>
+        </button>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function () {
+		var edtor = initUEditor('Content', 800, 350);
+
+        $("#formMenu_Block_Sort").Validform({
+            tiptype: 3,
+			datatype:{
+				"vtest":function(gets,obj,curform,reZXp){
+					return true;
+				}
+			},
+            callback: function (form) {
+				win.showLoading("正在保存...");
+                $("#formMenu_Block_Sort").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        parent.getList();
+                        parent.win.success(data.Message);
+                        win.close();
+                    }
+                });
+                return false;
+            }
+        });
+		$('#file_upload').uploadify({
+            auto: true,
+            formData: { 'type': 'upload' },
+            swf: '/Scripts/uploadify/uploadify.swf',
+            uploader: '/Scripts/uploadify/ImageHandler.ashx',
+            fileSizeLimit: '10MB', //上传最大值
+            fileTypeDesc: '文件类型',
+            fileTypeExts: '*.jpg;*.gif;*.png', //上传文件类型
+            queueSizeLimit: '1', //允许同时上传数量
+            buttonText: '选择图片',
+            buttonClass: 'some-class',
+            width: 80,
+            height: 25,
+            onSelect: function (file) {
+            },
+            onUploadError: function (file, errorCode, errorMsg, errorString) {
+                layer.alert(errorMsg, { icon: 7 });
+            },
+            onQueueComplete: function (queueData) {
+            },
+            onUploadComplete: function (file) {
+            },
+            onUploadSuccess: function (file, data, response) {
+                var json = eval("(" + data + ")");
+                var imgHtml = '';
+                imgHtml += '<div style="float:left;" class="ees">';
+                imgHtml += '<a href="' + json.path + '" target="_blank"><img src="' + json.path + '" name="PImages"  style="height: 100px;width: 100px;"/></a>';
+                imgHtml += '<a href="javascript:;" onclick="onRemoveImg(this)">删除</a>';
+                imgHtml += '</div>';
+                $("#divImage").append(imgHtml);
+            },
+            onInit: function (instance) {
+                $("#file_upload-queue").hide();
+            }
+        });
+        $('#file_upload1').uploadify({
+            auto: true,
+            formData: { 'type': 'upload' },
+            swf: '/Scripts/uploadify/uploadify.swf',
+            uploader: '/Scripts/uploadify/ImageHandler.ashx',
+            fileSizeLimit: '500KB', //上传最大值
+            fileTypeDesc: '文件类型',
+            fileTypeExts: '*.jpg;*.gif;*.png', //上传文件类型
+            queueSizeLimit: '1', //允许同时上传数量
+            buttonText: '选择图片',
+            buttonClass: 'some-class',
+            width: 80,
+            height: 25,
+            onSelect: function (file) {
+            },
+            onUploadError: function (file, errorCode, errorMsg, errorString) {
+                layer.alert(errorMsg, { icon: 7 });
+            },
+            onQueueComplete: function (queueData) {
+            },
+            onUploadComplete: function (file) {
+            },
+            onUploadSuccess: function (file, data, response) {
+                var json = eval("(" + data + ")");
+                $("#AImage").show().attr("src", json.path);
+                $("input[name='AImage']").val(json.path);
+            },
+            onInit: function (instance) {
+                $("#file_upload1-queue").hide();
+            }
+        });
+
+        $("input[name='IsHome']").click(function () {
+            $(this).prop("checked", true).siblings().prop("checked", false);
+        });
+    });
+	//删除图片
+    function onRemoveImg(obj) {
+        $(obj).parent().remove();
+    }
+</script>

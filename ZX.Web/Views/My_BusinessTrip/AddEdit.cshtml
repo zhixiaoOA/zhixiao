@@ -1,0 +1,243 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model My_BusinessTrip
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    List<Dictionary> listApplyMoneyUnit = ViewBag.ListApplyMoneyUnit ?? new List<Dictionary>();
+
+    List<Approval> listApproval = ViewBag.ListApproval ?? new List<Approval>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        font-size: 14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>出差申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/My_BusinessTrip/SaveData" method="post" class="form" id="formMy_BusinessTrip">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="BLength" value="@Model.BLength" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-center w-130px">申报部门/单位</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-70px'>申请人</th>
+                        <td class="w-160px">
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-80px'>出差人员</th>
+                        <td>
+                            <input class="form-control" name="Persons" value="@Model.Persons" datatype="*" nullmsg="请填写出差人员" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">出差日期</th>
+                        <td colspan="4">
+                            <div class="input-group" style="width:188px;">
+                                <input type="text" class='form-control form-date' id="StartTime" placeholder="开始日期" name="StartTime" value="@Model.StartTime.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:130px;" onblur="getDateDiff()" datatype="*" nullmsg="请填写开始时间" />
+                                <span class="input-group-addon">截止日期</span>
+                                <input type="text" class='form-control form-date' id="EndTime" name="EndTime" placeholder="结束日期" value="@Model.EndTime.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:130px;" onblur="getDateDiff()" datatype="*" nullmsg="请填写结束时间" />
+                            </div>
+                        </td>
+                        <td>
+                            <span style="line-height:2;" id="iday">@("共 " + Model.BLength + " 天")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">出差事由</th>
+                        <td colspan="5">
+                            <textarea style="width:100%;" cols="3" name="ADesc" class='form-control' autocomplete="off" datatype="*" nullmsg="请填写出差事由">@Model.ADesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">拟出差路线</th>
+                        <td colspan="5">
+                            <input name="Luxian" class="form-control" value="@Model.Luxian" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">申请费用</th>
+                        <td colspan="2">
+                            <div class="input-group">
+                                <input name="ApplyMoney" class="form-control" value="@Model.ApplyMoney" onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this)" />
+                                <span class="input-group-addon fix-border fix-padding"></span>
+                                <select name="ApplyMoneyUnitName" class="form-control" style="width:80px;">
+                                    @{
+                                        foreach (var itemUnit in listApplyMoneyUnit)
+                                        {
+                                            if (Model.ApplyMoneyUnitName.IsNotNullOrEmpty() && Model.ApplyMoneyUnitName.Equals(itemUnit.Name))
+                                            {
+                                                <option selected value="@itemUnit.Name">@itemUnit.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@itemUnit.Name">@itemUnit.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </td>
+                        <th class="text-center w-120px">拟乘交通工具</th>
+                        <td colspan="2">
+                            <input type="checkbox" class="form-checkbox" name="Jtgj" value="飞机" @((Model.Jtgj + "").Contains("飞机") ? "checked" : "") />飞机&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="Jtgj" value="火车" @((Model.Jtgj + "").Contains("火车") ? "checked" : "") />火车&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="Jtgj" value="汽车" @((Model.Jtgj + "").Contains("汽车") ? "checked" : "") />汽车&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="Jtgj" value="其他" @((Model.Jtgj + "").Contains("其他") ? "checked" : "") />其他
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">是否需要代购车票</th>
+                        <td colspan="2">
+                            <input type="checkbox" class="form-checkbox" name="IsDgou" value="1" @(Model.IsDgou == 1 ? "checked" : "") />是&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="IsDgou" value="0" @(Model.IsDgou == 0 ? "checked" : "") />否&nbsp;
+                        </td>
+                        <th class="text-center w-120px">代购车票提供个人资料</th>
+                        <td colspan="2">
+                            <input name="DgouInfo" class="form-control" value="@Model.DgouInfo" />
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="5">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>请选择审批流程<span style="color:red">*</span></th>
+                        <td colspan='5'>
+                            <select class="form-control" style="max-width:80%;" name="FK_ApprovalId" datatype="*" nullmsg="请选择审批流程">
+                                <option value="">==请选择==</option>
+                                @foreach (var item in listApproval)
+                                {
+                                    <option value="@item.Id" @(Model.FK_ApprovalId == item.Id ? "selected" : "")>@item.DName</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveCaogao()'>存为草稿</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="submitMsg" value="" />
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#formMy_BusinessTrip").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                if ($("input[name='Status']").val() == "@ApplyStatus.草稿.ToInt()") {
+                    win.showLoading("正在保存...");
+                    $("#formMy_BusinessTrip").ajaxSubmit(function (data) {
+                        if (data.Code == 300) {
+                            win.alert(data.Message);
+                        } else if (data.Code == 200) {
+                            win.success($("#submitMsg").val(), function () {
+                                goBack();
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    win.confirm("确认提交审批？", function () {
+                        win.showLoading("正在保存...");
+                        $("#formMy_BusinessTrip").ajaxSubmit(function (data) {
+                            if (data.Code == 300) {
+                                win.alert(data.Message);
+                            } else if (data.Code == 200) {
+                                win.success($("#submitMsg").val(), function () {
+                                    goBack();
+                                }, 1000);
+                            }
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+
+        //$(".form-checkbox").click(function () {
+        //    $(this).prop("checked", true).siblings().prop("checked", false);
+        //});
+    });
+    function saveCaogao() {
+        $("input[name='Status']").val("@(ApplyStatus.草稿.ToInt())");
+        $("#submitMsg").val("保存草稿成功");
+        $("#formMy_BusinessTrip").submit();
+    }
+    function saveData() {
+        if(@Model.Id==0)$("input[name='Status']").val("@(ApplyStatus.新申请.ToInt())");
+        $("#submitMsg").val("提交审批成功");
+        $("#formMy_BusinessTrip").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    function getDateDiff() {
+        if ($("#StartTime").val() != "" && $("#EndTime").val() != "") {
+            var btime = $("#StartTime").val();
+            var etime = $("#EndTime").val();
+            var dd = $.admin.getDateDiff(btime, etime, "dd") + 1;
+            $("input[name='BLength']").val(dd);
+            $("#iday").html("共 " + dd + " 天");
+        }
+    }
+</script>

@@ -1,0 +1,222 @@
+﻿@using ZX.Tools
+@using System.Data
+@using ZX.Model
+@{
+    ViewBag.Title = "用户信息-指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+<input type="hidden" id="currentMid" name="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<style>
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+    .layui-table td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+    .btn-fearch {
+        float: right;
+        margin-top: 30px;
+        z-index: 200;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .navbar-fixed-top {
+        position: inherit;
+        float: left;
+    }
+</style>
+<script type='text/javascript'>
+    $(function () {
+        getList();
+    });
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        $.post("/Sys_User/GetSys_UserList", { pageIndex: pageIndex, pageSize: pageSize, name: "", mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+    //新增
+    function addUser() {
+        var url = "/Sys_User/AddEdit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+        window.location.href = url;
+    }
+    //编辑
+    function edit(obj) {
+        var id = $(obj).attr("val");
+        var url = "/Sys_User/AddEdit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+        window.location.href = url;
+    }
+    //查看
+    function look(obj) {
+        var id = $(obj).attr("val");
+        var url = "/Sys_User/LookAt?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+        win.open(url, 700, 500, "员工信息查看");
+    }
+
+    //删除sysUserDel
+    function sysUserDel(obj) {
+        var id = $(obj).attr("val");
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Sys_User/DeleteData", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功", function () {
+                        getList();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+
+    function ExcelImport() {
+        var url = "/Sys_User/ExcelImport";
+        win.open(url, 600, 300, "员工导入");
+    }
+
+    function ExcelExport() {
+        window.location.href = "/Sys_User/ExportUserList";
+    }
+
+    function resetPwd(obj) {
+        var id = $(obj).attr("val");
+        layer.confirm('确认要重置吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Sys_User/ResetPwd", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("重置成功", function () {
+                        getList();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+
+
+</script>
+<div class='page-content with-menu'>
+    <div id='menuActions' style="float:right;">
+    </div>
+    <div class="btn-fearch">
+        <form action="OutExcel" id="doForm">
+            <div style="width:auto;float:right;">
+                <a href='javascript:;' onclick="ExcelImport()" class="btn btn-primary">导入Excel</a>
+                <a href='javascript:;' onclick="ExcelExport()" class="btn btn-primary">导出Excel</a>
+                <a href='javascript:;' onclick="addUser()" class="btn btn-primary"><i class="icon-plus"></i>添加员工</a>
+            </div>
+        </form>
+    </div>
+    <table class='layui-table' id='contactList'>
+        <thead>
+            <tr class='text-center'>
+                <th class='w-60px'>
+                    <div>
+                        <a href=''>编号</a>
+                    </div>
+                </th>
+                <th class='w-100px text-left'>
+                    <div>
+                        <a href=''>用户名</a>
+                    </div>
+                </th>
+                <th class='w-100px text-left'>
+                    <div>
+                        <a href=''>真实姓名</a>
+                    </div>
+                </th>
+                <th class='w-100px text-left'>
+                    <div>
+                        <a href=''>所属部门</a>
+                    </div>
+                </th>
+                <th class='w-100px text-left'>
+                    <div>
+                        <a href=''>性别</a>
+                    </div>
+                </th>
+                <th class='w-120px text-left'>
+                    <div>
+                        <a href=''>电话/手机</a>
+                    </div>
+                </th>
+                <th class='w-200px'>
+                    <div>
+                        <a href=''>邮箱</a>
+                    </div>
+                </th>
+                <th class='w-120px'>
+                    <div>
+                        <a href=''>QQ</a>
+                    </div>
+                </th>
+                <th class='w-200px visible-lg'>
+                    <div>
+                        <a href=''>通讯地址</a>
+                    </div>
+                </th>
+                <th class='w-50px visible-lg'>
+                    <div>
+                        <a href=''>是否禁用</a>
+                    </div>
+                </th>
+                <th class='w-240px'>操作</th>
+            </tr>
+        </thead>
+        <tbody id="tbList"></tbody>
+    </table>
+    <div class='table-footer'>
+        <div class='pull-left text-danger'></div>
+        <div style='float:right; clear:none;' class='pager form-inline'>
+            <div id="myPager"></div>
+        </div>
+    </div>
+</div>

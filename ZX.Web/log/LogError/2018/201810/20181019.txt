@@ -1,0 +1,89 @@
+
+ 
+记录时间：2018-10-19 09:22:42,058 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 171
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 77
+
+ 
+记录时间：2018-10-19 09:25:28,212 
+线程ID:[12] 
+日志级别：  ERROR 
+错误描述：SqlConnection 不支持并行事务。
+ 
+System.InvalidOperationException: SqlConnection 不支持并行事务。
+   在 System.Data.SqlClient.SqlInternalConnection.BeginSqlTransaction(IsolationLevel iso, String transactionName, Boolean shouldReconnect)
+   在 System.Data.SqlClient.SqlConnection.BeginTransaction(IsolationLevel iso, String transactionName)
+   在 System.Data.SqlClient.SqlConnection.BeginTransaction()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 149
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 80
+
+ 
+记录时间：2018-10-19 10:07:49,073 
+线程ID:[7] 
+日志级别：  ERROR 
+错误描述：连接未关闭。 连接的当前状态为打开。
+ 
+System.InvalidOperationException: 连接未关闭。 连接的当前状态为打开。
+   在 System.Data.ProviderBase.DbConnectionInternal.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   在 System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.Open()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 150
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 78
+
+ 
+记录时间：2018-10-19 10:09:59,651 
+线程ID:[7] 
+日志级别：  ERROR 
+错误描述：连接未关闭。 连接的当前状态为打开。
+ 
+System.InvalidOperationException: 连接未关闭。 连接的当前状态为打开。
+   在 System.Data.ProviderBase.DbConnectionInternal.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   在 System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.Open()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 149
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 78
+
+ 
+记录时间：2018-10-19 10:35:17,495 
+线程ID:[38] 
+日志级别：  ERROR 
+错误描述：无法将类型为“System.String”的对象强制转换为类型“System.Collections.ArrayList”。
+ 
+System.InvalidCastException: 无法将类型为“System.String”的对象强制转换为类型“System.Collections.ArrayList”。
+   在 ZX.Web.Controllers.init.CheckController.generSql(SqlConnection connectstring) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 192
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 79
+
+ 
+记录时间：2018-10-19 10:45:17,751 
+线程ID:[13] 
+日志级别：  ERROR 
+错误描述：连接未关闭。 连接的当前状态为打开。
+ 
+System.InvalidOperationException: 连接未关闭。 连接的当前状态为打开。
+   在 System.Data.ProviderBase.DbConnectionInternal.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   在 System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.Open()
+   在 ZX.Web.Controllers.init.CheckController.generSql(SqlConnection connectstring)
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase()
+
+ 
+记录时间：2018-10-19 16:26:36,432 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 173
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 78

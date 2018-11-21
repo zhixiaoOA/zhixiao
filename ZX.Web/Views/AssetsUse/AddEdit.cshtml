@@ -1,0 +1,254 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model AssetsUse
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<AssetsUseDetail> listDetail = ViewBag.ListDetail ?? new List<AssetsUseDetail>();
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    List<Assets> listAssets = ViewBag.ListAssets ?? new List<Assets>();
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td{
+        font-size:14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>资产领取申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/AssetsUse/SaveData" method="post" class="form" id="formAssetsUse">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <input type="hidden" name="detail" value="" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-center w-100px">申请人</th>
+                        <td>@user.RealName</td>
+                        <th class='text-center w-100px'>申请部门</th>
+                        <td>@user.DeptName</td>
+                        <th class='text-center w-100px'>职位</th>
+                        <td>@user.PositionName</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">申请事由</th>
+                        <td colspan="5">
+                            <textarea style="width:100%;" cols="3" name="ADesc" class='form-control' autocomplete="off" datatype="*" nullmsg="请填写申请事由">@Model.ADesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">资产明细</th>
+                        <td colspan="5">
+                            <table>
+                                <tbody id="tblist" style="border:0;width:100%;">
+                                    @{int rowIndex = 1; }
+                                    @foreach (var item in listDetail)
+                                    {
+                                        <tr>
+                                            <td style="border:0;width:300px;">
+                                                <select data-placeholder="选择资产..." class="chosen-select form-control" tabindex="2" datatype="*" nullmsg="请选择资产">
+                                                    @foreach (var itemZc in listAssets)
+                                                    {
+                                                        <option value="@itemZc.Id" data-keys="@itemZc.AName" num="@itemZc.ANum" @(itemZc.Id == item.FK_AssetsId ? "selected" : "")>@itemZc.AName</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td style="border:0;width:80px;">
+                                                <input placeholder="数量" name="DCount" class="form-control" value="@item.DCount"
+                                                       onkeypress="$.admin.keyPress(this)"
+                                                       onkeyup="$.admin.keyUp(this)"
+                                                       onblur="$.admin.keyBlur(this);" datatype="vnum" nullmsg="请填写数量" />
+                                            </td>
+                                            <td style="border:0;">
+                                                @if (rowIndex == listDetail.Count)
+                                                {
+                                                    <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="icon icon-minus-sign-alt" style="cursor:pointer;" title="删除" onclick="onAddOrDelRow(this)"></i>
+                                                }
+                                            </td>
+                                        </tr>
+                                        rowIndex++;
+                                    }
+                                    @if (listDetail.Count == 0)
+                                    {
+                                        <tr>
+                                            <td style="border:0;width:300px;">
+                                                <select data-placeholder="选择资产..." class="chosen-select form-control" tabindex="2" datatype="*" nullmsg="请选择资产">
+                                                    @foreach (var itemZc in listAssets)
+                                                    {
+                                                        <option value="@itemZc.Id" num="@itemZc.ANum" data-keys="@itemZc.AName">@itemZc.AName</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td style="border:0;width:80px;">
+                                                <input placeholder="数量" name="DCount" class="form-control" value=""
+                                                       onkeypress="$.admin.keyPress(this)"
+                                                       onkeyup="$.admin.keyUp(this)"
+                                                       onblur="$.admin.keyBlur(this);" datatype="vnum" nullmsg="请填写数量" />
+                                            </td>
+                                            <td style="border:0;">
+                                                <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="5">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<table style="display:none;">
+    <tbody id="tbAdd">
+        <tr>
+            <td style="border:0;">
+                <select name="add" data-placeholder="选择资产..." class="chosen-select form-control" tabindex="2" datatype="*" nullmsg="请选择资产">
+                    @foreach (var itemZc in listAssets)
+                    {
+                        <option value="@itemZc.Id" num="@itemZc.ANum" data-keys="@itemZc.AName">@itemZc.AName</option>
+                    }
+                </select>
+            </td>
+            <td style="border:0;width:80px;">
+                <input placeholder="数量" name="DCount" class="form-control" value=""
+                       onkeypress="$.admin.keyPress(this)"
+                       onkeyup="$.admin.keyUp(this)"
+                       onblur="$.admin.keyBlur(this);" datatype="vnum" nullmsg="请填写数量" />
+            </td>
+            <td style="border:0;">
+                <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
+        $("#tblist .chosen-select").chosen({ disable_search_threshold: 10 });
+        $("#formAssetsUse").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            datatype: {
+                vnum: function (gets, obj, curform, regxp) {
+                    var maxNum = $(obj).parent().parent().find("select option:selected").attr("num");
+                    if (parseInt(gets) > parseInt(maxNum)) {
+                        return "库存不足，当前库存：" + maxNum;
+                    }
+                    return true;
+                }
+            },
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                var details = [];
+                $("#tblist tr").each(function () {
+                    var detail = {
+                        FK_AssetsId: $(this).find("select").val(),
+                        DCount: $(this).find("input[name='DCount']").val()
+                    };
+                    details.push(detail);
+                });
+                $("input[name='detail']").val(JSON.stringify(details));
+                $("#formAssetsUse").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            goBack();
+                        }, 1000);
+                    }
+                });
+                return false;
+            }
+        });
+    });
+    function saveData() {
+        $("#formAssetsUse").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    //新增行
+    function onAddOrDelRow(obj) {
+        if ($(obj).attr("title") == "新增") {
+            var newTr = $("#tbAdd").html();
+            $("#tblist").append(newTr);
+            $(obj).removeClass("icon-plus-sign-alt").addClass("icon-minus-sign-alt").attr("title", "删除").parent().parent().find("select").attr("name", "noadd");
+            $("#tblist select[name='add']").chosen({ disable_search_threshold: 20 });
+        } else {
+            $(obj).parent().parent().remove();
+        }
+    }
+    function setMoney(obj) {
+        var count = $(obj).parent().parent().find("input[name='Count']").val();
+        var price = $(obj).parent().parent().find("input[name='Price']").val();
+        if (count != "" && price != "") {
+            $(obj).parent().parent().find("td[name='moneys']").html(parseInt(count) * parseFloat(price));
+        }
+        var totalMoney = 0;
+        $("#tblist tr").each(function () {
+            var count = $(this).find("input[name='Count']").val();
+            var price = $(this).find("input[name='Price']").val();
+            if (count != "" && price != "") {
+                totalMoney = totalMoney + parseInt(count) * parseFloat(price);
+            }
+        });
+        $("#spmoney").html(totalMoney + "（元）");
+    }
+</script>

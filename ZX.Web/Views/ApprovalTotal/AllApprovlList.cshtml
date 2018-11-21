@@ -1,0 +1,117 @@
+﻿@using ZX.Tools
+@{
+    ViewBag.Title = "审批单统计-指效OA";
+}
+<div class='row page-content with-menu'>
+    <div class='panel'>
+        <div class="panel-heading">
+            <strong><i class="icon-group"></i>审批单统计</strong>
+        </div>
+        <div class="panel-body">
+            <div>
+                <fieldset>
+                    <legend>查询条件</legend>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">日期</label>
+                            <input type="text" class="form-control" id="StartTime" placeholder="开始日期" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                            至
+                            <input type="text" class="form-control" id="EndTime" placeholder="结束日期" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputInviteCode3">状态</label>
+                            <select id="status" class="form-control">
+                                <option value="@(ApplyStatus.审核中.ToInt()+","+ApplyStatus.新申请.ToInt()+","+ApplyStatus.驳回.ToInt())">==全部==</option>
+                                <option value="@ApplyStatus.审核中.ToInt()">@ApplyStatus.审核中.ToString()</option>
+                                <option value="@ApplyStatus.新申请.ToInt()">@ApplyStatus.新申请.ToString()</option>
+                                <option value="@ApplyStatus.驳回.ToInt()">@ApplyStatus.驳回.ToString()</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">事项</label>
+                            <input type="text" class="form-control" id="adesc" placeholder="事项" style="width:150px;" />
+                        </div>
+                        <button type="button" class="btn btn-default" id="btnSearch">查询</button>
+                    </div>
+                </fieldset>
+            </div>
+            <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-60px'>序号</th>
+                        <th class='text-left'>标题</th>
+                        <th class='text-left'>描述</th>
+                        <th class='text-left'>申请人</th>
+                        <th class='text-left'>状态</th>
+                        <th class='text-left'>申请时间</th>
+                        <th class='text-left w-90px'>审批节点</th>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+        $("#btnSearch").click(function () {
+            pageIndex = 1;
+            getList();
+        });
+    });
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        var beginTime = $("#StartTime").val();
+        var endTime = $("#EndTime").val();
+        var status = $("#status").val();
+        var adesc = $("#adesc").val();
+        $.post("/MyApply/GetAllApprovls", {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            beginTime: beginTime,
+            endTime: endTime,
+            status: status,
+            adesc: adesc
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

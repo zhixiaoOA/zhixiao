@@ -1,0 +1,217 @@
+﻿@using ZX.Tools
+@{
+    ViewBag.Title = "出差审批单-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .cur {
+        float: left;
+    }
+
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .layui-table {
+        margin: 0;
+    }
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='cur'>
+            <a href='/Approval/Index?mid=@ViewBag.CurrentMid'>我的审批单</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Work/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.加班及调休申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_BusinessTrip/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.出差申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Apply/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyGooodsUse/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.所需物品领用申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyGiftBuy/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.物资采购申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyAgreement/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.合同协议审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyClock/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.未打卡证明申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MySealUse/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.印章使用审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MySealOut/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.印章外带审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Ask/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.员工请假申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyEntertain/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.招待审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyCost/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.费用申请单.ToString()</a>
+        </li>
+    </ul>
+</nav>
+<div class='row page-content with-menu'>
+    <div class='panel'>
+        <div class="panel-heading">
+            <strong><i class="icon-group"></i>出差审批单</strong>
+        </div>
+        <div class="panel-body">
+            <div>
+                <fieldset>
+                    <legend>查询条件</legend>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">日期</label>
+                            <input type="text" class="form-control" id="StartTime" placeholder="开始日期" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                            至
+                            <input type="text" class="form-control" id="EndTime" placeholder="结束日期" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputInviteCode3">状态</label>
+                            <select id="status" class="form-control">
+                                <option value="@(ApplyStatus.审核中.ToInt()+","+ApplyStatus.新申请.ToInt()+","+ApplyStatus.驳回.ToInt())">==全部==</option>
+                                <option value="@ApplyStatus.审核中.ToInt()">@ApplyStatus.审核中.ToString()</option>
+                                <option value="@ApplyStatus.新申请.ToInt()">@ApplyStatus.新申请.ToString()</option>
+                                <option value="@ApplyStatus.驳回.ToInt()">@ApplyStatus.驳回.ToString()</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">事由</label>
+                            <input type="text" class="form-control" id="adesc" placeholder="事由" style="width:150px;" />
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="scbox" value="1" checked /><span>待审批</span>
+                            <input type="checkbox" name="scbox" value="2" /><span>已审批</span>
+                        </div>
+                        <button type="button" class="btn btn-default" id="btnSearch">查询</button>
+                    </div>
+                </fieldset>
+            </div>
+            <table class='layui-table' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-60px'>序号</th>
+                        <th class='text-left w-100px'>申请人</th>
+                        <th class='text-left w-100px'>部门</th>
+                        <th class='text-left'>事由</th>
+                        <th class='text-left w-90px'>申请费用</th>
+                        <th class='text-left w-130px'>开始时间</th>
+                        <th class='text-left w-130px'>结束时间</th>
+                        <th class='text-left w-90px'>加班时长</th>
+                        <th class='text-left w-80px'>当前状态</th>
+                        <th class='text-left w-200px'>当前审批</th>
+                        <th class='text-left w-140px'>申请时间</th>
+                        <th class='text-left w-120px'>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+        $("#btnSearch").click(function () {
+            pageIndex = 1;
+            getList();
+        });
+        $("input[name='scbox']").click(function () {
+            $(this).prop("checked", true).siblings("input[name='scbox']").prop("checked", false);
+            ctype = $(this).val();
+            if (ctype == 1) {
+                status = "@(ApplyStatus.审核中.ToInt()+","+ApplyStatus.新申请.ToInt())";
+            } else {
+                status = "@(ApplyStatus.审核中.ToInt()+","+ApplyStatus.新申请.ToInt()+","+ApplyStatus.驳回.ToInt()+","+ApplyStatus.已审核.ToInt())";
+            }
+            pageIndex = 1;
+            getList();
+        });
+    });
+    function edit(id) {
+        window.location.href = "/My_BusinessTrip/ApprovalDetail/" + id+"?mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    var status = "@(ApplyStatus.审核中.ToInt()+","+ApplyStatus.新申请.ToInt())";
+    var ctype = 1;
+    function getList() {
+        win.showLoading();
+        var beginTime = $("#StartTime").val();
+        var endTime = $("#EndTime").val();
+        var status = $("#status").val();
+        var adesc = $("#adesc").val();
+        $.post("/My_BusinessTrip/GetApprovalList", {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            beginTime: beginTime,
+            endTime: endTime,
+            status: status,
+            adesc: adesc,
+            ctype: ctype
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

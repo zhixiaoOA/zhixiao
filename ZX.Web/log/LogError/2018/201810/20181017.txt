@@ -1,0 +1,189 @@
+
+ 
+记录时间：2018-10-17 09:15:15,059 
+线程ID:[5] 
+日志级别：  ERROR 
+错误描述：阅读器关闭时尝试调用 MetaData 无效。
+ 
+System.InvalidOperationException: 阅读器关闭时尝试调用 MetaData 无效。
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 744
+   在 ZX.DAL.AllApplyNoticeDAL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 69
+   在 ZX.BLL.AllApplyNoticeBLL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 51
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 36
+
+ 
+记录时间：2018-10-17 09:16:30,004 
+线程ID:[5] 
+日志级别：  ERROR 
+错误描述：阅读器关闭时尝试调用 MetaData 无效。
+ 
+System.InvalidOperationException: 阅读器关闭时尝试调用 MetaData 无效。
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 744
+   在 ZX.DAL.AllApplyNoticeDAL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 69
+   在 ZX.BLL.AllApplyNoticeBLL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 51
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 36
+
+ 
+记录时间：2018-10-17 09:21:51,286 
+线程ID:[5] 
+日志级别：  ERROR 
+错误描述：MyCostCount
+ 
+System.IndexOutOfRangeException: MyCostCount
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 744
+   在 ZX.DAL.AllApplyNoticeDAL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 69
+   在 ZX.BLL.AllApplyNoticeBLL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 51
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 36
+
+ 
+记录时间：2018-10-17 09:25:12,425 
+线程ID:[29] 
+日志级别：  ERROR 
+错误描述：ExecuteReader 要求已打开且可用的 Connection。连接的当前状态为已关闭。
+ 
+System.InvalidOperationException: ExecuteReader 要求已打开且可用的 Connection。连接的当前状态为已关闭。
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 744
+   在 ZX.DAL.AllApplyNoticeDAL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 69
+   在 ZX.BLL.AllApplyNoticeBLL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 51
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 36
+
+ 
+记录时间：2018-10-17 09:44:20,555 
+线程ID:[5] 
+日志级别：  ERROR 
+错误描述：MyCostCount
+ 
+System.IndexOutOfRangeException: MyCostCount
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 744
+   在 ZX.DAL.AllApplyNoticeDAL.GetAuthApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 84
+   在 ZX.BLL.AllApplyNoticeBLL.GetAuthApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 63
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 37
+
+ 
+记录时间：2018-10-17 09:49:20,912 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：MyCostCount
+ 
+System.IndexOutOfRangeException: MyCostCount
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 744
+   在 ZX.DAL.AllApplyNoticeDAL.GetAuthApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 84
+   在 ZX.BLL.AllApplyNoticeBLL.GetAuthApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 63
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 37
+
+ 
+记录时间：2018-10-17 10:52:55,509 
+线程ID:[5] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:07:21,781 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:09:02,396 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:18:55,226 
+线程ID:[52] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:19:07,971 
+线程ID:[24] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:19:10,292 
+线程ID:[24] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:20:28,841 
+线程ID:[52] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:24:46,502 
+线程ID:[17] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 35
+
+ 
+记录时间：2018-10-17 11:38:06,964 
+线程ID:[5] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:String 引用没有设置为 String 的实例。
+参数名: s
+ 
+System.ArgumentNullException: String 引用没有设置为 String 的实例。
+参数名: s
+   在 System.Text.Encoding.GetBytes(String s)
+   在 ZX.Tools.EnDecrypt.SHA1Hash(String str_sha1_in) 位置 E:\xueqiu\zxoa\trunk\ZX.Tools\EnDecrypt.cs:行号 22
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\LoginController.cs:行号 45

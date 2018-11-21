@@ -1,0 +1,582 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@using ZX.BLL
+@model Temporary_Task
+@{
+    ViewBag.Title = "任务编辑-指效OA";
+    int userId = Session["UserId"].ToInt();
+}
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .label.task-status-doing {
+        color: #D2322D
+    }
+
+    .label.task-status-done {
+        color: #229F24
+    }
+
+    .label.task-status-waiting {
+        color: #E48600
+    }
+
+    .label.task-status-cancel {
+        color: #333
+    }
+
+    .taskMenu {
+        width: 200px
+    }
+
+        .taskMenu + .page-content {
+            margin-left: 220px;
+        }
+
+    #dropMenu {
+        min-width: 200px;
+    }
+
+    #defaultMenu, #finishedMenu, #suspendMenu {
+        min-width: 168px;
+    }
+
+    #groupBar .btn-group {
+        margin-right: 15px;
+    }
+
+    #currentItem {
+        margin-right: 1px;
+    }
+
+    .children {
+        background: #f0f0f0;
+    }
+
+    .modal-team .table-form {
+        margin: auto;
+        width: 90%;
+    }
+
+    .modal-team .modal-content {
+        padding: 5px;
+    }
+
+        .modal-team .modal-content .table-form td + td, .table-form th + th {
+            padding-left: 5px;
+        }
+
+    .panel .panel-heading a:hover {
+        text-decoration: none;
+    }
+
+    #menu .pull-right {
+        margin-right: 5px;
+    }
+
+    .only-pick-time table {
+        width: 100%
+    }
+
+        .only-pick-time table td {
+            width: 150px
+        }
+
+        .only-pick-time table > tfoot .today, .only-pick-time table > thead {
+            display: none !important;
+        }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    .car{
+        float:left;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content with-menu'>
+    <script>
+        window.chosenDefaultOptions = { no_results_text: '没有匹配的选项', disable_search_threshold: 1, search_contains: true, width: '100%', allow_single_deselect: true };
+        $(document).ready(function () {
+            $(".chosen").chosen(chosenDefaultOptions);
+        });
+    </script>
+
+    <nav id='menu'>
+        <ul class='nav'>
+            <li class="car"><a id='currentItem' href="javascript:;"><i class='icon-folder-open-alt'></i> <strong>@Model.TName</strong></a></li>
+            <li class="car divider angle"></li>
+            <li class="car">
+                <a href='javascript:;' onclick="goTemporary_Task()">列表</a>
+            </li>
+            <li class="car divider angle"></li>
+            <li class="car title"><a href='javascript:;'>编辑任务</a></li>
+        </ul>
+
+    </nav><div class='page-content'>
+        <form method='post' id='ajaxForm' enctype='multipart/form-data' action="/Temporary_Task/EditSave">
+            <input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+            <input type="hidden" name="ParentId" id="ParentId" value="@Model.ParentId" />
+            <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+            <input type="hidden" name="EditCount" id="EditCount" value="@Model.EditCount">
+            <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+            <div class='row'>
+                <div class='col-md-8'>
+                    <div class='panel'>
+                        <div class='panel-heading'><strong>编辑任务</strong></div>
+                        <div class='panel-body'>
+                            <table class='table table-form table-data'>
+                                <tr>
+                                    <th class='w-80px'>名称<span style="color:red">*</span></th>
+                                    <td>
+                                        <div class='input-group'>
+                                            <input type='text' name='TName' id='TName' value='@Model.TName' class='form-control' datatype="*" nullmsg="请输入任务名称" />
+                                            @*<span class='input-group-addon'>
+                                                    <label class='checkbox-inline'>
+                                                        <input type='checkBox' name='multiple' value='1' /
+
+                                                    >
+                                                        多人
+                                                    </label>
+                                                </span>*@
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>任务描述</th>
+                                    <td>
+                                        <textarea name='PDesc' id='PDesc' class='form-control'>@Model.TDesc</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>备注</th>
+                                    <td>
+                                        <textarea name='TRemark' id='TRemark' class='form-control'>@Model.TRemark</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>附件</th>
+                                    <td>
+                                        <input type="hidden" value="@Model.Attach" name="Attach" id="Attach" />
+                                        <button type="button" class="layui-btn" id="btnUpload">上传附件</button><label id="lblAttach">@Model.Attach</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <style>
+                        .wordwrap {
+                            word-wrap: break-word;
+                            word-break: break-all;
+                        }
+                    </style>
+
+
+                    <div class='panel panel-history'>
+                        <div class='panel-heading'>
+                            <strong>历史记录</strong>
+                        </div>
+                        <div class='panel-body'>
+                            @{
+                                //获取任务历史
+                                List<Temporary_Task_Log> listLog = Temporary_Task_LogBLL.GetList(d => d.Where(t => t.FK_TemporaryTaskId == Model.Id));
+                                List<Sys_User> listUser = new List<Sys_User>();
+                                if (listLog != null)
+                                {
+                                    //获取用户
+                                    listUser = Sys_UserBLL.GetList();
+                                }
+                                foreach (var item in listLog.OrderByDescending(t => t.Id))
+                                {
+                                    string realName = listUser.Where(l => l.Id == item.CreateUserId).FirstOrDefault().RealName;
+                                    <ol>
+                                        <li value='@item.Id.ToInt()'>
+                                            <span>
+                                                @item.CreateTime, 由 <strong>@realName</strong>操作,状态为:@item.StatusName,备注:@item.Remark
+                                            </span>
+                                        </li>
+                                    </ol>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                    <input type='hidden' name='referer' id='referer' value='' />
+                    <div class='page-actions'>
+                        @{
+                            try
+                            {
+                                bool bl = true;
+                                //判断是否指派或者自己创建
+                                if (Model.Assigned == (userId + "") || Model.CreateUserId == userId)
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="saveData()">保存</button>
+                                    bl = false;
+                                }
+                                //是否已经开放权限，如没有，继续走角色设定权限
+                                if (bl)
+                                {
+                                    @Html.Raw(ViewBag.CurrentBtnList29)
+                                }
+                            }
+                            catch { }
+                        }
+                        <a href='javascript:;' class='btn btn-default' onclick="javascript: window.history.go(-1);">返回</a>
+                        <span id="spmsg"></span>
+                    </div>
+                </div>
+                <div class='col-md-4'>
+
+                    <input type="hidden" id="tempDetail" name="tempDetail" />
+
+                    <div class='panel'>
+                        <div class='panel-heading'><strong>基本信息</strong></div>
+                        <div class='panel-body'>
+                            <table class='table table-info'>
+                                <tr>
+                                    <th>指派给<span style="color:red">*</span></th>
+                                    <td>
+                                        <select name="Assigned" id="Assigned" class="form-control" datatype="*" nullmsg="请选择指派人">
+                                            <option value="" data-keys=""></option>
+                                            @{
+                                                try
+                                                {
+                                                    List<SelectListItem> selectItemsAssigned = ViewBag.ListTeam;
+                                                    foreach (var item in selectItemsAssigned)
+                                                    {
+                                                        if (Model.Id > 0)
+                                                        {
+                                                            if (Model.Assigned == item.Value)
+                                                            {
+                                                                <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                                                continue;
+                                                            }
+                                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                                catch { }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class='hidden' id='teamTr'>
+                                    <th>团队</th>
+                                    <td>
+                                        <a href='#modalTeam' class='form-control btn' data-toggle='modal' data-target='#modalTeam'>团队</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>任务状态<span style="color:red">*</span></th>
+                                    <td>
+                                        <select name='TState' id='TState' class='form-control' datatype="*" nullmsg="请选择任务状态">
+                                            <option value='' data-keys=' '></option>
+                                            <option value='2' @(Model.TState == 2 ? "selected" : "")>未开始</option>
+                                            <option value='3' @(Model.TState == 3 ? "selected" : "")>进行中</option>
+                                            <option value='4' @(Model.TState == 4 ? "selected" : "")>已完成</option>
+                                            <option value='5' @(Model.TState == 5 ? "selected" : "")>已取消</option>
+                                            <option value='6' @(Model.TState == 6 ? "selected" : "")>已关闭</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>优先级<span style="color:red">*</span></th>
+                                    <td>
+                                        <select name="Priority" id="Priority" class="form-control" datatype="*" nullmsg="请选择优先级">
+                                            <option value="" data-keys=""></option>
+                                            @{
+                                                try
+                                                {
+                                                    List<SelectListItem> selectItemsPriority = ViewBag.ListPriority;
+                                                    foreach (var item in selectItemsPriority)
+                                                    {
+                                                        if (Model.Id > 0)
+                                                        {
+                                                            if (Model.Priority.ToString() == item.Value)
+                                                            {
+                                                                <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                                                continue;
+                                                            }
+                                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                                catch { }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>截止日期<span style="color:red">*</span></th>
+                                    <td>
+                                        <input type="text" name="AsTime" id="AsTime" value="@Model.AsTime.ToDateFormat()" placeholder="截止日期" onclick="WdatePicker()" class="form-control form-date" datatype="*" nullmsg="请选择截止日期">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>最初预计<span style="color:red">*</span></th>
+                                    <td>
+                                        <input type="text" id="TExpected" name="TExpected" placeholder="工时" class="form-control" autocomplete="off" value="@Model.TExpected" onkeypress="$.admin.keyPress(this)"
+                                               onkeyup="$.admin.keyUp(this)"
+                                               onblur="$.admin.keyBlur(this)" datatype="*" nullmsg="请输入最初预计">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>总消耗</th>
+                                    <td>
+                                        @{
+                                            int consumTime = 0;
+                                            int theTime = 0;
+                                            Temporary_Task_Team ttm = Temporary_Task_TeamBLL.GetList(d => d.Where(t => t.FK_TemporaryTaskId == Model.Id)).FirstOrDefault();
+                                            if (ttm != null)
+                                            {
+                                                consumTime = ttm.ConsumTime.ToInt();
+                                                theTime = ttm.TheTime.ToInt();
+                                            }
+                                        }
+                                        <input type="text" id="ConsumTime" name="ConsumTime" placeholder="工时" class="form-control" autocomplete="off" value="@consumTime" onkeypress="$.admin.keyPress(this)"
+                                               onkeyup="$.admin.keyUp(this)"
+                                               onblur="$.admin.keyBlur(this)">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>预计剩余</th>
+                                    <td>
+                                        <input type="text" id="TheTime" name="TheTime" placeholder="工时" class="form-control" autocomplete="off" value="@theTime" onkeypress="$.admin.keyPress(this)"
+                                               onkeyup="$.admin.keyUp(this)"
+                                               onblur="$.admin.keyBlur(this)">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>抄送给</th>
+                                    <td>
+                                        <input type="hidden" id="TCC" name="TCC" class="form-control" value="@Model.TCC" placeholder="抄送给">
+                                        <select data-placeholder="选择要发信通知的用户..." class="chosen-select form-control" tabindex="2" multiple="" id="TCC">
+                                            @{
+                                                try
+                                                {
+                                                    List<Sys_User> userList = ViewBag.ListUser;
+                                                    foreach (var item in userList)
+                                                    {
+                                                        bool bl = true;
+                                                        if (Model.TCC.IsNullOrEmpty())
+                                                        {
+                                                            <option value="@item.Id" data-keys="@item.RealName">@item.RealName</option>
+                                                            continue;
+                                                        }
+
+                                                        List<string> tccList = Model.TCC.Split(',').ToList();
+
+                                                        if (tccList.Contains(item.Id.ToString()))
+                                                        {
+                                                            <option value="@item.Id" data-keys="@item.RealName" selected>@item.RealName</option>
+                                                            bl = false;
+                                                            continue;
+                                                        }
+                                                        if (bl)
+                                                        {
+                                                            <option value="@item.Id" data-keys="@item.RealName">@item.RealName</option>
+                                                        }
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class='panel'>
+                        <div class='panel-heading'><strong>任务的一生</strong></div>
+                        <div class='panel-body'>
+                            <table class='table table-info'>
+                                <tr>
+                                    <th class='w-80px'>由谁创建</th>
+                                    @{
+                                        string strRealName = "";
+                                        string strTSuccess = "";
+                                        string strTCancel = "";
+                                        string strTClosed = "";
+                                        try
+                                        {
+                                            List<Sys_User> userList = ViewBag.ListUser;
+                                            strRealName = userList.Where(l => l.Id == Model.CreateUserId).FirstOrDefault().RealName;
+
+
+                                            if (Model.TSuccess.IsNotNullOrEmpty())
+                                            {
+                                                strTSuccess = userList.Where(l => l.Id == Model.TSuccess.ToInt()).FirstOrDefault().RealName;
+                                            }
+                                            if (Model.TCancel.IsNotNullOrEmpty())
+                                            {
+                                                strTCancel = userList.Where(l => l.Id == Model.TCancel.ToInt()).FirstOrDefault().RealName;
+                                            }
+                                            if (Model.TClosed.IsNotNullOrEmpty())
+                                            {
+                                                strTClosed = userList.Where(l => l.Id == Model.TClosed.ToInt()).FirstOrDefault().RealName;
+                                            }
+                                        }
+                                        catch { }
+                                    }
+                                    <td><input type="text" readonly class="form-control" value="@strRealName" /></td>
+                                </tr>
+                                <tr>
+                                    <th>由谁完成</th>
+                                    <td>
+                                        <input type="text" readonly class="form-control" value="@strTSuccess" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>完成时间</th>
+                                    <td>
+                                        <input type="text" readonly class="form-control" value="@Model.TSucTime" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>由谁取消</th>
+                                    <td>
+                                        <input type="text" readonly class="form-control" value="@strTCancel" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>取消时间</th>
+                                    <td>
+                                        <input type="text" readonly class="form-control" value="@Model.TCancelTime" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>由谁关闭</th>
+                                    <td>
+                                        <input type="text" readonly class="form-control" value="@strTClosed" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>关闭时间</th>
+                                    <td>
+                                        <input type="text" readonly class="form-control" value="@Model.TClosedTime" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>关闭原因</th>
+                                    <td>
+                                        <textarea readonly class="form-control">@Model.TClosedWhy</textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script language='Javascript'>
+    $(function () {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/UploadAttach'
+                , accept: 'file'
+                , data: { direName: "/Temporary_Task/Files" }
+                , done: function (res) {
+
+                    $("#Attach").val(res.Data);
+
+                    $("#lblAttach").text(res.Data);
+
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+        search_contains: true         // 从任意位置开始检索
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#TCC").val($(this).val());
+
+    });
+    //
+    function goTemporary_Task() {
+        window.location.href = "/Temporary_Task/Temporary_TaskList?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    function saveData() {
+        //任务基本信息
+        $("#ajaxForm").submit();
+    }
+
+    $("#ajaxForm").Validform({
+        tiptype: function (msg, o, cssctl) {
+            var objtip = $("#spmsg");
+            cssctl(objtip, o.type);
+            objtip.text(msg);
+        },
+        beforeSubmit: function () {
+
+            //在验证成功后，表单提交前执行的函数，curform参数是当前表单对象。
+            //这里明确return false的话表单将不会提交;
+            $('<div class="loadingWrap"></div>').appendTo("body");
+
+            //任务团队基本信息
+            var taskTeamItem = { FK_TaskId: "", ExpectHours: "", ConsumTime: "", TheTime: "" }
+            taskTeamItem.FK_TaskId = $("#FK_TemporaryTaskId").val();
+            taskTeamItem.ExpectHours = $("#ExpectHours").val();
+            taskTeamItem.ConsumTime = $("#ConsumTime").val();
+            taskTeamItem.TheTime = $("#TheTime").val();
+
+            var jsonDataTaskTeam = JSON.stringify(taskTeamItem);
+            $("#tempDetail").val(jsonDataTaskTeam);
+        },
+        callback: function (form) {
+            win.showLoading("正在保存...");
+            $("#ajaxForm").ajaxSubmit(function (data) {
+                $(".loadingWrap").remove();
+                win.hideLoading();
+                if (data.Code == 300) {
+                    win.alert("保存失败");
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        goTemporary_Task();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+</script>

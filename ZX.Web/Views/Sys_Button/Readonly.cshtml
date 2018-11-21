@@ -1,0 +1,102 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@using ZX.BLL
+@model ZX.Model.Sys_Button
+@{
+    ViewBag.Title = "按钮基本信息查看-指效";
+}
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel-body {
+        padding: 80px;
+        padding-top:20px;
+    }
+</style>
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-body'>
+            <form action="SaveData" method="post" class="layui-form" id="formMenu">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title" value="@(ViewBag.MenuName)" readonly="readonly" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">按钮名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title" autocomplete="off" readonly="readonly" value="@Model.BName" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">操作类型</label>
+                    <div class="layui-input-inline">
+                        @Html.DropDownListFor(model => model.BType, ViewBag.ButtonType as IEnumerable<SelectListItem>)
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-verify="">
+                            @{
+                                List<Dictionary> ditList = DictionaryBLL.GetList(d => d.Where(t => t.ParentId == 26));
+                                foreach (var item in ditList)
+                                {
+                                    if (Model.BGroup == item.Id)
+                                    {
+                                        <option value="@item.Id" lay-verify="required" data-keys="@item.Name" selected>@item.Name</option>
+                                        continue;
+                                    }
+                                    <option value="@item.Id" lay-verify="required" data-keys="@item.Name">@item.Name </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">执行方法</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title" autocomplete="off" readonly="readonly" value="@Model.BOptionFun" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否禁用</label>
+                    <div class="layui-input-block">
+                        @if (Model.BIsUse == 1)
+                        {
+                            <input type="checkbox" lay-skin="primary" id="checkBIsUse" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" lay-skin="primary" id="checkBIsUse" />
+                        }
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title" autocomplete="off" readonly="readonly" value="@Model.BSort" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">按钮描述</label>
+                    <div class="layui-input-inline" >
+                        <textarea name='BDesc' id='BDesc' class='layui-textarea' rows='5'>@Model.BDesc</textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use("form", function () {
+        var form = layui.form;
+    });
+
+    $(document).ready(function () {
+        $('select').addClass("form-control");
+
+    });
+</script>

@@ -1,0 +1,194 @@
+﻿@using ZX.Tools
+@model ZX.Model.Supplier
+@{
+    ViewBag.Title = "供货商-指效";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<script>
+    window.chosenDefaultOptions = { no_results_text: '没有匹配的选项', disable_search_threshold: 1, search_contains: true, width: '70%', allow_single_deselect: true };
+    $(document).ready(function () {
+        $(".chosen").chosen(chosenDefaultOptions);
+    });
+</script>
+<form action="/Supplier/SaveData" method="post" class="form-horizontal" id="formSupplier">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <div class="form-group">
+        <label for="SName" class="col-sm-1">供应商名称</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SName" name="SName" value="@Model.SName" placeholder="供应商名称" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SCode" class="col-sm-1">供应商编号</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SCode" name="SCode" value="@Model.SCode" placeholder="供应商编号" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SAddress" class="col-sm-1">联系地址</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SAddress" name="SAddress" value="@Model.SAddress" placeholder="联系地址" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SLinkName" class="col-sm-1">联系人姓名</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SLinkName" name="SLinkName" value="@Model.SLinkName" placeholder="联系人姓名" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SPhone" class="col-sm-1">手机电话</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SPhone" name="SPhone" value="@Model.SPhone" placeholder="手机电话" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="STel" class="col-sm-1">座机</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="STel" name="STel" value="@Model.STel" placeholder="座机" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SEMail" class="col-sm-1">邮箱</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SEMail" name="SEMail" value="@Model.SEMail" placeholder="邮箱" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SOpenName" class="col-sm-1">开户名称</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SOpenName" name="SOpenName" value="@Model.SOpenName" placeholder="开户名称" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SOpenBank" class="col-sm-1">开户银行</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SOpenBank" name="SOpenBank" value="@Model.SOpenBank" placeholder="开户银行" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SOpenBankAccount" class="col-sm-1">银行账号</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SOpenBankAccount" name="SOpenBankAccount" value="@Model.SOpenBankAccount" placeholder="银行账号" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SOpenMake" class="col-sm-1">开票抬头</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SOpenMake" name="SOpenMake" value="@Model.SOpenMake" placeholder="开票抬头" class="form-control" autocomplete="off">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="SSize" class="col-sm-1">规模</label>
+        <div class="col-md-4 col-sm-10">
+            <select name='SSize' class="form-control" tabindex="2">
+                <option value='0' selected='selected' data-keys=' ' @(Model.SSize == "0" ? "selected" : "")></option>
+                <option value='1' data-keys='daxing(100renyishang) dx1rys' @(Model.SSize == "1" ? "selected" : "")>大型(100人以上)</option>
+                <option value='2' data-keys='zhongxing(50-100ren) zx5r' @(Model.SSize == "2" ? "selected" : "")>中型(50-100人)</option>
+                <option value='3' data-keys='xiaoxing(10ren-50ren) xx1r-r' @(Model.SSize == "3" ? "selected" : "")>小型(10人-50人)</option>
+                <option value='4' data-keys='weixing(10renyixia) wx1ryx' @(Model.SSize == "4" ? "selected" : "")>微型(10人以下)</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SIndustry" class="col-sm-1">行业</label>
+        <div class="col-md-4 col-sm-10">
+            <select name='SIndustry' class='form-control chosen'>
+                <option value='0' selected='selected' data-keys='/ /' @(Model.SIndustry == "0" ? "selected" : "")>/</option>
+                <option value='1' data-keys='/huagong /hg' @(Model.SIndustry == "1" ? "selected" : "")>/化工</option>
+                <option value='3' data-keys='/huanbao、lvhua、gonggongshiye /hblhggsy' @(Model.SIndustry == "3" ? "selected" : "")>/环保、绿化、公共事业</option>
+                <option value='4' data-keys='/dianzidiangongjitongxun /dzdgjtx' @(Model.SIndustry == "4" ? "selected" : "")>/电子电工及通讯</option>
+                <option value='5' data-keys='/bangongwenjiaojiguangyi /bgwjjgy' @(Model.SIndustry == "5" ? "selected" : "")>/办公文教及光仪</option>
+                <option value='6' data-keys='/yingshi、xinwen、chuban /ysxwcb' @(Model.SIndustry == "6" ? "selected" : "")>/影视、新闻、出版</option>
+                <option value='7' data-keys='/diannao、wangluo、ruanjian /dnwlrj' @(Model.SIndustry == "7" ? "selected" : "")>/电脑、网络、软件</option>
+                <option value='8' data-keys='/nonglinmuyu /nlmy' @(Model.SIndustry == "8" ? "selected" : "")>/农林牧渔</option>
+                <option value='9' data-keys='/shenghuoxiaofei /shxf' @(Model.SIndustry == "9" ? "selected" : "")>/生活消费</option>
+                <option value='10' data-keys='/jiadianjijiajuyongpin /jdjjjyp' @(Model.SIndustry == "10" ? "selected" : "")>/家电及家居用品</option>
+                <option value='11' data-keys='/jiaotongyunshu、wuliu /jtyswl' @(Model.SIndustry == "11" ? "selected" : "")>/交通运输、物流</option>
+                <option value='12' data-keys='/wenhuajiaoyu、peixun /whjypx' @(Model.SIndustry == "12" ? "selected" : "")>/文化教育、培训</option>
+                <option value='14' data-keys='/wanjujiertongyongpin /wjjetyp' @(Model.SIndustry == "14" ? "selected" : "")>/玩具及儿童用品</option>
+                <option value='15' data-keys='/keyan、sheji、jiance /kysjjc' @(Model.SIndustry == "15" ? "selected" : "")>/科研、设计、监测</option>
+                <option value='16' data-keys='/lipin、meishu、gongyipin /lpmsgyp' @(Model.SIndustry == "16" ? "selected" : "")>/礼品、美术、工艺品</option>
+                <option value='17' data-keys='/yiliao、yiyao、baojian /ylyybj' @(Model.SIndustry == "17" ? "selected" : "")>/医疗、医药、保健</option>
+                <option value='18' data-keys='/jinrong、baoxian、touzi /jrbxtz' @(Model.SIndustry == "18" ? "selected" : "")>/金融、保险、投资</option>
+                <option value='19' data-keys='/jixie、jidian、shebei /jxjdsb' @(Model.SIndustry == "19" ? "selected" : "")>/机械、机电、设备</option>
+                <option value='20' data-keys='/lvyou、yundong、xiuxian /lyydxx' @(Model.SIndustry == "20" ? "selected" : "")>/旅游、运动、休闲</option>
+                <option value='21' data-keys='/zhengfujishehuituanti /zfjshtt' @(Model.SIndustry == "21" ? "selected" : "")>/政府及社会团体</option>
+                <option value='22' data-keys='/gongyezhipinjigongyeyongpin /gyzpjgyyp' @(Model.SIndustry == "22" ? "selected" : "")>/工业制品及工业用品</option>
+                <option value='23' data-keys='/baozhuang、yinshua、zhipin /bzyszp' @(Model.SIndustry == "23" ? "selected" : "")>/包装、印刷、纸品</option>
+                <option value='24' data-keys='/shangyejigou /syjg' @(Model.SIndustry == "24" ? "selected" : "")>/商业机构</option>
+                <option value='25' data-keys='/fangzhi、pige、yinran /fzpgyr' @(Model.SIndustry == "25" ? "selected" : "")>/纺织、皮革、印染</option>
+                <option value='26' data-keys='/anquan、baoan /aqba' @(Model.SIndustry == "26" ? "selected" : "")>/安全、保安</option>
+                <option value='27' data-keys='/zhuanyefuwu /zyfw' @(Model.SIndustry == "27" ? "selected" : "")>/专业服务</option>
+                <option value='28' data-keys='/nengyuan、kuangchan、yejin /nykcyj' @(Model.SIndustry == "28" ? "selected" : "")>/能源、矿产、冶金</option>
+                <option value='29' data-keys='/fuzhuang、fushi /fzfs' @(Model.SIndustry == "29" ? "selected" : "")>/服装、服饰</option>
+                <option value='30' data-keys='/shenghuofuwu /shfw' @(Model.SIndustry == "30" ? "selected" : "")>/生活服务</option>
+                <option value='33' data-keys='/chongwujiyongpin /cwjyp' @(Model.SIndustry == "33" ? "selected" : "")>/宠物及用品</option>
+                <option value='34' data-keys='/jianzhu、zhuangshi、fangdichan /jzzsfdc' @(Model.SIndustry == "34" ? "selected" : "")>/建筑、装饰、房地产</option>
+                <option value='35' data-keys='/shipin、yinliao、yanjiu /spylyj' @(Model.SIndustry == "35" ? "selected" : "")>/食品、饮料、烟酒</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SQQ" class="col-sm-1">QQ</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SQQ" name="SQQ" value="@Model.SQQ" placeholder="QQ" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SWeiXin" class="col-sm-1">微信</label>
+        <div class="col-md-4 col-sm-10">
+            <input type="text" id="SWeiXin" name="SWeiXin" value="@Model.SWeiXin" placeholder="微信" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SRemark" class="col-sm-1">备注</label>
+        <div class="col-md-5 col-sm-10">
+            <textarea id="SRemark" name="SRemark" class="form-control" rows='2'>@Model.SRemark</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <a href='javascript:;' class='btn btn-back' onclick="goBack()">返回</a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 3, // 3 个以下的选择项则不显示检索框
+        search_contains: true         // 从任意位置开始检索
+    });
+    function goBack() {
+        window.location.href = "/Supplier/Index?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

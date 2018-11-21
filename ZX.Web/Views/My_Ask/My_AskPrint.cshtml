@@ -1,0 +1,169 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model My_Ask
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Sys_User> userList = ViewBag.UserList ?? new List<Sys_User>();
+    int positionCounts = ViewBag.PositionCounts;
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>请假审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/My_Ask/SaveApproval" method="post" class="form" id="formMy_Ask">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="FK_ApprovalId" value="@Model.FK_ApprovalId" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-center w-120px">姓名</th>
+                        <td>
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-50px'>部门</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-50px'>职位</th>
+                        <td>
+                            @user.PositionName
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">请假类别</th>
+                        <td colspan="5">@ViewBag.TypeName</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">请假事由</th>
+                        <td colspan="5">
+                            @Model.ADesc
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">请假时间</th>
+                        <td colspan="5" class="text-center">
+                            @{
+                                DateTime dt = Convert.ToDateTime(Model.StartTime);
+                                int sYear = dt.Year;
+                                int month = dt.Month;
+                                int day = dt.Day;
+                                string hh = dt.Hour < 10 ? "0" + dt.Hour : dt.Hour + "";
+
+                                DateTime endDt = Convert.ToDateTime(Model.EndTime);
+                                int endYear = endDt.Year;
+                                int endMonth = endDt.Month;
+                                int endDay = endDt.Day;
+                                string endhh = endDt.Hour < 10 ? "0" + endDt.Hour : endDt.Hour + "";
+                            }
+
+                            @("自" + sYear + "年" + month + "月" + day + "日" + hh + "时  至" + endYear + "年" + endMonth + "月" + endDay + "日" + endhh + "时")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="tdDay" colspan="6" class="text-center">@ViewBag.AppLen</td>
+                    </tr>
+                    @{
+                        int approvalUserCount = userList.Count;
+
+                        string userSign0 = "";
+                        string userSign1 = "";
+                        string userSign2 = "";
+                        string userSign3 = "";
+
+                        try
+                        {
+                            userSign0 = userList[0].USgin;
+                        }
+                        catch { }
+
+                        try
+                        {
+                            userSign1 = userList[1].USgin;
+                        }
+                        catch { }
+
+
+                        try
+                        {
+                            userSign2 = userList[2].USgin;
+                        }
+                        catch { }
+
+                    }
+                    <tr>
+                        <td colspan="6">
+                            部门负责人意见：
+                            @{
+                                //如果申请单只走部门负责人审批,则仅仅显示部门负责人
+                                if (positionCounts > 1)
+                                {
+                                    if (userSign2.IsNotNullOrEmpty())
+                                    {
+                                        <img src="@userSign2" style="width:200px;height:50px;margin-left:7px;" />
+                                    }
+                                }
+                                else
+                                {
+                                    if (userSign0.IsNotNullOrEmpty())
+                                    {
+                                        <img src="@userSign0" style="width:200px;height:50px;margin-left:7px;" />
+                                    }
+
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            分管领导意见：
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            综合管理部意见：
+                            @{
+                                //如果申请单只走部门负责人审批,则仅仅显示部门负责人
+                                if (positionCounts > 1 && userSign1.IsNotNullOrEmpty())
+                                {
+                                    <img src="@userSign1" style="width:200px;height:50px;margin-left:7px;" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            总经理意见：
+                            @{
+                                //如果申请单只走部门负责人审批,则仅仅显示部门负责人
+                                if (positionCounts > 1 && userSign0.IsNotNullOrEmpty())
+                                {
+                                    <img src="@userSign0" style="width:200px;height:50px;margin-left:7px;" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        onprint();
+    });
+    function printHtml(html) {
+        var bodyHtml = html;
+        document.body.innerHTML = html;
+        window.print();
+        document.body.innerHTML = bodyHtml;
+    }
+    function onprint() {
+        var html = $(".panel-body").html();
+        printHtml(html);
+    }
+</script>

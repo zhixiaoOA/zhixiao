@@ -1,0 +1,258 @@
+﻿@using ZX.Tools
+@using System.Data
+@using ZX.Model
+@{
+    ViewBag.Title = "个人任务亮灯统计-指效";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/dist/lib/chosen/chosen.min.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/dist/lib/chosen/chosen.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+
+
+<input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+<input type="hidden" id="currentMid" name="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<input type="hidden" id="pointValue" value="1" />
+<style>
+    .a_btn_menu {
+        float: right;
+        margin-right: 3px;
+    }
+    .top-navbar-index {
+        position: inherit;
+        background-color: white;
+        width: 100%;
+        margin-bottom: 0;
+    }
+    .with-menu{
+        margin-left:10px;
+    }
+    .nav-heading {
+        line-height: 34px;
+        margin-right: 5px;
+    }
+    .layui-table td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+    #tbList td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+    .form-inline{margin-top:30px}
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div id='menuActions'>
+        @Html.Raw(ViewBag.CurrentBtnList32)
+    </div>
+    <div class='panel'>
+        <div>
+            <fieldset>
+                <legend>统计条件</legend>
+                <div class="input-group">
+                    <select id="yearSelect" data-placeholder="选择年份..." class="chosen-select form-control" style="width: 120px;" tabindex="2">
+                        @{
+                            int currentYear = DateTime.Now.Year;
+                            for (int i = currentYear; i > currentYear - 11; i--)
+                            {
+                                <option value="@i" data-keys="@i">@(i)年</option>
+                            }
+                        }
+                    </select>
+                    <select id="quarterSelect" data-placeholder="选择季度..." class="chosen-select form-control" style="width: 120px;" tabindex="3">
+                        @{
+                            <option value=""></option>
+                            int currentQuarter = DateTime.Now.Month;
+                            for (int i = 1; i < 5; i++)
+                            {
+                                <option value="@i" data-keys="@i">第@(i)季度</option>
+                            }
+                        }
+                    </select>
+                    <select id="monthSelect" data-placeholder="选择月份..." class="chosen-select form-control" style="width: 100px;" tabindex="4">
+                        @{
+                            <option value="">整年</option>
+                            int currentMonth = DateTime.Now.Month;
+                            for (int i = 1; i < 13; i++)
+                            {
+                                <option value="@i" data-keys="@i">@(i)月</option>
+                            }
+                        }
+                    </select>
+                    <button class="btn btn-default" type="button" onclick="doSearch()">统计</button>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <div class="form-inline">
+                <div class="form-group">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-heading">任务类型</li>
+                        <li class='active' onclick="getListByPoint(this,1)">
+                            <a href='javascript:;' class="form-control">项目任务</a>
+                        </li>
+                        <li onclick="getListByPoint(this,2)">
+                            <a href='javascript:;' class="form-control">临时任务</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <table class='layui-table' id='contactList'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-80px'>
+                        <a href=''>编号</a>
+                    </th>
+                    <th class='w-120px text-center'>
+                        <a href=''>真实名</a>
+                    </th>
+                    <th class='text-center'>
+                        <a href=''>黄灯</a>
+                    </th>
+                    <th class='text-center'>
+                        <a href=''>红灯</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='~/res/js/jquery/form/min.js?v=4.6.1' type='text/javascript'></script>
+<script language='Javascript'>
+    $(function () {
+        var currentDate = new Date();
+        $("#yearSelect").val(currentDate.getFullYear());
+        $("#yearSelect").val("");
+        $("#monthSelect").val(currentDate.getMonth());
+        getProjectLampList();
+    });
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getTemporaryTaskLampList() {
+        win.showLoading();
+        var yearSelect = $("#yearSelect").val();
+        var quarterSelect = $("#quarterSelect").val();
+        var monthSelect = $("#monthSelect").val();
+        $.post("/LampStatistics/GetOwnerTemporaryTaskLampList", { pageIndex: pageIndex, pageSize: pageSize, name: "", yearSelect: yearSelect, quarterSelect: quarterSelect, monthSelect: monthSelect, mid: $("#currentMid").val(), mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initTemporaryTaskLampPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+    function getProjectLampList() {
+        win.showLoading();
+        var yearSelect = $("#yearSelect").val();
+        var quarterSelect = $("#quarterSelect").val();
+        var monthSelect = $("#monthSelect").val();
+        $.post("/LampStatistics/GetOwnerProjectLampList", { pageIndex: pageIndex, pageSize: pageSize, name: "", yearSelect: yearSelect, quarterSelect: quarterSelect, monthSelect: monthSelect, mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initProjectLampPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initProjectLampPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getProjectLampList();
+                    }
+                }
+            });
+        });
+    }
+
+
+    function initTemporaryTaskLampPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getTemporaryTaskLampList();
+                    }
+                }
+            });
+        });
+    }
+
+    //快速切换
+    function getListByPoint(obj, pointValue1) {
+        $(obj).addClass("active").siblings().removeClass("active");
+        pageIndex = 1;
+
+        $("#pointValue").val(pointValue1);
+        switch (pointValue1) {
+            case 1:
+                getProjectLampList();
+                break;
+            case 2:
+                getTemporaryTaskLampList();
+                break;
+            default:
+                break;
+        }
+    }
+
+    function doSearch() {
+        var pointValue = $("#pointValue").val();
+        switch (pointValue) {
+            case "1":
+                getProjectLampList();
+                break;
+            case "2":
+                getTemporaryTaskLampList();
+                break;
+            default:
+                break;
+        }
+    }
+</script>

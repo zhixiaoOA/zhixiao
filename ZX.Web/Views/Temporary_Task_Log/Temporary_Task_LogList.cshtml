@@ -1,0 +1,113 @@
+﻿@using ZX.Tools
+@{
+    ViewBag.Title = "某某管理";
+}
+<div class="page-content">
+    <div class="page-header">
+        <input type="hidden" value="1" name="pageIndex" />
+        @Html.Raw(ViewBag.ButtonHtml)
+        关键字：<input type="text" id="key" value="" placeholder="关键字" />
+        <button type="button" class="btn btn-sm btn-info" id="btnSearch" style="height: 31px;margin-top: -5px;">搜 索</button>
+    </div>
+    <div class="row">
+        <table class="ui selectable celled table">
+            <thead>
+                <tr>
+                    <th style="width:35px;">
+                        <input type="checkbox" class="cbox" onclick="onAllCheck(this)" />
+                    </th>
+                    <th>Id</th>
+                    <th>FK_TemporaryTaskId</th>
+                    <th>Remark</th>
+                    <th>StatusId</th>
+                    <th>StatusName</th>
+                    <th>CreateUserId</th>
+                    <th>CreateTime</th>
+                    <th>UpdateUserId</th>
+                    <th>UpdateTime</th>
+                    <th>CreateAccount</th>
+                    <th>UpdateAccount</th>
+
+                </tr>
+            </thead>
+            <tbody id="listTbody"></tbody>
+        </table>
+        <div class="pageing">
+            <ul class="pagination" pageindex="1" totalpage="0"></ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSearch").click(function () {
+            $("input[name='pageIndex']").val(1);
+            getList();
+        });
+        getList();
+    });
+    function getList() {
+        win.showLoading();
+        var pageIndex = $("input[name='pageIndex']").val();
+        var key = $("#key").val();
+        $.post("/Admin/Temporary_Task_Log/GetTemporary_Task_LogList", { pageIndex: pageIndex, key: key }, function (data) {
+            $("input[name='pageIndex']").val(data.PageIndex);
+            $(".pagination").attr("pageindex", data.PageIndex).attr("totalpage", data.PageTotal);
+            if (data.PageTotal > 0) {
+                $.jqPaginator('.pagination', {
+                    totalPages: data.PageTotal,
+                    visiblePages: 10,
+                    currentPage: data.PageIndex,
+                    onPageChange: function (num, type) {
+                        if (type != "init") {
+                            $("input[name='pageIndex']").val(num);
+                            getList();
+                        }
+                    }
+                });
+            }
+            $("#listTbody").html(data.Data);
+            win.hideLoading();
+        }, "json").error(function () { win.hideLoading(); });
+    }
+    //全选/取消
+    function onAllCheck(obj) {
+        $("input[name='cbox']").prop("checked", $(obj).prop("checked"));
+    }
+    //选择行
+    function onSelectTr(obj) {
+        $("input[name='cbox']").prop("checked", false);
+        $(obj).parent().find("td:eq(0)").find("input").prop("checked", true);
+    }
+    //添加
+    function add() {
+        win.open("/Admin/Temporary_Task_Log/AddEdit/0", 1000, 700, "新增");
+    }
+
+    //删除
+    function del() {
+        var ids = $.admin.getCboxVal($("input[name='cbox']:checked"));
+        if (ids != "") {
+            win.confirm('确认要删除吗？', function () {
+                $.post("/Admin/Temporary_Task_Log/DeleteData/" + ids, {}, function (data) {
+                    if (data.Code == 200) {
+                        getList();
+						win.success('删除成功');
+                    } else {
+                        win.alert(data.Message);
+                    }
+                }, "json");
+            });
+        } else {
+            win.info("请勾选要删除的数据");
+        }
+    }
+    //修改
+    function edit() {
+        var id = $("input[name='cbox']:checked").first().val();
+        if (id == undefined) {
+            win.info("请勾选要编辑的数据");
+        } else {
+            win.open("/Admin/Temporary_Task_Log/AddEdit/" + id, 1000, 700, "编辑");
+        }
+    }
+</script>

@@ -1,0 +1,111 @@
+
+ 
+记录时间：2018-10-22 08:59:39,280 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.RecursionGetFirstMenu(List`1 menuList, Int32 mid) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 298
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 166
+
+ 
+记录时间：2018-10-22 08:59:39,350 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-22 09:00:44,296 
+线程ID:[27] 
+日志级别：  ERROR 
+错误描述：无法打开登录所请求的数据库 "zhixiaoOA"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiaoOA"。登录失败。
+用户 'sa' 登录失败。
+   在 System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling)
+   在 System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   在 System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   在 System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   在 System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   在 System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   在 System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   在 System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.Open()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 160
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 80
+ClientConnectionId:4e0b3932-dbf2-4ad8-a10c-7471afc079c6
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-10-22 09:21:00,569 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.RecursionGetFirstMenu(List`1 menuList, Int32 mid) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 298
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 166
+
+ 
+记录时间：2018-10-22 09:21:00,599 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+
+ 
+记录时间：2018-10-22 10:00:10,363 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:')' 附近有语法错误。
+ 
+System.Data.SqlClient.SqlException (0x80131904): ')' 附近有语法错误。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(String strWhere) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 482
+   在 ZX.BLL.BaseBLL`2.GetList(String where) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 163
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId)
+ClientConnectionId:8a9667d8-1b01-41c6-a9fc-d299aa51c88f
+Error Number:102,State:1,Class:15
+
+ 
+记录时间：2018-10-22 10:00:10,395 
+线程ID:[18] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t)
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId)

@@ -1,0 +1,232 @@
+﻿@using ZX.Model
+@model List<ZX.Model.Sys_Menu>
+
+@{
+    ViewBag.Title = "菜单管理-指效";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link rel='stylesheet' href='/Static/js/jquery/treeview/min.css?v=4.6.1' type='text/css' media='screen' />
+<link rel='stylesheet' href='/Static/js/jquery/treeview/min.css?v=4.6.1' type='text/css' media='print' />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link rel='stylesheet' href='/Static/css/theme/zui/css/min.css' type='text/css' media='screen' />
+<link rel='stylesheet' href='/Static/js/jquery/chosen/min.css' type='text/css' media='screen' />
+<link rel='stylesheet' href='/Static/js/jquery/chosen/min.css' type='text/css' media='print' />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/chosen/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src='/Static/js/jquery/treeview/min.js?v=4.6.1' type='text/javascript'></script>
+<style>
+    .page-content.with-menu {
+        margin: 0 0 0 160px;
+    }
+
+    .group-item .checkbox {
+        display: inline-block;
+    }
+
+        .group-item .checkbox input {
+            margin: 2px 0 0 -16px;
+        }
+
+    .leftmenu > .nav > li > a {
+        padding: 0 15px;
+    }
+
+    .input-group-addon label.checkbox {
+        margin: 0;
+        padding-top: 3px;
+    }
+
+    #childList .sort-handle {
+        cursor: move;
+    }
+
+    .doc-category {
+        margin: 41px 0 0;
+    }
+
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .col-md-8 {
+        width: 75%;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<input type="hidden" id="fk_menuId" value="">
+<div class='page-content'>
+    <div class="col-md-12">
+        <div class='row'>
+            <div class='col-md-3'>
+                <div class='panel'>
+                    <div class='panel-heading'>
+                        <strong><i class="icon icon-spin icon-cog"></i> 菜单管理</strong>
+                        <div style="float:right;">@Html.Raw(ViewBag.CurrentBtnList31)</div>
+                    </div>
+                    <div class='panel-body'>
+                        <div id='treeMenuBox'>
+                            <ul class='tree'></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-8'>
+                <div class='clearfix'>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <strong><i class="icon icon-sliders"></i>菜单按钮</strong>
+                            <div class="pull-right panel-actions">
+                                @Html.Raw(ViewBag.CurrentBtnList27)
+                            </div>
+                        </div>
+                        <table class='layui-table'>
+                            <thead>
+                                <tr class='text-center'>
+                                    <th class='w-60px'>编号</th>
+                                    <th class='w-120px'>名称</th>
+                                    <th class='w-100px'>
+                                        类型
+                                    </th>
+                                    <th class='w-150px'>
+                                        分组
+                                    </th>
+                                    <th class='w-120px'>
+                                        执行方法
+                                    </th>
+                                    <th class='w-50px'>
+                                        状态
+                                    </th>
+                                    <th>
+                                        描述
+                                    </th>
+                                    <th class='w-60px'>
+                                        排序
+                                    </th>
+                                    <th class='w-170px'>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script language='Javascript'>
+            $(document).ready(function () {
+                $('.form-search').submit(function () {
+                    var inputValue = $(".search-query").val();
+                    if (inputValue == '') {
+                        alert('请输入用户名');
+                        return false;
+                    }
+                });
+
+                getList();
+        });
+            function getList() {
+                $.post("/sys_menu/GetList", { mid:@ViewBag.CurrentMid, secondMenuId: $("#secondMenuId").val() }, function (data) {
+                    if (data.Code == 200) {
+                        $(".tree").html(data.Data);
+                        $('.tree').each(function () {
+                            var $this = $(this);
+                            $this.treeview($.extend({ collapsed: true, unique: false }, $this.data()));
+                        });
+                    } else {
+                    }
+                });
+        }
+            function treeAdd(obj) {
+                window.location.href = "/Sys_Menu/addedit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+            }
+
+            function treeEdit(obj){
+                var id = $(obj).attr("val");
+                window.location.href = "/Sys_Menu/addedit?id="+id+"&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+            }
+
+            function treeChildAdd(obj) {
+                var pid = $(obj).attr("val");
+                window.location.href = "/Sys_Menu/addedit?pid=" + pid + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+            }
+            //删除
+            function treeDel(obj) {
+                layer.confirm('确认要删除吗？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    var id = $(obj).attr("val");
+                    $.post("/sys_menu/DeleteData", { id: id }, function (data) {
+                        if (data.Code == 200) {
+                            layer.msg('删除成功', { icon: 1 });
+                            window.location.href = '/sys_menu/index?mid=' + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                        } else {
+                            layer.alert(data.Message, { icon: 7 });
+                        }
+                    }, "json");
+                });
+            }
+            //展示菜单所拥有的按钮
+            function showSysMenuBtn(id) {
+                //为添加按钮设置 跳转路径
+                $('#fk_menuId').val(id);
+
+                $.post("/sys_menu/GetButtonList", { mid: id, secondMenuId: $("#secondMenuId").val()}, function (data) {
+                    if (data.Code == 200) {
+                        $("tbody").html(data.Data);
+                    } else {
+                        //win.alert("获取数据失败");
+                    }
+                });
+            }
+            function m_Btn_Add(obj) {
+                var selectMenuId=$("#fk_menuId").val();
+                if (selectMenuId <= 0 || selectMenuId=="") {
+                    win.alert("请先选择菜单。");
+                    return false;
+                }
+                win.open("/Sys_Button/addedit?id=0&fk_menuId=" + $('#fk_menuId').val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 750, 580, "按钮新增");
+            }
+            function m_Btn_Del(obj) {
+                var id =$(obj).attr("val");
+                var pid = $("#fk_menuId").val();
+                layer.confirm('确认要删除吗？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $.post("/Sys_Button/DeleteData", { id: id }, function (data) {
+                        if (data.Code == 200) {
+                            layer.msg('删除成功', { icon: 1 });
+                            showSysMenuBtn(pid);
+                        } else {
+                            layer.alert(data.Message, { icon: 7 });
+                        }
+                    }, "json");
+                }, function () { });
+            }
+
+            function btnEdit(obj) {
+                win.open("/Sys_Button/addedit?id=" + $(obj).attr("val") + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(),750,580,"按钮编辑");
+            }
+
+            function btnLook(obj) {
+                win.open("/Sys_Button/Readonly?id=" + $(obj).attr("val"), 750, 533, "按钮信息");
+            }
+            //排序
+            function onSort(id, obj) {
+                $.post("/sys_menu/UpdateSort/", { id: id, sort: $(obj).val() }, function (data) {
+                }, "json");
+            }
+    </script>
+</div>

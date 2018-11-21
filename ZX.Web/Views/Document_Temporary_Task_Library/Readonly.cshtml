@@ -1,0 +1,51 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model Document_Manager
+@{
+    ViewBag.Title = "项目文档查看-指效";
+}
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<style>
+    .form-group {
+        padding-left: 80px;
+    }
+</style>
+<script language='javascript'>
+    $("body").children("div[class='container']").attr("class", "m-company-setbasic");
+</script>
+
+<input type="hidden" id="txtDTypeTree" value="@ViewBag.TreeJson" />
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<form id="ajaxForm" method="post" class="form-horizontal" style="padding-top: 38px;">
+    <input type="hidden" id="FK_LibraryId" name="FK_LibraryId" value="@Model.FK_LibraryId">
+    <input type="hidden" id="Id" name="Id" value="@Model.Id">
+
+
+    <div class="form-group">
+        <label for="DTitle" class="col-sm-2">
+            文档名称<span style="color:red">*</span>
+        </label>
+        <div class="col-md-6 col-sm-9">
+            <div class="input-group">
+                <input type="text" id="DTitle" name="DTitle" value="@Model.DTitle" placeholder="名称" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Attach" class="col-sm-2">类型</label>
+        <div class="col-md-6 col-sm-8">
+            <label id="lblPostfix">@Model.Postfix</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Attach" class="col-sm-2">文档<span style="color:red">*</span></label>
+        <div class="col-md-6 col-sm-8">
+            <span><a href="@Model.Attach" id="aAttach" style="@(Model.Attach.IsNullOrEmpty()?"display:none;":"")">下载</a></span>
+            <span id="lblAttach" style="@(Model.Attach.IsNotNullOrEmpty()?"display:none;":"")">暂无文档</span>
+        </div>
+    </div>
+
+</form>

@@ -1,0 +1,307 @@
+﻿@using ZX.Model
+@using ZX.Tools
+
+@{
+    ViewBag.Title = "文档分类-指效OA";
+}
+<style>
+    .page-content.with-menu {
+        margin: 0 0 0 160px;
+    }
+
+    .group-item .checkbox {
+        display: inline-block;
+    }
+
+        .group-item .checkbox input {
+            margin: 2px 0 0 -16px;
+        }
+
+    .leftmenu > .nav > li > a {
+        padding: 0 15px;
+    }
+
+    .input-group-addon label.checkbox {
+        margin: 0;
+        padding-top: 3px;
+    }
+
+    #childList .sort-handle {
+        cursor: move;
+    }
+
+    .doc-category {
+        margin: 41px 0 0;
+    }
+
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+</style>
+@*<nav class='navbar navbar-main navbar-fixed-top' role='navigation' id='mainNavbar'>
+        @Html.Raw(ViewBag.SysAdminMainNavbar)
+    </nav>*@
+<div class='row page-content'>
+    <div id="sysDTypeTree" class="menuContent" style="display: none; position: absolute;">
+        <ul id="treeDocType" class="ztree" style="margin-top: 0;"></ul>
+    </div>
+    <input type="hidden" id="txtDTypeTree" value="@ViewBag.TreeJson" />
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <input type="hidden" id="fk_LibraryId" value="@ViewBag.FK_LibraryId">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <input type="hidden" id="backPageName" value="@ViewBag.BackPageName" />
+
+    <link rel='stylesheet' href='~/res/js/jquery/chosen/min.css?v=4.6.1' type='text/css' media='screen' />
+    <link rel='stylesheet' href='~/res/js/jquery/chosen/min.css?v=4.6.1' type='text/css' media='print' />
+    <script src='~/res/js/jquery/chosen/min.js?v=4.6.1' type='text/javascript'></script>
+
+    <script>
+        window.chosenDefaultOptions = { no_results_text: '没有匹配的选项', disable_search_threshold: 1, search_contains: true, width: '100%', allow_single_deselect: true };
+        $(document).ready(function () {
+            $(".chosen").chosen(chosenDefaultOptions);
+        });
+    </script>
+    <script language='Javascript'>v.root = 0;</script>
+    <script language='Javascript'>v.type = "dept";</script>
+    <script language='Javascript'>v.moduleID = 820053;</script>
+    <div class='col-md-12'>
+        <div class='row'>
+            <div class='col-md-3'>
+                <div class='panel'>
+                    <div class='panel-heading'>
+                        <strong><i class="icon-sitemap"></i> 类目</strong>
+                    </div>
+                    <div class='panel-body'>
+                        <div id='treeMenuBox'>
+                            <ul class='tree'></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-8' id='categoryBox'>
+                <div class="form-horizontal" id="childForm">
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <strong>类目 <i class="icon-double-angle-right"></i> </strong>
+                        </div>
+                        <div class="panel-body" id="childList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel='stylesheet' href='~/res/js/jquery/treeview/min.css?v=4.6.1' type='text/css' media='screen' />
+<link rel='stylesheet' href='~/res/js/jquery/treeview/min.css?v=4.6.1' type='text/css' media='print' />
+<script src='~/res/js/jquery/treeview/min.js?v=4.6.1' type='text/javascript'></script>
+
+<script language='javascript'>
+    $(document).ready(function () {
+        getTree();
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形分类
+        var menuNodes = eval($("#txtDTypeTree").val());
+        menuTree = $.fn.zTree.init($("#treeDocType"), menuSetting, menuNodes);
+    });
+
+    function getTree() {
+        //win.showLoading("正在加载...");
+        $.post("/Document_Type/GetTree", {
+            libraryId: $("#fk_LibraryId").val()}, function (data) {
+            if (data.Code == 200) {
+                if (data.Data.length <= 0 || data.Data == "") {
+                    $(".col-md-3").remove();
+                } else {
+                    $(".tree").html(data.Data);
+                    $('.tree').each(function () {
+                        var $this = $(this);
+                        $this.treeview($.extend({ collapsed: false, unique: false }, $this.data()));
+                    });
+                }
+                docTypeAddEdit(0, 0);
+            } else {
+                $(".col-md-3").remove();
+                win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+</script>
+<script src='~/res/js/jquery/form/min.js?v=4.6.1' type='text/javascript'></script>
+<script language='Javascript'>
+    //添加子分类
+    function docTypeAddEdit(id, pid) {
+        $("#pid").attr("value", pid);
+        $.post("/Document_Type/GetDocTypeList", { id: id, pid: pid, libraryId: $("#fk_LibraryId").val()}, function (data) {
+            if (data.Code == 200) {
+                if (data.Data.length <= 0 || data.Data == "") {
+                    $(".col-md-3").remove();
+                } else {
+                    $("#childForm .panel").html("");
+                    $("#childForm .panel").html(data.Data);
+                    $("#childForm .panel-body").append("<div class='form- group'> <div class='col-xs-8 col-md-offset-2'><button type='button' onclick='saveDate()' id='submit' class='btn btn-primary' data-loading='稍候...'>保存</button>&nbsp;&nbsp;<a href='javascript:;' class='btn btn-back ' onclick='goBackToList()'>返回</a>&nbsp;&nbsp;<a href='javascript:;' class='btn btn-back ' onclick='goBackToDocList()'>返回文档列表</a></div ></div >");
+                }
+            } else {
+                $(".col-md-3").remove();
+                win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+    //保存子分类
+    function saveDate() {
+        win.showLoading("正在保存...");
+        var items = [];
+        var typeSort =0;
+        $("input[name='dept']").each(function () {
+            var item = { DName: "", ParentId: "", DSort: "", FK_LibraryId:"" };
+            if ($(this).val().trim() != "") {
+                item.DName = $(this).val();
+                item.ParentId = $("#pid").val();
+                item.DSort = typeSort;
+                item.FK_LibraryId =$("#fk_LibraryId").val();
+                items.push(item);
+                typeSort++;
+            }
+        });
+
+        var jsonData = JSON.stringify(items);
+        $.post("/Document_Type/SaveData", { jsonData: jsonData, pid: $("#pid").val(), libraryId: $("#fk_LibraryId").val() }, function (data) {
+            if (data.Code = 200) {
+                win.success("保存成功", function () {
+                    goBackToList();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+
+
+    //编辑分类
+    function docTypeEdit(id) {
+        $.post("/Document_Type/Edit", { id: id }, function (data) {
+            if (data.Code == 200) {
+                $("#childForm .panel").html("");
+                $("#childForm .panel").html(data.Data);
+                $("#childForm .panel-body").append("<div class='form-group'> <div class='col-xs-8 col-md-offset-2'><button type='button' onclick='saveEditDate()' id='submit' class='btn btn-primary' data-loading='稍候...'>保存</button> <a href='javascript:;' class='btn btn-back ' onclick=goBackToList()>返回</a></div ></div >");
+            } else {
+                win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+    function goBackToList() {
+        var url = "/Document_Type/Index?libraryId=" + $("#fk_LibraryId").val() +"&mid=" + $("#currentMid").val();
+        window.location.href = url;
+    }
+
+    function goBackToDocList() {
+        var url = "";
+        switch ($("#backPageName").val()) {
+            case "projectDoc":
+                url = "/Document_Manager/ProjectDocList?libraryId=" + $("#fk_LibraryId").val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                break;
+            case "temporaryDoc":
+                url = "/Document_Temporary_Task_Library/TemporaryTaskDocList?libraryId=" + $("#fk_LibraryId").val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                break;
+            case "managerDoc":
+                url = "/Document_Company_Library/CompanyDocList?libraryId=" + $("#fk_LibraryId").val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                break;
+            case "ownerDoc":
+                url = "/Document_Owner_Library/OwnerDocList?libraryId=" + $("#fk_LibraryId").val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                break;
+        }
+        window.location.href = url;
+    }
+
+    //编辑分类保存
+    function saveEditDate() {
+        var dname = $.trim($("#DName").val());
+        if (dname == "" || dname.length <= 0) {
+            alert("请输入类目名称.");
+            return;
+        }
+
+        win.showLoading("正在保存...");
+
+        var item = { Id: "", DName: "", ParentId: "", DDescribe: "", DSort: "", FK_LibraryId: "" };
+        item.Id = $("#tId").val();
+        item.DName = $("#DName").val();
+        item.ParentId = $("#pid").val();
+        item.FK_LibraryId = $("#fk_LibraryId").val();
+        item.DDescribe = $("#DDescribe").val();
+        item.DSort = $("#DSort").val();
+
+        var jsonData = JSON.stringify(item);
+        $.post("/Document_Type/SaveEditData", { jsonData: jsonData }, function (data) {
+            if (data.Code = 200) {
+                win.success("保存成功", function () {
+                    goBackToList();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+
+    //删除
+    function docTypeDel(id) {
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("DeleteDataNotChild", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    goBackToList();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+
+    //点击选择分类
+    function onMenuClick(e, treeId, treeNode) {
+        $("#pid").val(treeNode.id);
+        $("#txtDTypeParent").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示分类
+    function showSysDeptTree() {
+        var cityObj = $("#txtDTypeParent");
+        var cityOffset = $("#txtDTypeParent").offset();
+        $("#treeDocType").width(cityObj.width());
+        $("#sysDTypeTree").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("#sysDTypeTree").css("z-index", "10")
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏分类
+    function hideSysMenuMenu() {
+        $("#sysDTypeTree").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏分类
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysDTypeTree" || $(event.target).parents("#sysDTypeTree").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+</script>

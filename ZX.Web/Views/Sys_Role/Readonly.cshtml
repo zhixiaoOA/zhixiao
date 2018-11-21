@@ -1,0 +1,52 @@
+﻿
+@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Sys_Role
+@{
+    ViewBag.Title = "查看角色-指效";
+}
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+</style>
+<div class='row page-content'>
+
+    <div class='panel'>
+        <div class='panel-body'>
+            <form action="SaveData" method="post" class="form" id="formRole">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <table class='layui-table'>
+                    <tr>
+                        <td style='width:100px'>分组名称</td>
+                        <td style='width:50%'>
+                            <input type='text' class="layui-input" name='RName' id="RName" value="@Model.RName" />
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>分组描述</th>
+                        <td colspan='2'>
+                            <textarea name='RDesc' id='RDesc' class='layui-textarea' rows='5'>@Model.RDesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style='width:100px'>排序</th>
+                        <td style='width:50%'>
+                            <input type='text' name='RSort' id='RSort' value='@Model.RSort' class='layui-input' onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" />
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+

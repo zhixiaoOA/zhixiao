@@ -1,0 +1,427 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Document_Library
+
+@{
+    ViewBag.Title = "文档库-编辑-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .loadingWrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 300;
+        background-image: url(../img/loading2.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: #000;
+        background-color: rgba(234, 229, 229, 0.5);
+        filter: alpha(opacity=50);
+    }
+
+    .form-horizontal {
+        padding: 20px;
+    }
+</style>
+
+<form method="post" class="form-horizontal" action="/Document_Library/SaveData" id="formLibrary">
+    <input type="hidden" name="Id" id="Id" value="@Model.Id">
+    <input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" name="FK_Id" id="FK_Id" value="@Model.FK_Id" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class="form-group" style="padding-top:16Px;" id="div_DType">
+        <label for="DType" class="col-sm-2">文档库类型</label>
+        <div class="col-md-6 col-sm-10">
+            <select name="DType" id="DType" class="form-control" value="@Model.DType">
+                <option value='0' selected='selected' data-keys='xiangmuwendangku xmwdk xm' @(Model.DType == 0 ? "selected" : "")>项目文档库</option>
+                <option value='10' data-keys='ls linshi' @(Model.DType == 10 ? "selected" : "")>临时任务文档库</option>
+                <option value='20' data-keys='gswdk gs 公司' @(Model.DType == 20 ? "selected" : "")>公司文档库</option>
+                <option value='30' data-keys='geren gr 个人' @(Model.DType == 30 ? "selected" : "")>个人文档库</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" id="div_PName">
+        <label for="PName" class="col-sm-2" id="lblPName">
+            所属项目
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select id="ddlPFK_Id" data-placeholder="选择一个项..." class="form-control">
+                @{
+                    if (ViewBag.ProjectList != null)
+                    {
+                        foreach (var item in ViewBag.ProjectList as IEnumerable<SelectListItem>)
+                        {
+                            //判断文档库类型是否是临时文档库 是就反填充
+                            if (Model.DType == 10)
+                            {
+                                if (Model.FK_Id.ToString().Equals(item.Value))
+                                {
+                                    <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                    continue;
+                                }
+                            }
+                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" id="div_TName" style="display:none;">
+        <label for="TName" class="col-sm-2" id="lblTName">
+            临时任务
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select id="ddlTFK_Id" data-placeholder="选择一个项..." class="form-control">
+                @{
+                    if (ViewBag.TemporaryTaskList != null)
+                    {
+                        foreach (var item in ViewBag.TemporaryTaskList as IEnumerable<SelectListItem>)
+                        {
+                            //判断文档库类型是否是临时文档库 是就反填充
+                            if (Model.DType == 10)
+                            {
+                                if (Model.FK_Id.ToString().Equals(item.Value))
+                                {
+                                    <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                    continue;
+                                }
+                            }
+                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div id="DName" class="form-group">
+        <label for="EndTime" class="col-sm-2">
+            文档库名称<span style="color:red">*</span>
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <div class="input-group">
+                <input type="text" name="DName" value="@Model.DName" placeholder="文档库名称" class="form-control" datatype="*" nullmsg="请填写文档库名称">
+                <input type="hidden" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" class="form-control">
+                <label class="input-group-addon">
+                    @{
+                        if (Model.IsPrivate.ToInt() == 1)
+                        {
+                            <input type="checkbox" id="IsPrivateBox" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="IsPrivateBox">
+                        }
+                    }
+                    设为私密
+                </label>
+            </div>
+        </div>
+    </div>
+    <div id="div_AuthUserAccount" class="form-group">
+        <label for="AuthUserAccount" class="col-sm-2">
+            授权用户
+        </label>
+        <input type="hidden" id="AuthUserAccount" name="AuthUserAccount" class="form-control" value="@Model.AuthUserAccount" placeholder="授权用户">
+        <div class="col-md-6 col-sm-10">
+            <select data-placeholder="选择用户..." class="chosen-select form-control" tabindex="2" multiple="">
+                @{
+                    if (ViewBag.AuthUserList != null)
+                    {
+                        foreach (var item in ViewBag.AuthUserList as IEnumerable<SelectListItem>)
+                        {
+                            bool bl = true;
+                            if (Model.AuthUserAccount.IsNotNullOrEmpty())
+                            {
+                                List<string> AuthUserList = Model.AuthUserAccount.Split(',').ToList();
+
+                                if (AuthUserList.Contains(item.Value))
+                                {
+                                    <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                    bl = false;
+                                    continue;
+                                }
+                            }
+
+                            if (bl)
+                            {
+                                <option value="@item.Value" data-keys="@item.Value"> @item.Text </option>
+                            }
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group" id="div_AuthRole">
+        <input type="hidden" id="AuthRole" name="AuthRole" value="@Model.AuthRole" placeholder="授权角色" class="form-control">
+        <label for="RoleList" class="col-sm-2">
+            授权角色
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <label class="checkbox-inline">
+                <input type="checkbox" onclick="allCheckClick(this)">全选
+            </label>
+            @{
+                List<Sys_Role> list = ViewBag.RoleListList;
+                if (list != null)
+                {
+                    foreach (var item in list)
+                    {
+                        bool bl = true;
+                        if (!Model.AuthRole.IsNullOrEmpty())
+                        {
+                            List<string> authRole = Model.AuthRole.Split(',').ToList();
+                            if (authRole.Contains(item.Id.ToString()))
+                            {
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="visitorsList" value="@item.Id" id="whitelist+@item.Id" onclick="roleCheckBoxOC()" checked> @item.RName
+                                </label>
+                                bl = false;
+                                continue;
+                            }
+                        }
+                        if (bl)
+                        {
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="visitorsList" value="@item.Id" onclick="roleCheckBoxOC()" id="whitelist+@item.Id"> @item.RName
+                            </label>
+                        }
+
+                    }
+                }
+            }
+        </div>
+    </div>
+
+    <div class="form-group" id="div_AuthDept" style="display:none;">
+        <input type="hidden" id="AuthDept" name="AuthDept" value="@Model.AuthDept" placeholder="授权部门" class="form-control">
+        <label for="deptList" class="col-sm-2">
+            授权部门
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <label class="checkbox-inline">
+                <input type="checkbox" onclick="allDeptCheckClick(this)">全选
+            </label>
+            @{
+                List<Sys_Dept> deptList = ViewBag.DeptList;
+                if (deptList != null)
+                {
+                    foreach (var item in deptList)
+                    {
+                        bool bl = true;
+                        if (!Model.AuthDept.IsNullOrEmpty())
+                        {
+                            List<string> authDept = Model.AuthDept.Split(',').ToList();
+                            if (authDept.Contains(item.Id.ToString()))
+                            {
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="visitorsDeptList" value="@item.Id" id="whitelist+@item.Id" onclick="deptCheckBoxOC()" checked> @item.DName
+                                </label>
+                                bl = false;
+                                break;
+                            }
+                        }
+                        if (bl)
+                        {
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="visitorsDeptList" value="@item.Id" id="whitelist+@item.Id" onclick="deptCheckBoxOC()"> @item.DName
+                            </label>
+                        }
+
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            @Html.Raw(ViewBag.CurrentBtnList29)
+            <span id="spmsg"></span>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+        search_contains: true,     // 从任意位置开始检索
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#AuthUserAccount").val($(this).val());
+    });
+
+    //角色复选框单击事件
+    function roleCheckBoxOC() {
+        var visitorsList = "";
+        $("input:checkbox[name='visitorsList']:checked").each(function () {
+            visitorsList += $(this).val() + ",";
+        });
+        if (visitorsList.length > 0) {
+            $("#AuthRole").val(visitorsList.substring(0, visitorsList.length - 1));
+        } else {
+            $("#AuthRole").val("");
+        }
+    }
+
+    //部门复选框单击事件
+    function deptCheckBoxOC() {
+        var visitorsList = "";
+        $("input:checkbox[name='visitorsDeptList']:checked").each(function () {
+            visitorsList += $(this).val() + ",";
+        });
+        if (visitorsList.length > 0) {
+            $("#AuthDept").val(visitorsList.substring(0, visitorsList.length - 1));
+        } else {
+            $("#AuthDept").val("");
+        }
+    }
+
+    function saveData() {
+        var dType = $("#DType").val();
+        switch (dType) {
+            case "0": {//项目
+                $("#FK_Id").val($("#ddlPFK_Id").val());
+                break;
+            }
+            case "10": { //临时任务
+                $("#FK_Id").val($("#ddlTFK_Id").val());
+                break;
+            }
+            case "20": {
+                $("#div_PName").hide();
+                $("#div_TName").hide();
+                $("#FK_Id").val(0);
+                break;
+            }
+            case "30": {
+                $("#div_PName").hide();
+                $("#div_TName").hide();
+                $("#FK_Id").val(0);
+                break;
+            }
+            default:
+        }
+
+        $("#formLibrary").submit();
+    }
+
+    $("#formLibrary").Validform({
+        tiptype: function (msg, o, cssctl) {
+            var objtip = $("#spmsg");
+            cssctl(objtip, o.type);
+            objtip.text(msg);
+        },
+        beforeSubmit: function () {
+            $('<div class="loadingWrap"></div>').appendTo("body");
+            //在验证成功后，表单提交前执行的函数，curform参数是当前表单对象。
+            //这里明确return false的话表单将不会提交;
+        },
+        callback: function (form) {
+            win.showLoading("正在保存...");
+            $("#formLibrary").ajaxSubmit(function (data) {
+                $(".loadingWrap").remove();
+                if (data.Code == 300) {
+                    win.alert(data.Message);
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        window.parent.location.reload();//刷新当前页面.
+                        win.close();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+    //文档库类型变更事件
+    $("#DType").change(function () {
+        var dType = $(this).val();
+        switch (dType) {
+            case "0": {
+                $("#div_PName").show();
+                $("#div_TName").hide();
+                $("#div_AuthUserAccount").show();
+                $("#div_AuthDept").hide();
+                $("#div_AuthRole").show();
+                break;
+            }
+            case "10": {
+                $("#div_TName").show();
+                $("#div_PName").hide();
+                $("#div_AuthUserAccount").show();
+                $("#div_AuthRole").show();
+                $("#div_AuthDept").hide();
+                break;
+            }
+            case "20": {
+                $("#div_PName").hide();
+                $("#div_TName").hide();
+                $("#div_AuthUserAccount").show();
+                $("#div_AuthRole").hide();
+                $("#div_AuthDept").show();
+                $("#FK_Id").val(0);
+                break;
+            }
+            case "30": {
+                $("#div_PName").hide();
+                $("#div_TName").hide();
+                $("#div_AuthUserAccount").hide();
+                $("#div_AuthRole").hide();
+                $("#div_AuthDept").hide();
+                $("#FK_Id").val(0);
+                break;
+            }
+            default:
+        }
+    });
+
+    //是否设为私密处理事件
+    $("#IsPrivateBox").change(function () {
+
+        if ($(this).is(':checked')) {
+            $("#div_AuthRole").hide();
+            $("#div_AuthUserAccount").hide();
+            $("#AuthUserAccount").val("");
+            $("#AuthRole").val("");
+            $("#IsPrivate").val("1");
+        } else {
+            $("#div_AuthRole").show();
+            $("#div_AuthUserAccount").show();
+            $("#IsPrivate").val("0");
+        }
+    });
+
+    //角色全选
+    function allCheckClick(obj) {
+        $("input[name='visitorsList']").prop('checked', $(obj).prop('checked'));
+        roleCheckBoxOC();
+    }
+    //部门全选
+    function allDeptCheckClick(obj) {
+        $("input[name='visitorsDeptList']").prop('checked', $(obj).prop('checked'));
+        deptCheckBoxOC();
+    }
+
+</script>

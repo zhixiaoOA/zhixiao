@@ -1,0 +1,542 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@using ZX.BLL
+@model List<ProjectModel>
+@{
+    ViewBag.Title = "项目列表—指效OA";
+    List<Sys_User> userList = ViewBag.UList;
+    DateTime? currentTime = ViewBag.CurrentTime;
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .a_btn_menu {
+        float: none;
+        margin-right: 2px;
+    }
+
+    .panel-tab-project {
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        background-color: #fff;
+        box-shadow: none !important;
+    }
+
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid #ddd;
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+        font-size: 18px;
+    }
+
+    .temp-task-btn {
+        border-radius: 8px !important;
+    }
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 10px;
+    }
+    .temp-task-btn{
+        margin-top:50px;
+        margin-right:10px;
+    }
+    .panel-title-text {
+        font-family: 宋体;
+        font-size: 14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='active' style="float:left;">
+            <a href='javascript:;' onclick="showProjectList('-1')">我参与的</a>
+        </li>
+        <li style="float:left;">
+            <a href='javascript:;' onclick="showProjectList('0')">进行中</a>
+        </li>
+        <li style="float:left">
+            <a href='javascript:;' onclick="showProjectList('20')">已完成</a>
+        </li>
+        <li style="float:left">
+            <a href='javascript:;' onclick="showProjectList('10')">已挂起</a>
+        </li>
+    </ul>
+</nav>
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='dashboard-actions'>
+    @Html.Raw(ViewBag.CurrentBtnList)
+</div>
+<div style="width:auto;float:right;margin-top:-85px;">
+    <a href='javascript:;' onclick="addProject()" class="layui-btn layui-btn-normal temp-task-btn">创建项目</a>
+</div>
+<div class='row page-content with-menu' style="width:98%">
+    <form method="post" action="/Project/GetProjectList?mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId" id="myForm">
+        <input type="hidden" name="pageIndex" id="pageIndex" value="@Request.Form["pageIndex"]" />
+        <input type="hidden" name="pageSzie" id="pageSize" value="@Request.Form["pageSzie"]" />
+        <input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+        <input type="hidden" name="status" id="status" value="@Request.Form["status"]" />
+    </form>
+    <div class='row' id='cardMode'>
+        @{
+            //List<Project> projectList = ViewBag.ProjectList;
+            //项目负责人真实名
+            string userName = "";
+            foreach (var item in Model)
+            {
+                <div class='col-md-4 col-sm-6'>
+                    <div class='panel-tab-project'>
+                        <div class='panel-heading'>
+                            <strong>@item.PName</strong>
+                            <div class="panel-actions pull-right">
+                                <div class="dropdown">
+                                    <button class="btn btn-mini" data-toggle="dropdown"><span class="caret"></span></button>
+                                    <ul class="dropdown-menu pull-right">
+                                        @{
+                                            try
+                                            {
+                                                //表行按钮组
+                                                List<Sys_Button> currentBtnList28 = new List<Sys_Button>();
+
+                                                List<Sys_Button> btnList = ViewBag.RoleButtonList;
+
+                                                currentBtnList28 = btnList.Where(l => l.BGroup == 28 && l.BIsUse == 0).OrderByDescending(l => l.BSort).ToList();
+                                                if (currentBtnList28.Count > 0)
+                                                {
+                                                    foreach (var btnItem in currentBtnList28)
+                                                    {
+                                                        //如果是完成或者是挂起,启用激活 不显示完成和挂起
+                                                        if (item.PStatus.ToInt() == 20 || item.PStatus.ToInt() == 10)
+                                                        {
+                                                            if (btnItem.BName.Contains("完成") || btnItem.BName.Contains("挂起"))
+                                                            {
+                                                                continue;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            //控制激活按钮
+                                                            if (btnItem.BName.Contains("激活"))
+                                                            {
+                                                                continue;
+                                                            }
+                                                        }
+                                                        <a href='javascript:;' onclick="@btnItem.BOptionFun" val="@item.Id" class="a_btn_menu">@btnItem.BName</a>
+                                                    }
+                                                }
+                                            }
+                                            catch { }
+
+                                            userName = userList.Where(l => l.Id == item.HeadUser.ToInt()).FirstOrDefault().RealName;
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='panel-body'>
+                            <div class='info'>@item.PName</div>
+                            <div class='footerbar text-important' style="float: right;">
+                                <span><i class='icon icon-user'> </i>@userName</span>
+                                <span class='icon icon-time'>
+
+                                    @{
+                                        string strStartTime = "";
+                                        strStartTime = item.EndTime != null ? (Convert.ToDateTime(item.StartTime).Month.ToString() + "-" + Convert.ToDateTime(item.StartTime).Day) : "";
+                                        string strEndTime = "";
+                                        strEndTime = item.EndTime != null ? (Convert.ToDateTime(item.EndTime).Month.ToString() + "-" + Convert.ToDateTime(item.EndTime).Day) : "";
+                                    }
+                                    @strStartTime~<i class='icon icon-time'>@strEndTime </i>
+                                </span>
+                                <a href='javascript:;' class='btn btn-primary entry' onclick="goProject_Task(@item.Id)">进入</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager2"></div>
+            </div>
+        </div>
+    </div>
+    <div class='panel hide' id='listMode'>
+        <table class='table table-hover table-striped'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-60px'>
+                        <div>
+                            编号
+                        </div>
+                    </th>
+                    <th class='text-left'>
+                        <div>
+                            项目名称
+                        </div>
+                    </th>
+                    <th class='w-100px'>负责人</th>
+                    <th class='w-100px'>
+                        <div>
+                            开始日期
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            结束日期
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            由谁创建
+                        </div>
+                    </th>
+                    <th class='w-80px'>
+                        <div>
+                            状态
+                        </div>
+                    </th>
+                    <th>项目描述</th>
+                    <th class='w-100px'>
+                        进度
+                    </th>
+                    <th class='w-160px'>操作</th>
+                </tr>
+            </thead>
+            @{
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    //获取该项目下的所有任务(含子任务)
+                    List<Project_TaskModel> projectAllTaskList = Project_TaskBLL.GetProjectTaskListByParentId(item.Id.ToInt());
+                    //查询出主任务
+                    List<Project_TaskModel> taskList = projectAllTaskList.Where(d => d.FK_ProjectId == item.Id && d.ParentId.ToInt() == 0).ToList();
+                    //计算进度值,第一步:统计当前项目下的任务总耗(任务和已完成子任务总耗时总和)工时T1.第二步,获取预计剩余工时 T2,  第三步: T1/(T1+T2)*100%
+                    decimal doneHours = 0;//已耗时
+                    decimal predictHours = 0;//预估剩余工时
+                    decimal totalTExpected = 0; //获取项目总共最初预计，用于亮灯控制判断
+                    foreach (var task in projectAllTaskList)
+                    {
+                        totalTExpected += task.TExpected.ToInt();
+                        if (task.ParentId.ToInt() == 0) //主任务
+                        {
+                            List<Project_Task_Team> list = Project_Task_TeamBLL.GetList(t => t.Where(d => d.FK_TaskId == task.Id));
+                            doneHours += list.Sum(d => d.ConsumTime).ToDecimal();
+                            predictHours += list.Sum(d => d.TheTime).ToDecimal();
+                        }
+                    }
+
+                    decimal percent = 0;
+                    try
+                    {
+                        percent = doneHours / (doneHours + predictHours) * 100;
+
+                        percent = System.Decimal.Round(percent, 2);
+                    }
+                    catch { }
+                    <tr class='text-center'>
+                        <td onclick="goProject_Task(@item.Id)">@i</td>
+                        <td class='text-left' onclick="goProject_Task(@item.Id)">
+                            @{
+                                //任务结束前一天 亮黄灯控制
+                                TimeSpan ts = Convert.ToDateTime(item.EndTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                if (ts.Days == 1 && item.PStatus.Trim() != "20")
+                                {
+                                    <div class="circular Orange" title="仅剩一天时间"></div>
+                                }
+                                //超时
+                                if (ts.Days < 0 && item.PStatus.Trim() != "20")
+                                {
+                                    <div class="circular red" title="已超时@(ts.Days*-1)天"></div>
+                                }
+
+                            }
+                            <a href='javascript:;'>@item.PName</a>
+                        </td>
+                        @{
+                            string headUser = "";
+                            string creatUser = "";
+                            try
+                            {
+                                headUser = userList.Where(l => l.Id == item.HeadUser.ToInt()).FirstOrDefault().RealName;
+                                creatUser = userList.Where(l => l.Id == item.CreateUserId.ToInt()).FirstOrDefault().RealName; ;
+                            }
+                            catch { }
+
+                        }
+                        <td>@headUser</td>
+                        <td>@item.StartTime.ToShortDate()</td>
+                        <td>@item.EndTime.ToShortDate()</td>
+                        <td>@creatUser</td>
+                        @{
+                            string pStatusName = "未知";
+                            switch (item.PStatus.ToInt())
+                            {
+                                case 0:
+                                    {
+                                        pStatusName = "有效";
+
+                                        break;
+                                    }
+                                case 10:
+                                    {
+                                        pStatusName = "挂起";
+
+                                        break;
+                                    }
+                                case 20:
+                                    {
+                                        pStatusName = "完成";
+
+                                        break;
+                                    }
+                                case 30:
+                                    {
+                                        pStatusName = "删除";
+                                        break;
+                                    }
+                            }
+                        }
+                        <td>@pStatusName</td>
+                        <td title='@item.PDesc'>@item.PDesc</td>
+                        <td class="w-100px" title="@(percent + "%")">
+                            <div class="progress progress-striped" style="margin: 0">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @(percent+"%")" title="@(percent+"%")">
+                                    <span class="sr-only">@(percent + "%") Complete (success)</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            @{
+                                try
+                                {
+                                    //表行按钮组
+                                    List<Sys_Button> currentBtnList28 = new List<Sys_Button>();
+
+                                    List<Sys_Button> btnList = ViewBag.RoleButtonList;
+
+                                    currentBtnList28 = btnList.Where(l => l.BGroup == 28 && l.BIsUse == 0).OrderBy(l => l.BSort).ToList();
+                                    if (currentBtnList28.Count > 0)
+                                    {
+                                        foreach (var btnItem in currentBtnList28)
+                                        {
+                                            //如果是完成或者是挂起,启用激活 不显示完成和挂起
+                                            if (item.PStatus.ToInt() == 20 || item.PStatus.ToInt() == 10)
+                                            {
+                                                if (btnItem.BName.Contains("完成") || btnItem.BName.Contains("挂起"))
+                                                {
+                                                    continue;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //控制激活按钮
+                                                if (btnItem.BName.Contains("激活"))
+                                                {
+                                                    continue;
+                                                }
+                                            }
+                                            <a href='javascript:;' onclick="@btnItem.BOptionFun" val="@item.Id" class="a_btn_menu">@btnItem.BName</a>
+                                        }
+                                    }
+                                }
+                                catch { }
+                            }
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            <tfoot>
+                <tr>
+                    <td colspan='9'>
+                        <div class='table-footer'>
+                            <div class='pull-left text-danger'></div>
+                            <div style='float:right; clear:none;' class='pager form-inline'>
+                                <div id="myPager"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script language='Javascript'>
+    $(document).ready(function () {
+        initPage(); initPage2();
+    });
+    function addProject() {
+        win.open("/Project/AddEdit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 630, "创建项目");
+    }
+
+    function look(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Project/Readonly?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 630, "项目编辑");
+    }
+
+    //编辑
+    function projectEdit(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Project/AddEdit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 630, "项目编辑");
+    }
+    //团队
+    function projectTeam(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Project_Team/ProjectTeamEdit?projectId=" + id + "&secondMenuId=" + $("#secondMenuId").val(), 770, 500, "项目团队");
+    }
+    //完成
+    function projectFinish(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Project/Finish?projectId=" + id + "&secondMenuId=" + $("#secondMenuId").val(), 770, 230, "项目完成");
+    }
+    //我参与的
+    function showProjectListByMySelf() {
+        window.location.href = "/Project/GetProjectListByMySelf?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    function edit(obj) {
+        var id = $(obj).attr("val");
+    }
+
+    //按状态显示
+    function showProjectList(pStatus) {
+        $("#status").val(pStatus);
+        $("#myForm").submit();
+    }
+
+    //挂起
+    function projectHangUp(obj) {
+        layer.confirm('确认要挂起吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            var id = $(obj).attr("val");
+            $.post("/Project/HangUp", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("挂起成功", function () {
+                        win.hideLoading();
+                        window.location.href = "/Project/GetProjectList?mid=" + $("#currentMid").val() + "&status=0" + "&secondMenuId=" + $("#secondMenuId").val();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+    //激活
+    function projectRunAgain(obj) {
+        layer.confirm('确认要激活吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            var id = $(obj).attr("val");
+            $.post("/Project/RunAgain", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("激活成功", function () {
+                        win.hideLoading();
+                        window.location.href = "/Project/GetProjectList?mid=" + $("#currentMid").val() + "&status=0" + "&secondMenuId=" + $("#secondMenuId").val();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+
+    //删除
+    function projectDel(obj) {
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            var id = $(obj).attr("val");
+            $.post("/Project/DeleteData", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    window.location.href = "/Project/GetProjectList?mid=" + $("#currentMid").val() + "&status=0" + "&secondMenuId=" + $("#secondMenuId").val();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+    //进入任务
+    function goProject_Task(projectId) {
+        window.location.href = "/Project_Task/GetProjectTaskList?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&secondMenuId=15";
+        win.hideLoading();
+    }
+
+    function initPage() {
+        var pageIndex = $("#pageIndex").val();
+        var pageSize = $("#pageSize").val();
+        var count = $("#count").val();
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        $("#pageIndex").val(obj.curr);
+                        $("#pageSize").val(obj.limit);
+                        $("#myForm").submit();
+                        //getList();
+                    }
+                }
+            });
+        });
+    }
+
+    function initPage2() {
+        var pageIndex = $("#pageIndex").val();
+        var pageSize = $("#pageSize").val();
+        var count = $("#count").val();
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager2'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        $("#pageIndex").val(obj.curr);
+                        $("#pageSize").val(obj.limit);
+                        $("#myForm").submit();
+                        //getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

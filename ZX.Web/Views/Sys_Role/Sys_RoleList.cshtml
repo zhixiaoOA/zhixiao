@@ -1,0 +1,184 @@
+﻿@using ZX.Model
+@{
+    ViewBag.Title = "角色管理-指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .a_btn_role {
+        float: right;
+        margin-right: 7px;
+    }
+
+    #menuActions {
+        margin-top: -35px;
+        float: right;
+        margin-bottom: -27px;
+    }
+    .layui-table td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+    .form-group span {
+        padding-left: 0;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .form-group span.col-sm-1 {
+        padding-right: 0;
+    }
+
+    a.disabled {
+        color: #aaa !important;
+    }
+
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+
+    .with-menu {
+        margin: 10px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <div id='menuActions'>
+        @Html.Raw(ViewBag.CurrentBtnList32)
+    </div>
+    <div class='panel'>
+        <table class='layui-table' id='contractList'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-60px'>
+                        <div>
+                            编号
+                        </div>
+                    </th>
+                    <th class='w-200px'>
+                        <div>
+                            角色名称
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            角色描述
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            排序
+                        </div>
+                    </th>
+                    <th class='w-240px'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+    <script language='Javascript'>
+        $(function () {
+            getList();
+        });
+        var pageIndex = 1, pageSize = 10, count = 0;
+        function getList() {
+            $.post("/Sys_Role/GetSys_RoleList", { pageIndex: pageIndex, pageSize: pageSize, name: "", mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+                if (data.Code == 200) {
+                    $("#tbList").html(data.Data);
+                    count = data.TotalCount;
+                    initPage();
+                } else {
+                    win.alert("获取数据失败");
+                }
+            });
+        }
+
+        //HTML转义
+        function HTMLEncode(html) {
+            var temp = document.createElement("div");
+            (temp.textContent != null) ? (temp.textContent = html) : (temp.innerText = html);
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
+        }
+
+        function initPage() {
+            layui.use(['laypage', 'layer'], function () {
+                var laypage = layui.laypage
+                    , layer = layui.layer;
+                //完整功能
+                laypage.render({
+                    elem: 'myPager'
+                    , limit: pageSize
+                    , curr: pageIndex
+                    , count: count
+                    , theme: '#1E9FFF'
+                    , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            pageIndex = obj.curr;
+                            pageSize = obj.limit;
+                            getList();
+                        }
+                    }
+                });
+            });
+        }
+        function del(obj) {
+            layer.confirm('确认要删除吗？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                var id = $(obj).attr("val");
+                $.post("/Sys_Role/DeleteData", { id: id }, function (data) {
+                    if (data.Code == 200) {
+                        layer.msg('删除成功', { icon: 1 });
+                        window.location.reload();//刷新当前页面.
+                    } else {
+                        layer.alert(data.Message, { icon: 7 });
+                    }
+                }, "json");
+            }, function () { });
+        }
+        function addRole() {
+            var url = "/sys_Role/addedit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+            window.location.href = url;
+        }
+
+        function editRole(obj) {
+            var id = $(obj).attr("val");
+            var url = "/sys_Role/addedit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+            window.location.href = url;
+        }
+        function look(obj) {
+            var id = $(obj).attr("val");
+            var url = "/sys_Role/Readonly?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+            win.open(url, 700, 320, "角色信息");
+        }
+
+        function editRoleMenu(obj) {
+            var id = $(obj).attr("val");
+            var url = "/Sys_Role_Menu/Index?rid=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+            window.location.href = url;
+        }
+    </script>
+</div>

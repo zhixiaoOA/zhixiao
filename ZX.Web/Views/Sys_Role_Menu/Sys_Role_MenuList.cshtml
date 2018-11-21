@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "角色权限-指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table-priv caption {
+        background-color: #f5f5f5;
+        border: 1px solid #DDD;
+        height: 40;
+        line-height: 40px;
+        text-align: left;
+        padding-left: 8px;
+        font-size: 15px;
+    }
+
+        .table-priv caption label {
+            font-weight: 800;
+        }
+
+    .table-priv td {
+        padding: 8px 40px;
+        line-height: 20px;
+    }
+
+    .table-priv th {
+        vertical-align: middle;
+    }
+
+        .table-priv th label {
+            font-weight: 600;
+            padding-left: 0;
+        }
+
+            .table-priv th label input[type="checkbox"] {
+                left: auto;
+                right: 0;
+                margin-left: 0
+            }
+
+    .table-priv td label {
+        width: 170px;
+        font-size: 12px;
+        padding: 0 50px;
+        display: inline-block;
+    }
+
+        .table-priv td label.checkbox-inline + .checkbox-inline {
+            margin-left: 0
+        }
+
+    #search {
+        padding: 8px 40px;
+        line-height: 20px;
+    }
+
+    .table-priv a:hover {
+        text-decoration: none;
+    }
+
+    .page-content {
+        padding: 10px;
+    }
+
+    .w-120px {
+        width: 140px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="txtRid" value="@ViewBag.Rid" />
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='page-content'>
+    <div class='list'>
+        <form class='form' id='ajaxForm'></form>
+        <script type='text/javascript'>
+            var groupID = 1;
+            var menu = "";
+        </script>
+        <script language='Javascript'>
+            $(document).ready(function () {
+                $('[name*=tree]').each(function () {
+                    if ($(this).val() == 'browse') $(this).parent('label').css('width', '50%');
+                });
+                $('[name*=setting]').each(function () {
+                    if ($(this).val() == 'lang') $(this).parent('label').css('width', '50%');
+                });
+                $('[name*=report]').each(function () {
+                    if ($(this).val() == 'browse') $(this).parent('label').css('width', '50%');
+                });
+                getList($("#txtRid").val());
+            })
+
+            function showPriv(value) {
+                location.href = createLink('group', 'managePriv', "type=byGroup&param=" + groupID + "&menu=&version=" + value);
+            }
+
+            function getList() {
+                //win.showLoadding("正在加载...");
+                $.post("/sys_role_menu/GetSys_RolePower", { rid: $("#txtRid").val() }, function (data) {
+                    if (data.Code == 200) {
+                        $("form").html(data.Data);
+                    } else {
+                        win.alert("获取数据失败");
+                    }
+                    //win.hideLoadding();
+                });
+            }
+            //一级菜单复选框单击事件
+            function checkAppClick(obj) {
+                $("input[type='checkbox'][pid='" + $(obj).val() + "']").prop("checked", $(obj).prop("checked"));
+            }
+            //二级菜单复选框单击事件
+            function checkModuleClick(obj) {
+                $("input[name='btn'][btnpid='" + $(obj).val() + "']").prop("checked", $(obj).prop("checked"));
+            }
+            //保存
+            function saveDate() {
+                win.showLoading("正在保存...");
+                var menuCheckList = $("input[name='menu']:checked");
+                var btnCheckList = $("input[name='btn']:checked");
+                var items = [];
+                $("input[name='menu']:checked").each(function () {
+                    var item = { FK_RoleId: '0', FK_MenuButtonId: '0', TypeId: 0 };
+                    item.FK_MenuButtonId = $(this).val();
+                    item.FK_RoleId = $("#txtRid").val();
+                    item.TypeId = 1;
+                    items.push(item);
+                });
+                $("input[name='btn']:checked").each(function () {
+                    var item = { FK_RoleId: '0', FK_MenuButtonId: '0', TypeId: 0 };
+                    item.FK_MenuButtonId = $(this).val();
+                    item.FK_RoleId = $("#txtRid").val();
+                    item.TypeId = 2;
+                    items.push(item);
+                });
+                var jsonData = JSON.stringify(items);
+                $.post("/Sys_Role_Menu/SaveData", { jsonData: jsonData, rid: $("#txtRid").val() }, function (data) {
+                    if (data.Code = 200) {
+                        win.success("保存成功", function () {
+                            window.history.go(-1);
+                        });
+                    } else {
+                        win.alert("保存失败");
+                    }
+                    win.hideLoading();
+                });
+            }
+            function goBackToList() {
+                var url = "/Sys_Role/Index?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                window.location.href = url;
+            }
+        </script>
+    </div>
+</div>

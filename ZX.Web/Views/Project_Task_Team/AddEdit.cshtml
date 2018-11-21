@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "工时-指效OA";
+}
+<script src="~/Scripts/layer/layer.js"></script>
+<script src="~/Scripts/layer/layer.tools.js"></script>
+<form id="WorkTime" method="post">
+    <input type="hidden" id="FK_TaskId" value="@ViewBag.FK_TaskId">
+    <input type="hidden" id="ExpectHours" value="@ViewBag.ExpectHours">
+    <input type="hidden" id="FK_ProjectId" value="@ViewBag.FK_ProjectId">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class="form-group">
+        <label for="ConsumTime" class="col-sm-2">
+            我的消耗
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input id="ConsumTime" name="ConsumTime" class='form-control' placeholder="我的消耗" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="TheTime" class="col-sm-2">
+            预计耗时
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input id="TheTime" name="TheTime" class='form-control' placeholder="预计耗时" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="LogRemark" class="col-sm-2">
+            描述
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <textarea name="LogRemark" id="LogTextRemark" class='form-control' rows='5' placeholder="描述"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" class="btn btn-primary" onclick="saveData()">保存</button>
+        </div>
+    </div>
+</form>
+<script>
+    //完成
+    function saveData() {
+        win.showLoading("正在保存...");
+        var remarkText = $("#LogTextRemark").val();
+        //$("#testform").serialize();
+        //{ ExpectHours: $("#ExpectHours").val(), ConsumTime: $("#ConsumTime").val(), TheTime: $("#TheTime").val(), logText: remarkText }
+        $.post("/Project_Task/WorkTimeSave", { FK_TaskId: $("#FK_TaskId").val(), FK_ProjectId: $("#FK_ProjectId").val(), ExpectHours: $("#ExpectHours").val(), ConsumTime: $("#ConsumTime").val(), TheTime: $("#TheTime").val(), logText: remarkText }, function (data) {
+            if (data.Code == 300) {
+                win.hideLoading();
+                win.alert("保存失败");
+            } else if (data.Code == 200) {
+                win.success("保存成功", function () {
+                    win.hideLoading();
+                    goProject_Task($("#FK_ProjectId").val());
+                });
+            }
+        }, "json");
+    }
+    //进入任务
+    function goProject_Task(projectId) {
+        window.location.href = "/Project_Task/GetProject_TaskList?projectId=" + projectId + "&mid=" + $("#currentMid").val();;
+    }
+</script>

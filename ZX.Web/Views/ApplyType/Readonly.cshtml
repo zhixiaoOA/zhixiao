@@ -1,0 +1,57 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Approval_Type
+@{
+    List<Approval> list = ViewBag.List;
+}
+<form action="/applytype/SaveData" method="post" class="ui form" id="formApproval_Type">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>名称</label>
+            <input type="text" name="AName" value="@Model.AName" placeholder="名称" autocomplete="off" datatype="*">
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need">*</span>引用审批流</label>
+            <select name="FK_ApprovalId" class='form-control'>
+                @foreach (var item in list)
+                {
+                    <option value="@item.Id" @(item.Id == Model.FK_ApprovalId ? "selected" : "")>@item.DName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="inline fields">
+        <div class="sixteen wide field">
+            <label class="lbltitle"><span class="need"></span>备注</label>
+            <textarea name="TRemark">@Model.TRemark</textarea>
+        </div>
+    </div>
+    <div class="footer_form">
+        <button type="button" onclick="win.close();" class="btn btn-sm btn-danger">
+            <i class="icon-reply fa icon-only bigger-120">关闭</i>
+        </button>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function () {
+        $("#formApproval_Type").Validform({
+            tiptype: 3,
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#formApproval_Type").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        parent.getList();
+                        parent.win.success(data.Message);
+                        win.close();
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>

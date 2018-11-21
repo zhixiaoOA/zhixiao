@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html>
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='icon' href='/favicon.ico' type='image/x-icon' />
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
+    <title>@ViewBag.Title</title>
+    <script language='Javascript'>
+        var config = { "webRoot": "\/", "appName": "sys", "cookieLife": 30, "requestType": "GET", "requestFix": "-", "moduleVar": "m", "methodVar": "f", "viewVar": "t", "defaultView": "html", "themeRoot": "\/theme\/", "currentModule": "company", "currentMethod": "setbasic", "clientLang": "zh-cn", "requiredFields": "", "save": "\u4fdd\u5b58", "router": "\/sys\/index.php", "runMode": "front", "timeout": 30000, "pingInterval": 60 }
+    </script>
+
+    <link rel='stylesheet' href='~/res/theme/default/style.css?v=4.6.1' type='text/css' media='screen' />
+    <link rel='stylesheet' href='~/res/theme/default/style.css?v=4.6.1' type='text/css' media='print' />
+    <link rel='stylesheet' href='~/res/theme/default/admin.css?v=4.6.1' type='text/css' media='screen' />
+    <link rel='stylesheet' href='~/res/theme/default/admin.css?v=4.6.1' type='text/css' media='print' />
+    <link rel="shortcut icon" href="/Static/images/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/Static/images/icons/favicon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/Static/images/icons/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/Static/images/icons/favicon-114x114.png">
+    <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
+    <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,700,300">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/jquery-ui-1.10.4.custom.min.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/animate.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/all.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/main.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/style-responsive.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/zabuto_calendar.min.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/pace.css">
+    <link type="text/css" rel="stylesheet" href="/Static/styles/jquery.news-ticker.css">
+    <link href="/Scripts/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="/Scripts/zTree/css/demo.css" rel="stylesheet" />
+    <link rel='stylesheet' href='~/res/theme/zui/css/min.css?v=4.6.1' type='text/css' media='print' />
+
+    <script src="/Static/script/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/jquery-migrate-1.2.1.js"></script>
+    <script src="/Scripts/admin.min.js"></script>
+    <script src="/Scripts/layer/layer_bak.js"></script>
+    <script src="/Scripts/layer/layer.tools.js"></script>
+    <script src="/Scripts/zTree/js/jquery.ztree.core-3.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/zTree/js/jquery.ztree.excheck-3.1.js" type="text/javascript"></script>
+    <script src="/Scripts/zTree/js/jquery.ztree.all-3.1.js" type="text/javascript"></script>
+    <script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <link href="/Scripts/Validform/css/style.css" rel="stylesheet" />
+    <script src="/Scripts/Validform/js/Validform_v5.3.2.js" type="text/javascript"></script>
+    <script src="/Scripts/form/jquery.form.min.js"></script>
+    <link href="/Scripts/layui/css/layui.css" rel="stylesheet" />
+    <script src="/Scripts/layui/layui.all.js"></script>
+    <script language='Javascript'>if (typeof (v) != "object") v = {}; v.mid= "@ViewBag.mid";</script>
+    <script src="/Static/script/jquery-ui.js"></script>
+    <script src="/Static/script/bootstrap.min.js"></script>
+    <script src="/Static/script/bootstrap-hover-dropdown.js"></script>
+    <script src="/Static/script/html5shiv.js"></script>
+    <script src="/Static/script/respond.min.js"></script>
+    <script src="/Static/script/jquery.metisMenu.js"></script>
+    <script src="/Static/script/jquery.slimscroll.js"></script>
+    <script src="/Static/script/jquery.cookie.js"></script>
+    <script src="/Static/script/icheck.min.js"></script>
+    <script src="/Static/script/custom.min.js"></script>
+    <script src="/Static/script/jquery.news-ticker.js"></script>
+    <script src="/Static/script/jquery.menu.js"></script>
+    <script src="/Static/script/pace.min.js"></script>
+    <script src="/Static/script/holder.js"></script>
+    <script src="/Static/script/responsive-tabs.js"></script>
+    <script src="/Static/script/jquery.flot.js"></script>
+    <script src="/Static/script/jquery.flot.categories.js"></script>
+    <script src="/Static/script/jquery.flot.pie.js"></script>
+    <script src="/Static/script/jquery.flot.tooltip.js"></script>
+    <script src="/Static/script/jquery.flot.resize.js"></script>
+    <script src="/Static/script/jquery.flot.fillbetween.js"></script>
+    <script src="/Static/script/jquery.flot.stack.js"></script>
+    <script src="/Static/script/jquery.flot.spline.js"></script>
+    <script src="/Static/script/zabuto_calendar.min.js"></script>
+
+    <script language='Javascript'>v.lang = { "confirmDelete": "\u60a8\u786e\u5b9a\u8981\u6267\u884c\u5220\u9664\u64cd\u4f5c\u5417\uff1f", "deleteing": "\u5220\u9664\u4e2d", "doing": "\u5904\u7406\u4e2d", "timeout": "\u7f51\u7edc\u8d85\u65f6,\u8bf7\u91cd\u8bd5", "confirmDiscardChanges": "\u8868\u5355\u5df2\u66f4\u6539\uff0c\u786e\u5b9a\u5173\u95ed\uff1f", "yes": "\u662f", "no": "\u5426" };</script>
+    <style>
+        .top-navbar-index {
+            top: 50px !important;
+            left: 150px !important;
+            position: inherit !important;
+            width: 100% !important;
+            margin-bottom: 0 !important;
+            background-color: white !important;
+        }
+        .panel {
+            border: 2px solid #e5e5e5 !important;
+        }
+    </style>
+</head>
+<body class='m-company-setbasic'>
+    <div>
+        <div id="header-topbar-option-demo" class="page-header-topbar">
+            <nav id="topbar" role="navigation" style="margin-bottom: 0;" data-step="3" class="navbar navbar-default navbar-static-top">
+
+                <div class="topbar-main">
+                    <ul class="nav navbar navbar-top-links navbar-right mbn">
+                        <li class="dropdown topbar-user">
+                            <a data-hover="dropdown" href="#" class="dropdown-toggle"><img src="~/Static/images/avatar/profile-pic.png" alt="" class="img-responsive img-circle" />&nbsp;<span class="hidden-xs">@ViewBag.RealName</span>&nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu dropdown-user pull-right">
+                                <li><a href="#"><i class="fa fa-user"></i>个人信息</a></li>
+                                <li><a href="#"><i class="fa fa-calendar"></i>修改密码</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/Login/Index"><i class="fa fa-key"></i>退出登录</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+        </div>
+        <div id="wrapper">
+            <!--BEGIN SIDEBAR MENU-->
+            <nav id="sidebar" role="navigation" style="width:150px;height:93.5%"
+                 data-position="right" class="navbar-default navbar-static-side">
+                <div class="sidebar-collapse menu-scroll">
+                    <ul id="side-menu" class="nav">
+
+                        <div class="clearfix"></div>
+                        <li class="active">
+                            <a href="/Sys_Admin/Index?mid=2&secondMenuId=2">
+                                <i class="fa fa-tachometer fa-fw">
+                                    <div class="icon-bg bg-orange"></div>
+                                </i><span class="menu-title">企业架构</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-desktop fa-fw">
+                                    <div class="icon-bg bg-pink"></div>
+                                </i><span class="menu-title">项目管理</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-send-o fa-fw">
+                                    <div class="icon-bg bg-green"></div>
+                                </i><span class="menu-title">临时任务</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-edit fa-fw">
+                                    <div class="icon-bg bg-violet"></div>
+                                </i><span class="menu-title">资产管理</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-th-list fa-fw">
+                                    <div class="icon-bg bg-blue"></div>
+                                </i><span class="menu-title">审批管理</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-database fa-fw">
+                                    <div class="icon-bg bg-red"></div>
+                                </i><span class="menu-title">我的申请单</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-file-o fa-fw">
+                                    <div class="icon-bg bg-yellow"></div>
+                                </i><span class="menu-title">文件系统</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-gift fa-fw">
+                                    <div class="icon-bg bg-grey"></div>
+                                </i><span class="menu-title">个人空间</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-sitemap fa-fw">
+                                    <div class="icon-bg bg-dark"></div>
+                                </i><span class="menu-title">统计</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-envelope-o">
+                                    <div class="icon-bg bg-primary"></div>
+                                </i><span class="menu-title">系统设置</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o fa-fw">
+                                    <div class="icon-bg bg-orange"></div>
+                                </i><span class="menu-title">使用手册</span>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!--END SIDEBAR MENU-->
+            <div id="page-wrapper" style="float:left;margin-left:150px;width:90%;">
+                <div>
+                    @Html.Raw(ViewBag.SysAdminMainNavbar)
+                    @RenderBody()
+                </div>
+                <div id="footer">
+                    <div class="copyright">
+                        <p>Collect from <a href="http://zx.aioae.com/" title="指效OA" target="_blank">指效OA</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

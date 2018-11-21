@@ -1,0 +1,72 @@
+
+ 
+记录时间：2018-10-18 10:15:13,546 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 167
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 77
+
+ 
+记录时间：2018-10-18 10:23:17,382 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql)
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase()
+
+ 
+记录时间：2018-10-18 10:36:11,121 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql)
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase()
+
+ 
+记录时间：2018-10-18 10:42:41,557 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 168
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 77
+
+ 
+记录时间：2018-10-18 17:16:41,991 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql)
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase()
+
+ 
+记录时间：2018-10-18 17:20:22,568 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：此 SqlTransaction 已完成；它再也无法使用。
+ 
+System.InvalidOperationException: 此 SqlTransaction 已完成；它再也无法使用。
+   在 System.Data.SqlClient.SqlTransaction.ZombieCheck()
+   在 System.Data.SqlClient.SqlTransaction.Commit()
+   在 ZX.Web.Controllers.init.CheckController.ExcuteSql(SqlConnection connectstring, ArrayList sql)
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase()

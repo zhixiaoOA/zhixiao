@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "企业架构-指效";
+}
+<style>
+    #shortcutBox {
+        margin-top: 20px;
+    }
+
+        #shortcutBox .shortcut {
+            transition: all .3s;
+            -o-transition: all .3s;
+            -moz-transition: all .3s;
+            -webkit-transition: all .3s;
+            text-align: center;
+        }
+
+    .top-navbar-index {
+        top: 50px;
+        left: 150px;
+    }
+
+    #shortcutBox .shortcut:hover {
+        opacity: 0.8;
+        -moz-opacity: 0.8;
+        filter: alpha(opacity=80);
+        transition: all .3s;
+        -o-transition: all .3s;
+        -moz-transition: all .3s;
+        -webkit-transition: all .3s;
+    }
+
+    #shortcutBox h3 {
+        line-height: 170px;
+        font-size: 24px;
+        color: #FFFFFF;
+        font-weight: 500;
+    }
+
+    #shortcutBox a:hover {
+        text-decoration: none;
+    }
+
+    media(max-width:992px) {
+        #shortcutBox
+
+    {
+        margin-top: 20px;
+    }
+
+    }
+
+    media(max-width:768px) {
+        #shortcutBox
+
+    {
+        margin-top: -20px;
+    }
+
+    }
+
+    .organization {
+        background: #00A300;
+    }
+
+    .employee {
+        background: #B91D47;
+    }
+
+    .role-system {
+        background: #2D89EF;
+    }
+
+    .role-permission {
+        background: #99cccc;
+    }
+
+    .menu-admin {
+        background: #EECFA1;
+    }
+    .navbar-brand {
+        font-size: 17px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+</style>
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<div class='row page-content with-menu'>
+    <div class='container' id='shortcutBox'>
+        <div class='row'>
+            @Html.Raw(ViewBag.SysAdminMainNavbar)
+            @Html.Raw(ViewBag.SysAdminMiddleMenu)
+        </div>
+    </div>
+</div>

@@ -1,0 +1,182 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Assets
+@{
+    ViewBag.Title = "资产管理信息-指效OA";
+    List<Supplier> listSupplier = ViewBag.ListSupplier ?? new List<Supplier>();
+}
+<style type="text/css">
+    .form-control {
+        display: table-cell;
+    }
+</style>
+<div class='row page-content'>
+    <script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <div id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+        <ul id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+    </div>
+    <div class="page-content">
+        <form action="SaveData" method="post" class="form" id="formMenu">
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" name="FK_TypeId" value="@Model.FK_TypeId" />
+            <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
+            <table class='table table-bordered' style="border: 1px solid #ddd;">
+                <tr>
+                    <td>资产编号</td>
+                    <td>
+                        @Model.ACode
+                    </td>
+                </tr>
+                <tr>
+                    <td>名称</td>
+                    <td>
+                        @Model.AName
+                    </td>
+                </tr>
+                <tr>
+                    <td>供应商</td>
+                    <td>
+                        @foreach (var item in listSupplier)
+                        {
+                            if (@Model.FK_SupplierId == @item.Id)
+                            {
+                                @item.SName
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>所属分类</td>
+                    <td>
+                        @(ViewBag.TypeName == "所属分类" ? "" : ViewBag.TypeName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>适用部门</td>
+                    <td>
+                        @Model.DeptName
+                    </td>
+                </tr>
+                <tr>
+                    <td>数量</td>
+                    <td>
+                        @Model.ANum
+                    </td>
+                </tr>
+                <tr>
+                    <td>价格</td>
+                    <td>
+                        @Model.APrice
+                    </td>
+                </tr>
+                <tr>
+                    <td>单位</td>
+                    <td>
+                        @Model.UnitName
+                    </td>
+                </tr>
+                <tr>
+                    <td>资产性质</td>
+                    <td>
+                        @Model.NatureOfAssets
+                    </td>
+                </tr>
+                <tr>
+                    <td>购买日期</td>
+                    <td>
+                        @Model.PurchaseDay.ToDateFormat("yyyy-MM-dd")
+                    </td>
+                </tr>
+                <tr>
+                    <td>使用期限</td>
+                    <td>
+                        @Model.UsePeriod 年
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<div name="" id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+    <ul name="" id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+</div>
+<input type="hidden" name="" id="txtMenuzTree" value="@ViewBag.TreeJson" />
+<script type="text/javascript">
+    var menuTree;
+    $(function () {
+
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形菜单
+        var menuNodes = eval($("#txtMenuzTree").val());
+        menuTree = $.fn.zTree.init($("#treeSysMenu"), menuSetting, menuNodes);
+
+        //上传二维码
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/uploadfile'
+                , done: function (res) {
+                    $("#QrCodeUrl").show().attr("src", res.Data);
+                    $("input[name='QrCodeUrl']").val(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+        //上传图片
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload1'
+                , url: '/upload/uploadfile'
+                , done: function (res) {
+                    $("#ImageUrl").show().attr("src", res.Data);
+                    $("input[name='ImageUrl']").val(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+    //点击选择菜单
+    function onMenuClick(e, treeId, treeNode) {
+        $("#formMenu input[name='FK_TypeId']").val(treeNode.id);
+        $("#txtSysMenu").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示菜单
+    function showSysMenuMenu() {
+        var cityObj = $("#txtSysMenu");
+        var cityOffset = $("#txtSysMenu").offset();
+        $("#treeSysMenu").width(cityObj.width());
+        $("#sysMenuMenu").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function hideSysMenuMenu() {
+        $("#sysMenuMenu").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysMenuMenu" || $(event.target).parents("#sysMenuMenu").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+</script>

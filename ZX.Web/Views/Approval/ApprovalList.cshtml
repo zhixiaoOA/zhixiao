@@ -1,0 +1,153 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@{
+    ViewBag.Title = "我的审批单-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .cur {
+        float: left;
+    }
+
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .layui-table {
+        margin: 0;
+    }
+
+    #menu {
+        margin-top: 40px;
+    }
+
+    .navbar-brand {
+        height: 40px;
+        line-height: 40px;
+        padding: 0px 0px 0px 15px;
+    }
+    .navbar-brand {
+        font-size: 17px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='cur'>
+            <a href='/Approval/Index?mid=@ViewBag.CurrentMid'>我的审批单</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Work/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.加班及调休申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_BusinessTrip/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.出差申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Apply/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyGooodsUse/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.所需物品领用申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyGiftBuy/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.物资采购申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyAgreement/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.合同协议审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyClock/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.未打卡证明申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MySealUse/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.印章使用审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MySealOut/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.印章外带审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Ask/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.员工请假申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyEntertain/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.招待审批申请单.ToString()</a>
+        </li>
+        <li class='cur'>
+            <a href='/MyCost/AuthIndex?mid=@ViewBag.CurrentMid'>@ApplyType.费用申请单.ToString()</a>
+        </li>
+    </ul>
+</nav>
+<div class='row with-menu page-content'>
+    <div>
+        <div class='panel'>
+            <div class='panel-heading'>
+                <strong><i class='icon-list-ul'></i> 审批列表</strong>
+            </div>
+            <table class='layui-table' id='docList'>
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-100px'>
+                            <div>
+                                序号
+                            </div>
+                        </th>
+                        <th class='text-left'>
+                            <div>
+                                名称
+                            </div>
+                        </th>
+                        <th class='text-left'>
+                            <div>
+                                描述
+                            </div>
+                        </th>
+                        <th class='w-100px'>
+                            <div>
+                                节点
+                            </div>
+                        </th>
+                        <th class='w-100px visible-lg'>
+                            <div>
+                                状态
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class='table-footer'>
+                <div style='float:right; clear:none;' class='page'></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script language='Javascript'>
+    $(function () {
+        getApprovalNotPageList();
+    });
+
+    //展示待审批
+    function getApprovalNotPageList() {
+
+        //为添加按钮设置 跳转路径
+
+        $.post("/Approval/GetApprovalNotPageList", { mid: $("#currentMid").val(), "secondMenuId": $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("tbody").html(data.Data);
+            } else {
+                //win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+</script>

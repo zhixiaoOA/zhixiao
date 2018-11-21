@@ -1,0 +1,320 @@
+﻿@using ZX.Model
+@{
+    ViewBag.Title = "待办新增-指效";
+}
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+<style>
+    .only-pick-time table {
+        width: 100%
+    }
+
+        .only-pick-time table td {
+            width: 150px
+        }
+
+        .only-pick-time table > tfoot .today, .only-pick-time table > thead {
+            display: none !important;
+        }
+</style>
+
+<div class="modal-left">
+    <div class="modal-header">
+        <div id="titlebar">
+            <div class="input-group w-200px" id="datepicker">
+                <span class="input-group-addon">日期</span>
+                <input type="text" class="form-control form-date" placeholder="选择或者输入一个日期：yyyy-MM-dd" readonly="readonly" name="agendaDate" id="agendaDate" value="@Request["AgendDate"]">
+                <span class="input-group-addon"><label class="checkbox-inline"><input type="checkbox" name="switchDate" id="switchDateAll" onclick="switchDateAll(this);"> 待定</label></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <script type="text/javascript">
+
+        </script>
+        <form class="form-condensed" id="ajaxForm" method="post">
+            <div class="panel">
+                <table class="table table-form table-fixed">
+                    <thead>
+                        <tr class="text-center">
+                            <th style="width:50px;">编号</th>
+                            <th style="width:120px;">类型</th>
+                            <th style="width:100px;">优先级</th>
+                            <th style="width:120px;">指派给</th>
+                            <th><span style="color:red;"> 名称</span></th>
+                            <th>描述</th>
+                            <th style="width:160px;color:red;">起止时间</th>
+                            <th style="width:70px;"><label class="checkbox-inline"><input type="checkbox" name="switchDate" id="switchAll" onclick="switchDateAll(this)"> 待定</label></th>
+                        </tr>
+                    </thead>
+                    <tbody id="agendTable">
+                        @{
+                            List<SelectListItem> selectItemsAssigned = new List<SelectListItem>();
+                            List<SelectListItem> selectTPriority = new List<SelectListItem>();
+                            List<SelectListItem> selectProject = new List<SelectListItem>();
+                            try
+                            {
+                                selectItemsAssigned = ViewBag.ListTeam;
+                            }
+                            catch { }
+
+                            try
+                            {
+                                selectTPriority = ViewBag.TPrioritySItem;
+                            }
+                            catch { }
+
+                            try
+                            {
+                                selectProject = ViewBag.ProjectSItem;
+                            }
+                            catch
+                            { }
+
+
+                            for (int i = 1; i < 9; i++)
+                            {
+                                <tr class="text-center">
+                                    <td>@i</td>
+                                    <td>
+                                        <select name="types" id="types" onchange="loadProjectList(this.value, @(i))" class="form-control" style="width:100%;">
+                                            <option value="0" data-keys="zidingyi zdy">自定义</option>
+                                            <option value="10" data-keys="xiangmurenwu xmrw">项目任务</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="TPriority" id="TPriority" class="form-control">
+                                            @{
+                                                try
+                                                {
+                                                    foreach (var item in selectTPriority)
+                                                    {
+                                                        <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                                catch { }
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="assignedTo" id="assignedTo" class="form-control" tabindex="2">
+                                            @{
+                                                try
+                                                {
+                                                    <option value="" data-keys=""></option>
+                                                    foreach (var item in selectItemsAssigned)
+                                                    {
+                                                        <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                                catch { }
+                                            }
+                                        </select>
+                                    </td>
+                                    <td class="text-left" style="overflow:visible">
+                                        <div id="nameBox@(i)_1">
+                                            <input type="text" name="ziDingYiName" id="names" value="" class="text-left form-control">
+                                        </div>
+                                        <div id="nameBox@(i)_2" class="hidden">
+                                            <select name="projectName" id="projectName@(i)" class="form-control" tabindex="2">
+                                                @{
+                                                    try
+                                                    {
+                                                        <option value="" data-keys=""></option>
+                                                        foreach (var item in selectProject)
+                                                        {
+                                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+                                                    catch { }
+                                                }
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <textarea name="descs" id="descs" rows="1" class="form-control"></textarea>
+                                    </td>
+                                    <td colspan="2">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-time" name="agendaDate1" id="agendaDate@(i)_1" val="AStartmmhh" placeholder="hh:mm" style="width: 50%">
+                                            <input type="text" class="form-control form-time" name="agendaDate2" id="agendaDate@(i)_2" val="AEndmmhh" placeholder="hh:mm" style="width: 50%">
+                                            <span class="input-group-addon"><label class="checkbox-inline"><input type="checkbox" name="switchDate" id="switchDate@(i)" val="@i" onclick="switchDateList(this);"> 待定</label></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td colspan="5">
+                                @Html.Raw(ViewBag.CurrentBtnList29)
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    // 仅选择日期
+    $(".form-date").datetimepicker(
+        {
+            language: "zh-CN",
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            format: "yyyy-mm-dd"
+        });
+
+    // 选择时间
+    $(".form-time").datetimepicker({
+        language: "zh-CN",
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0,
+        format: 'hh:ii'
+    });
+
+    window.chosenDefaultOptions = { no_results_text: '没有匹配的选项', disable_search_threshold: 1, search_contains: true, width: '100%', allow_single_deselect: true };
+    $(document).ready(function () {
+        $(".chosen").chosen(chosenDefaultOptions);
+    });
+
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10,  // 10 个以下的选择项则不显示检索框
+        search_contains: true         // 从任意位置开始检索
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#PTState").val($(this).val());
+
+    });
+
+    //全选
+    function switchDateAll(switcher) {
+        if (switcher.checked) {
+            $("input.form-date,input.form-time").attr("disabled", "disabled")
+            $("input[name='switchDate']").attr("checked", "checked")
+
+        } else {
+            $("input.form-date,input.form-time").removeAttr("disabled")
+            $("input[name='switchDate']").removeAttr("checked")
+        }
+    }
+
+    //单个待定复选框选中事件
+    function switchDateList(switcher) {
+        var idIndex = $(switcher).attr("val");
+        if (switcher.checked) {
+            $("#agendaDate" + idIndex + "_1").attr("disabled", "disabled")
+            $("#agendaDate" + idIndex + "_2").attr("disabled", "disabled")
+
+        } else {
+            $("#agendaDate" + idIndex + "_1").removeAttr("disabled")
+            $("#agendaDate" + idIndex + "_2").removeAttr("disabled")
+        }
+    }
+
+    //加载项目下拉列表
+    function loadProjectList(selectValue, i) {
+        if (selectValue == 10) {
+            $("#nameBox" + i + "_1").addClass("hidden");
+            $("#nameBox" + i + "_2").removeClass("hidden");
+        } else {
+            $("#nameBox" + i + "_1").removeClass("hidden");
+            $("#nameBox" + i + "_2").addClass("hidden");
+        }
+    }
+
+    //$('[data-toggle="popover"]').popover();
+    function saveData() {
+        win.showLoading("正在保存...");
+        // 遍历 tr
+        var myAgendas = [];
+        $('#agendTable tr').each(function (i) {
+
+            var item = { ADate: "", AIsUndetermined: 1, AType: 0, APriority: "", AName: "", AAssigned: "", ADesc: "", ARemark: "", AStartmmhh: "", AEndmmhh: "", AIsNotSet: 1, AIsPlivate: 1, FK_Id: -1 };
+            item.ADate = $("#agendaDate").val();
+            if ($("#switchDateAll").prop("checked")) {
+                item.AIsUndetermined = 0;
+            } else {
+                item.AIsUndetermined = 1;
+            }
+            item.AType = $(this).find("select[name='types']").val();
+            item.APriority = $(this).find("select[name='TPriority']").val();
+            //item.AType = $(this).find("select[name='types']").val();
+            if (item.AType == "10") {
+                item.AName = $(this).find("select[name='projectName'] option:selected").text();
+                item.FK_Id = $(this).find("select[name='projectName']").val();
+            } else {
+                item.AName = $(this).find("input[name='ziDingYiName']").val();
+                item.FK_Id = -1;
+            }
+            item.AAssigned = $(this).find("select[name='assignedTo']").val();
+
+            item.ADesc = $(this).find("textarea[name='descs']").val();
+            item.AStartmmhh = $(this).find("input[name='agendaDate1']").val();
+            item.AEndmmhh = $(this).find("input[name='agendaDate2']").val();
+            if ($(this).find("input[name='switchDate']").prop("checked")) {
+                item.AIsNotSet = 0;
+            } else {
+                item.AIsNotSet = 1;
+            }
+            if (item.AName != "" && item.AName != "undefined") {
+                myAgendas.push(item);
+            }
+        });
+
+
+        var jsonData = JSON.stringify(myAgendas);
+        $.post("/My_Agenda/My_AgendaListAddSave", { jsonData: jsonData }, function (data) {
+            if (data.Code == 200) {
+                win.success("保存成功", function () {
+                    parent.window.location.reload();
+                    win.close();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+
+    function goBack() {
+        win.close();
+    }
+</script>

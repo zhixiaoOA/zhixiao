@@ -1,0 +1,191 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Sys_Menu
+@{
+    ViewBag.Title = "菜单基本信息-指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link rel='stylesheet' href='/Static/js/jquery/chosen/min.css' type='text/css' media='print' />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/chosen/min.js"></script>
+<script src="~/Static/js/jquery/jquery-migrate-1.2.1.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.all-3.1.min.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 10px;
+    }
+    #treeSysMenu {
+        border: 1px solid #617775;
+        background: #ffffff;
+        overflow-y: scroll;
+        overflow-x: auto;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i> 菜单基本信息</strong></div>
+        <div class='panel-body'>
+            <form action="SaveData" method="post" class="form" id="formMenu">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="MParentId" value="@Model.MParentId" />
+                <input type="hidden" name="MIcon" value="@Model.MIcon" />
+                <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th style='width:100px'>所属菜单<span style="color:red">*</span></th>
+                        <td style='width:50%'>
+                            <input type='text' placeholder="所属菜单" datatype="*" id="txtSysMenu" value="@(ViewBag.MenuName ?? "顶级")" class='form-control' readonly="readonly" onclick="showSysMenuMenu();" />
+                        </td>
+                        <td><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th style='width:100px'>菜单名称<span style="color:red">*</span></th>
+                        <td style='width:50%'>
+                            <input type='text' name='MName' id='MName' value="@Model.MName" class='form-control' autocomplete="off" datatype="*" />
+                        </td>
+                        <td><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th style='width:100px'>图标</th>
+                        <td style='width:50%'>
+                            <button type="button" class="layui-btn" id="btnUpload">上传图片</button>
+                            <img id="MIcon" src="@Model.MIcon" style="width:45px;height:45px;margin-left:10px;@(Model.MIcon + "" == "" ? "display:none" : "")" alt="@Model.MIcon" />
+                        </td>
+                        <td><div class="Validform_checktip"></div></td>
+                    </tr>
+
+                    <tr>
+                        <th style='width:100px'>链接<span style="color:red">*</span></th>
+                        <td style='width:50%'>
+                            <input type='text' name='MUrl' id='MUrl' value='@Model.MUrl' class='form-control' datatype="*" />
+                        </td>
+                        <td><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th style='width:100px'>排序<span style="color:red">*</span></th>
+                        <td style='width:50%'>
+                            <input type='text' name='MSort' id='MSort' value='@Model.MSort' class='form-control' onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" datatype="*" />
+                        </td>
+                        <td><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>菜单描述</th>
+                        <td colspan='2'>
+                            <textarea name='Mesc' id='Mesc' class='form-control' rows='5'>@Model.Mesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td colspan='2'>
+                            @Html.Raw(ViewBag.CurrentBtnList29)
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+    <ul id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+</div>
+<input type="hidden" id="txtMenuzTree" value="@ViewBag.TreeJson" />
+<script type="text/javascript">
+    function saveDate() {
+        $("#formMenu").submit();
+    }
+    var menuTree;
+    $(function () {
+        $("#formMenu").Validform({
+            tiptype: 2,
+            callback: function (form) {
+                $("#formMenu").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert("保存失败");
+                    } else if (data.Code == 200) {
+                        win.success("保存成功");
+                        window.history.go(-1);
+                    }
+                });
+                return false;
+            }
+        });
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形菜单
+        var menuNodes = eval($("#txtMenuzTree").val());
+        menuTree = $.fn.zTree.init($("#treeSysMenu"), menuSetting, menuNodes);
+
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/uploadfile'
+                , done: function (res) {
+                    $("#MIcon").show().attr("src", res.Data);
+                    $("input[name='MIcon']").val(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+    function goBack() {
+        window.history.go(-1);
+    }
+    //点击选择菜单
+    function onMenuClick(e, treeId, treeNode) {
+        $("#formMenu input[name='MParentId']").val(treeNode.id);
+        $("#txtSysMenu").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示菜单
+    function showSysMenuMenu() {
+        var cityObj = $("#txtSysMenu");
+        var cityOffset = $("#txtSysMenu").offset();
+        $("#treeSysMenu").width(cityObj.width());
+        $("#sysMenuMenu").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function hideSysMenuMenu() {
+        $("#sysMenuMenu").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysMenuMenu" || $(event.target).parents("#sysMenuMenu").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+</script>

@@ -1,0 +1,245 @@
+﻿@using ZX.Model
+@model Approval
+@{
+    List<Approval_User> listUser = ViewBag.ListUser ?? new List<Approval_User>();
+    List<CompanyPosition> listPosition = ViewBag.ListPosition ?? new List<CompanyPosition>();
+    List<Dictionary> listDic = ViewBag.ListDic ?? new List<Dictionary>();
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.core-3.1.min.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.excheck-3.1.min.js"></script>
+<script src="~/Static/js/jquery/jquery-migrate-1.2.1.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    #treeSysDept {
+        border: 1px solid #617775;
+        background: #ffffff;
+        overflow-y: scroll;
+        overflow-x: auto;
+    }
+
+    .row {
+        margin: 0;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>基本信息</strong></div>
+        <div class='panel-body'>
+            <form action="/applyset/SaveData" method="post" class="form" id="myForm">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="FK_DeptId" value="@Model.FK_DeptId" />
+                <input type="hidden" name="IsSdong" value="0" />
+                <input type="hidden" name="Users" value="" />
+                <table class='table table-form'>
+                    <tr>
+                        <th style='width:200px'>流程名称</th>
+                        <td>
+                            <input type='text' name='DName' value="@Model.DName" class='form-control' autocomplete="off" datatype="*" />
+                        </td>
+                        <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th style='width:200px'>引用申请单</th>
+                        <td>
+                            <select class='form-control' name="FK_TypeId">
+                                @foreach (var item in listDic)
+                                {
+                                    <option value="@item.Id" @(Model.FK_TypeId == item.Id ? "selected" : "" )>@item.Name</option>
+                                }
+                            </select>
+                        </td>
+                        <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th style='width:200px'>关联部门</th>
+                        <td><input type="text" class='form-control' placeholder="关联部门" datatype="*" id="txtSysDept" value="@(ViewBag.DeptName ?? " 所有部门")" readonly="readonly" onclick="showSysDept();"></td>
+                        <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>审批步骤</th>
+                        <td style='padding-left:0;'>
+                            <table id="tbList" style="width:300px;">
+                                @{ int rowIndex = 1;}
+                                @foreach (var item in listUser)
+                                {
+                                    <tr>
+                                        <td>
+                                            <select class='form-control' name="FK_CompanyPositionId">
+                                                @foreach (var itemPosition in listPosition)
+                                                {
+                                                    <option value="@itemPosition.Id" @(item.FK_CompanyPositionId == itemPosition.Id ? "selected" : "" )>@(itemPosition.Name + "审批")</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            @if (listUser.Count == rowIndex)
+                                            {
+                                                <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="icon icon-minus-sign-alt" style="cursor:pointer;" title="删除" onclick="onAddOrDelRow(this)"></i>
+                                            }
+                                        </td>
+                                    </tr>
+                                    rowIndex++;
+                                }
+                                @if (listUser.Count == 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            <select class='form-control' name="FK_CompanyPositionId">
+                                                @foreach (var itemPosition in listPosition)
+                                                {
+                                                    <option value="@itemPosition.Id">@(itemPosition.Name + "审批")</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                        <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td colspan='2'>
+                            @Html.Raw(ViewBag.CurrentBtnList29)
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="sysDept" class="DeptContent" style="display: none; position: absolute;">
+    <ul id="treeSysDept" class="ztree" style="margin-top: 0;"></ul>
+</div>
+<input type="hidden" id="txtDeptzTree" value="@ViewBag.TreeJson" />
+<script type="text/javascript">
+    var DeptTree;
+    function saveData() {
+        $("#myForm").submit();
+    }
+    $(function () {
+        $("#myForm").Validform({
+            tiptype: 2,
+            callback: function (form) {
+                var users = [];
+                $("#tbList tr").each(function () {
+                    var user = { FK_ApprovalId: 0, FK_CompanyPositionId: $(this).find("select[name='FK_CompanyPositionId']").val(), FlowName: $(this).find("select[name='FK_CompanyPositionId'] option:selected").text() };
+                    users.push(user);
+                });
+                if (users.length == 0) {
+                    win.alert("请填写审批步骤");
+                    return;
+                } else {
+                    win.showLoading("正在保存...");
+                    $("input[name='Users']").val(JSON.stringify(users));
+                    $("#myForm").ajaxSubmit(function (res) {
+                        if (res.Code == 200) {
+                            win.success("保存成功", function () {
+                                window.history.go(-1);
+                            }, 1000);
+                        } else {
+                            win.alert("保存失败:" + res.Message);
+                        }
+                        win.hideLoading();
+                    });
+                }
+                return false;
+            }
+        });
+        var DeptSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onDeptClick
+            }
+        };
+        //初始化树形菜单
+        var DeptNodes = eval($("#txtDeptzTree").val());
+        DeptTree = $.fn.zTree.init($("#treeSysDept"), DeptSetting, DeptNodes);
+    });
+
+    //新增行
+    function onAddOrDelRow(obj) {
+        if ($(obj).attr("title") == "新增") {
+            var newTr = $(obj).parent().parent().clone();
+            $("#tbList").append(newTr);
+            $(obj).removeClass("icon-plus-sign-alt").addClass("icon-minus-sign-alt").attr("title", "删除");
+        } else {
+            $(obj).parent().parent().remove();
+        }
+    }
+
+    function onSelectUser(obj) {
+        var id = $(obj).siblings("input").attr("id");
+        var name = $(obj).attr("id");
+        win.open("/select/selectuser?id=" + id + "&name=" + name, 800, 600, "选择用户");
+    }
+
+    //返回
+    function goBack() {
+        window.history.go(-1);
+    }
+    //点击选择菜单
+    function onDeptClick(e, treeId, treeNode) {
+        $("#myForm input[name='FK_DeptId']").val(treeNode.id);
+        $("#txtSysDept").val(treeNode.name);
+        hideSysDept();
+    }
+    //显示菜单
+    function showSysDept() {
+        var cityObj = $("#txtSysDept");
+        var cityOffset = $("#txtSysDept").offset();
+        $("#treeSysDept").width(cityObj.width());
+        $("#sysDept").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysDeptBodyDown);
+    }
+    //隐藏菜单
+    function hideSysDept() {
+        $("#sysDept").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysDeptBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysDeptBodyDown(event) {
+        if (!(event.target.id == "DeptBtn" || event.target.id == "sysDept" || $(event.target).parents("#sysDept").length > 0)) {
+            hideSysDept();
+        }
+    }
+</script>

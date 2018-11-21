@@ -1,0 +1,199 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model  ZX.Model.Sys_User
+@{
+    ViewBag.Title = "员工信息查看-指效";
+}
+<link href="/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/js/layui/css/layui.css" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/min.js"></script>
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/Validform_v5.3.2_min.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/jquery/jquery-migrate-1.2.1.js"></script>
+<script src="/Static/js/jquery/zTree/js/jquery.ztree.all-3.1.min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Scripts/jquery-migrate-1.2.1.js"></script>
+<div class='row page-content'>
+    <input type="hidden" id="txtDeptTree" value="@ViewBag.TreeJson" />
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <div id="sysDeptTree" class="menuContent" style="display: none; position: absolute;">
+        <ul id="treeSysDept" class="ztree" style="margin-top: 0;"></ul>
+    </div>
+    <div class="col-md-12">
+        <div class='col-md-10'>
+            <div class="panel">
+                <div class='panel-body'>
+                    <div id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+                        <ul id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+                    </div>
+                    <form method='post' id='ajaxForm' action="SaveData" onsubmit="return formCheck()">
+
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                        <input type="hidden" name="Fk_DeptId" id="Fk_DeptId" value="@Model.Fk_DeptId" />
+
+                        <table class='table table-form'>
+                            <tr>
+                                <th class='w-100px'>用户名</th>
+                                <td class='w-p40'>
+                                    @{
+                                        if (Model.Id <= 0)
+                                        {
+                                            <input type='text' name='UserName' id='UserName' value='@Model.UserName' class='form-control' autocomplete='off' />
+                                        }
+                                        else
+                                        {
+                                            <input type='text' name='UserName' id='UserName' value='@Model.UserName' class='form-control' autocomplete='off' readonly />
+                                        }
+
+                                    }
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>真实姓名</th>
+                                <td>
+                                    <input type='text' name='RealName' id='RealName' value='@Model.RealName' class='form-control' autocomplete='off' />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>性别</th>
+                                <td>
+                                    <label class='radio-inline'>
+                                        @{
+                                            if (@Model.USex == "1")
+                                            {
+                                                <input type='radio' name='USex' value='1' id='genderm' checked />
+                                            }
+                                            else
+                                            {
+                                                <input type='radio' name='USex' value='1' id='genderm' />
+                                            }
+                                        }
+                                        男
+                                    </label>
+                                    <label class='radio-inline'>
+                                        @{
+                                            if (@Model.USex == "2")
+                                            {
+                                                <input type='radio' name='USex' value='2' id='genderf' checked />
+                                            }
+                                            else
+                                            {
+                                                <input type='radio' name='USex' value='2' id='genderf' />
+                                            }
+                                        }
+                                        女
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>部门</th>
+                                <td>
+                                    <input type='text' placeholder="所属菜单" datatype="*" id="txtSysDept" value="@(ViewBag.txtSysDept ?? "顶级")" class='form-control' readonly="readonly" onclick="showSysDeptTree();" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>角色</th>
+                                <td>
+                                    @Html.DropDownListFor(model => model.Fk_RoleId, ViewBag.RoleList as IEnumerable<SelectListItem>, "--请选择--", new { @clase = "chosen-select form-control" })
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>手机</th>
+                                <td>
+                                    <input type='text' name='UPhone' id='UPhone' value='@Model.UPhone' class='form-control' autocomplete='off' />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>邮箱</th>
+                                <td>
+                                    <input type='text' name='UEmail' id='UEmail' value='@Model.UEmail' class='form-control' autocomplete='off' />
+                                </td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <th>QQ</th>
+                                <td>
+                                    <input type='text' name='UQQ' id='UQQ' value='@Model.UQQ' class='form-control' autocomplete='off' />
+                                </td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <th>通讯地址</th>
+                                <td>
+                                    <input type='text' name='UAddress' id='UAddress' value='@Model.UAddress' class='form-control' autocomplete='off' />
+                                </td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <th>是否禁用</th>
+                                <td>
+                                    <label class='radio-inline'>
+                                        @{
+                                            if (@Model.IsDel == 0)
+                                            {
+                                                <input type='radio' name='IsDel' value='0' id='IsDelYes' checked />
+                                            }
+                                            else
+                                            {
+                                                <input type='radio' name='IsDel' value='0' id='IsDelYes' />
+                                            }
+                                        }
+                                        是
+                                    </label>
+                                    <label class='radio-inline'>
+                                        @{
+                                            if (@Model.IsDel == 1)
+                                            {
+                                                <input type='radio' name='IsDel' value='1' id='IsDelNo' checked />
+                                            }
+                                            else
+                                            {
+                                                <input type='radio' name='IsDel' value='1' id='IsDelNo' />
+                                            }
+                                        }
+                                        否
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>个人签名</th>
+                                <td rowspan="2">
+                                    <img id="imgUSgin1" src="@Model.USgin" style="width:200px;height:100px;margin-left:10px;@(Model.USgin + "" == "" ? "display:none" : "")" alt="个人签名" title="个人签名" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script language='Javascript'>
+        $(document).ready(function () {
+            var menuSetting = {
+                view: {
+                    dblClickExpand: false
+                },
+                data: {
+                    simpleData: {
+                        enable: true
+                    }
+                },
+                callback: {
+                    onClick: onMenuClick
+                }
+            };
+            //初始化树形部门
+            var deptNodes = eval($("#txtDeptTree").val());
+            menuTree = $.fn.zTree.init($("#treeSysDept"), menuSetting, deptNodes);
+            if (v.deptID) $('#category' + v.deptID).addClass('text-bold');
+        });
+    </script>
+</div>

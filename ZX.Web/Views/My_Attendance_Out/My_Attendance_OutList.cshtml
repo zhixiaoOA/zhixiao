@@ -1,0 +1,167 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@{
+    ViewBag.Title = "外出考勤-指效";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/datetimepicker/datetimepicker.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/ajaxfileupload.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/datetimepicker/datetimepicker.min.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+
+    .cur {
+        float: left;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='cur'>
+            <a href='/My_Attendance/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.内部考勤</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Attendance_Out/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.外出考勤</a>
+        </li>
+        <li class='cur'>
+            <a href='/AttendanceCount/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.考勤统计</a>
+        </li>
+        <li class='cur'>
+            <a href='/AttendanceTime/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.考勤设置</a>
+        </li>
+    </ul>
+</nav>
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+<div class='with-menu'>
+
+    <div class='panel'>
+        <div class="panel-heading">
+            <strong><i class="icon-group"></i>员工外出考勤</strong>
+        </div>
+        <div id='menuActions'>
+            @Html.Raw(ViewBag.CurrentBtnList32)
+        </div>
+        <div class="panel-body">
+            <div>
+                <form action="OutExcel" id="doForm">
+                    <fieldset>
+                        <legend>查询条件</legend>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                姓名:
+                                <input type="text" id="txtRealname" name="key" value="" class="form-control" />
+                                <label for="exampleInputEmail3">日期</label>
+                                <input type="text" class="form-control" id="StartTime" name="startTime" placeholder="开始日期" value="@(DateTime.Now.ToString("yyyy-MM-01"))" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                                至
+                                <input type="text" class="form-control" id="EndTime" name="endTime" placeholder="结束日期" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                            </div>
+                            <button type="button" class="btn btn-default" id="btnSearch">查询</button>
+                            <div style="width:auto;float:right;">
+                                <a href='javascript:;' onclick="exportExcel()" class="btn btn-primary">导出Excel</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <table class='layui-table' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-30px'>序号</th>
+                        <th class="w-40px">姓名</th>
+                        <th class='w-150px'>考勤地址</th>
+                        <th class='w-150px'>事由</th>
+                        <th class='w-80px' WS>考勤时间</th>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+        $("#btnSearch").click(function () {
+            pageIndex = 1;
+            getList();
+        });
+    });
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        var beginTime = $("#StartTime").val();
+        var endTime = $("#EndTime").val();
+
+
+
+        $.post("/My_Attendance_Out/GetMy_Attendance_OutList", {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            startTime: beginTime,
+            endTime: endTime,
+            key: $("#txtRealname").val()
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+                win.hideLoading();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+    function exportExcel() {
+        $("#doForm").submit();
+    }
+</script>

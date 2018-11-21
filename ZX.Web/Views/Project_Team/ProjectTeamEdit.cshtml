@@ -1,0 +1,184 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model List<Project_Team>
+@{
+    ViewBag.Title = "团队";
+}
+
+<link href="~/dist/lib/chosen/chosen.min.css" rel="stylesheet" />
+<script src="~/dist/lib/chosen/chosen.min.js"></script>
+<script src="~/Scripts/layer/layer.js"></script>
+<script src="~/Scripts/layer/layer.tools.js"></script>
+<input type="hidden" id="projectId" value="@ViewBag.ProjectId" />
+<form id="teamForm" method="post">
+    <table class="table table-form table-hover no-td-padding" id="tableTeam">
+        <tbody id="tbList">
+            @{
+                var list = Model;
+                List<SelectListItem> allListTeam = ViewBag.TeamUserList;
+
+                if (list != null)
+                {
+                    foreach (var item in list)
+                    {
+                        <tr>
+                            <td>
+                                <select data-placeholder="选择一个团队..." name="team" class="form-control" tabindex="2">
+                                    @{
+                                        <option value="-1"></option>
+                                        foreach (var option in allListTeam)
+                                        {
+                                            @*SelectListItem selectItem = allListTeam.Where(l => l.Value == option.FK_UserId.ToString()).FirstOrDefault();
+                                                if (selectItem == null)
+                                                {
+                                                    continue;
+                                                }
+                                                if (item.FK_UserId.ToString() == selectItem.Value)
+                                                {
+                                                    <option value="@selectItem.Value" selected>@selectItem.Text</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@selectItem.Value">@selectItem.Text</option>
+                                                }*@
+                                            if (item.FK_UserId.ToString() == option.Value)
+                                            {
+                                                <option value="@option.Value" selected>@option.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@option.Value">@option.Text</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="w-180px">
+                                <select data-placeholder="选择一个权限..." name="power" class="form-control" tabindex="2">
+                                    @{
+                                        // 0：默认 10：管理员 20：受限
+                                        if (item.Permissions == 0)
+                                        {
+                                            <option value="0" selected>默认</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="0">默认</option>
+                                        }
+
+                                        if (item.Permissions == 10)
+                                        {
+                                            <option value="10" selected>管理员</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="10">管理员</option>
+                                        }
+
+                                        if (item.Permissions == 20)
+                                        {
+                                            <option value="20" selected>受限</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="20">受限</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td class="w-70px"><i class="btn btn-mini icon-remove" title="删除" onclick="onAddOrDelRow(this)"></i></td>
+                        </tr>
+                    }
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    <tr>
+                        <td>
+                            <select data-placeholder="选择一个团队..." name="team" class="form-control" tabindex="2">
+                                @{
+                                    <option value="-1"></option>
+                                    foreach (var option in allListTeam)
+                                    {
+                                        <option value="@option.Value">@option.Text</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td class="w-180px">
+                            <select data-placeholder="选择一个权限..." name="power" class="form-control" tabindex="2">
+                                @{
+                                    // 0：默认 10：管理员 20：受限
+
+                                    <option value="0">默认</option>
+
+                                    <option value="10">管理员</option>
+
+                                    <option value="20">受限</option>
+                                }
+                            </select>
+                        </td>
+                        <td class="w-60px">
+                            <i class="btn btn-mini @(i<2?"icon-remove":"icon-plus")" title="@(i<2?"删除":"新增")" onclick="onAddOrDelRow(this)"></i>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="alert alert-info">
+        <p title="管理员：可以查看、编辑、删除所有任务。
+默认：可以查看、编辑所有任务，删除与自己相关的任务。
+受限：只能查看、编辑与自己相关的任务。">管理员拥有所有权限，默认成员不可删除与自己无关的任务，受限成员仅可操作自己相关任务。</p>
+    </div>
+    <div class="text-center"> <button type="button" class="btn btn-primary" onclick="saveDate()">保存</button></div>
+</form>
+<script type="text/javascript">
+    //保存子部门
+    function saveDate() {
+        win.showLoading("正在保存...");
+        // 遍历 tr
+        var teamProjects = [];
+        $('#tableTeam tr').each(function (i) {
+
+            var item = { FK_UserId: "", Permissions: "", FK_ProjectId: "" };
+
+            $(this).children("td").each(function (j) {
+                if ($(this).children("select").attr("name") == "team") {
+                    if ($(this).children("select").val() > 0) {
+                        item.FK_UserId = $(this).children("select").val();
+                    }
+                }
+                if (item.FK_UserId != "" && $(this).children("select").attr("name") == "power") {
+                    item.Permissions = $(this).children("select").val();
+                }
+            });
+            if (item.FK_UserId != "") {
+                item.FK_ProjectId = $("#projectId").val();
+                teamProjects.push(item);
+            }
+        });
+
+        var jsonData = JSON.stringify(teamProjects);
+        $.post("/Project_Team/SaveData", { jsonData: jsonData, pid: $("#projectId").val() }, function (data) {
+            if (data.Code = 200) {
+                win.success("保存成功", function () {
+                    win.close();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+    //新增行
+    function onAddOrDelRow(obj) {
+        if ($(obj).attr("title") == "新增") {
+            var newTr = $(obj).parent().parent().clone();
+            $(newTr).find("input").val("");
+            $("#tbList").append(newTr);
+            $(obj).removeClass("icon-plus").addClass("icon-remove").attr("title", "删除");
+        } else {
+            $(obj).parent().parent().remove();
+        }
+    }
+</script>

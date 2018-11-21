@@ -1,0 +1,626 @@
+﻿@using ZX.Model
+@using ZX.BLL
+@using ZX.Tools
+@using System.Linq
+@{
+    ViewBag.Title = "个人空间-首页-指效";
+    int userId = Session["UserId"].ToInt();
+    int positionId = Session["PositionId"].ToInt();
+    List<SelectListItem> list = ViewBag.UserList;
+    DateTime? currentTime = ViewBag.CurrentTime;
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link href="/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='' style="width:98%">
+    <style>
+        body {
+            background: #fafafa;
+        }
+
+        .page-content {
+            margin-top: -19px;
+            border-top: 1px solid #3280fc;
+        }
+
+        .dashboard {
+            position: relative;
+            padding-top: 25px;
+            z-index: 1030
+        }
+
+            .dashboard .row {
+                margin: 0 auto;
+            }
+
+            .dashboard .panel-actions {
+                margin-top: 0;
+                margin-right: 0;
+            }
+
+        .dashboard-actions {
+            position: absolute;
+            top: -35px;
+            right: 100px
+        }
+
+            .dashboard-actions .btn {
+                padding: 5px 12px
+            }
+
+        .dashboard .table tr[data-url] td {
+            cursor: pointer;
+        }
+
+        .dashboard .panel-heading {
+            height: 30px
+        }
+
+        .circular {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            float: left;
+            margin-right: 5px;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .Orange {
+            background-color: yellow;
+        }
+        .panel-title-text {
+            font-family: 宋体;
+            font-size:14px;
+        }
+        .text-left {
+            font-family: 宋体;
+            font-size: 14px;
+        }
+        .text-center w-120px {
+            font-family: 宋体;
+            font-size: 14px;
+        }
+        .text-right w-100px {
+            font-family: 宋体;
+            font-size: 14px;
+        }
+        .text-right {
+            font-family: 宋体;
+            font-size: 14px;
+        }
+        .navbar-brand {
+            font-size: 17px !important;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+        }
+
+        .navbar-nav > li > a {
+            font-size: 14px !important;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+        }
+    </style>
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class='dashboard dashboard-draggable' id='dashboard' style="width:98%">
+        <div class='row'>
+            <div class="panel-box">
+                <div class="panel-title"><span class="panel-title-text">我的项目任务</span></div>
+                <div class="panel-row">
+                    <table class="table table-data table-hover table-fixed block-project">
+                        <tbody>
+                            @{
+                                int topCount = 10;
+                                //1-指派给我 2-由我创建 3-由我完成 4-由我关闭 5-由我取消
+
+                                List<Project_TaskModel> taskList = new List<Project_TaskModel>();
+
+
+                                string orderBy = "AsTime";
+
+                                ///(@userId=A.CreateUserId OR @tsuccess = A.TSuccess OR @assigned = A.Assigned)
+                                taskList = Project_TaskBLL.GetProjectTaskTopList(topCount, " (Assigned=" + userId + " OR TSuccess=" + userId + " OR CreateUserId=" + userId + ")", orderBy);
+
+                            }
+                            <tr>
+                                <th class="text-left">任务名称</th>
+                                <th class="text-right w-100px" title="按工时计算">进度</th>
+                                <th class="text-right w-100px" title="状态">状态</th>
+                            </tr>
+                            @{
+                                foreach (var task in taskList)
+                                {
+                                    <tr data-url="javascript:;" class="text-center" style="">
+                                        @{
+                                            decimal doneHours = 0;//已耗时
+                                            decimal predictHours = 0;//预估剩余工时
+                                            decimal totalTExpected = 0; //获取项目总共最初预计，用于亮灯控制判断
+                                            try
+                                            {
+                                                doneHours = task.ConsumTime.ToInt();
+                                                predictHours = task.TheTime.ToInt();
+                                            }
+                                            catch { }
+
+
+                                            decimal percent = 0;
+                                            try
+                                            {
+                                                percent = doneHours / (doneHours + predictHours) * 100;
+
+                                                percent = System.Decimal.Round(percent, 2);
+                                            }
+                                            catch { }
+
+                                            totalTExpected += task.TExpected.ToInt();
+                                        }
+                                        <td class="text-left" title="@task.TName">
+                                            @{
+                                                @*//进度<90% 亮灯绿灯控制
+                                                    if (percent < 90 && task.TState != 4)
+                                                    {
+                                                        <div class="circular green" title="进度已达(@percent)%"></div>
+                                                    }
+                                                    //进度到了90% 亮灯控制
+                                                    if (percent >= 90 && percent < 100 && task.TState != 4)
+                                                    {
+                                                        <div class="circular Orange" title="进度已达(@percent)%"></div>
+                                                    }
+                                                    //进度已经所消耗时间超出前期预计总耗时 亮灯控制
+                                                    if (doneHours > totalTExpected)
+                                                    {
+                                                        <div class="circular red" title="总耗时已超出最初预计@(doneHours-totalTExpected)工时。"></div>
+                                                    }*@
+
+                                                //任务结束前一天 亮黄灯控制
+                                                TimeSpan ts = Convert.ToDateTime(task.PEndTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                                if (ts.Days == 1 && task.TState != 4)
+                                                {
+                                                    <div class="circular Orange" title="仅剩一天时间"></div>
+                                                }
+                                                //超时
+                                                if (ts.Days < 0 && task.TState != 4)
+                                                {
+                                                    <div class="circular red" title="已超时@(ts.Days*-1)天"></div>
+                                                }
+
+                                            }
+                                            <a href="javascript:;" onclick="goProjectTask(this)" val="@task.Id">@task.TName</a>
+                                        </td>
+
+                                        <td class="task-tab-td-center" title="@(percent + " %")">
+                                            <div class="layui-progress layui-progress-big" lay-showPercent="true">
+                                                <div class="layui-progress-bar layui-bg-red" lay-percent="@(percent + "%")"></div>
+                                            </div>
+                                        </td>
+                                        @{
+                                            string tStatusName = "未知";
+                                            switch (task.TState.ToInt())
+                                            {
+                                                case 1:
+                                                    {
+                                                        tStatusName = "未完成";
+
+                                                        break;
+                                                    }
+                                                case 2:
+                                                    {
+                                                        tStatusName = "未开始";
+
+                                                        break;
+                                                    }
+                                                case 3:
+                                                    {
+                                                        tStatusName = "进行中";
+
+                                                        break;
+                                                    }
+                                                case 4:
+                                                    {
+                                                        tStatusName = "已完成";
+                                                        break;
+                                                    }
+                                                case 5:
+                                                    {
+                                                        tStatusName = "已取消";
+                                                        break;
+                                                    }
+                                                case 6:
+                                                    {
+                                                        tStatusName = "已关闭";
+                                                        break;
+                                                    }
+                                            }
+
+                                        }
+
+
+                                        <td class="text-right">@tStatusName</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title"><span class="panel-title-text">新闻</span></div>
+                <div class="panel-row">
+                    <table class="table table-data table-hover table-fixed block-project">
+                        <tbody>
+                            @{
+                                List<News> newList = new List<News>();
+                                newList = NewsBLL.GetNewsTopList(10, -1, 10).ToList<News>();
+
+
+                                foreach (var newItem in newList)
+                                {
+                                    <tr data-url="javascript:;" class="text-center" style="">
+                                        <td class="text-left" title="@newItem.DName">
+                                            <a href="javascript:;" onclick="newlook(this)" val="@newItem.Id,'新闻'">@newItem.DName</a>
+                                        </td>
+                                        @{
+                                            string userName = list.Where(l => l.Value == newItem.CreateUserId + "").FirstOrDefault().Text;
+                                        }
+                                        <td class="text-right w-100px" title="@userName">
+                                            @userName
+                                        </td>
+                                        <td class="text-right w-100px" title="@newItem.CreateTime">@newItem.CreateTime.ToShortDate()</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title"><span class="panel-title-text">需我审批</span></div>
+                <div class="panel-row">
+                    <table class="table table-data table-hover table-fixed block-project">
+                        <tbody>
+                            <tr>
+                                <th class="text-left">名称</th>
+                                <th class="text-center w-120px" title="流转节点">节点</th>
+                                <th class="text-right w-100px" title="流转节点">状态</th>
+                            </tr>
+                            @{
+                                //获取相关审批
+                                List<AllApplyNotice> allApplyNoticeList = new List<AllApplyNotice>();
+                                int fk_CompanyPositionId = 0;
+
+                                fk_CompanyPositionId = positionId.ToInt();
+
+                                if (fk_CompanyPositionId != 0)
+                                {
+                                    allApplyNoticeList = AllApplyNoticeBLL.GetAllApplyNoticeList(fk_CompanyPositionId);
+
+                                    if (allApplyNoticeList.Count > 0)
+                                    {
+                                        foreach (var applyNotice in allApplyNoticeList)
+                                        {
+                                            <tr data-url="javascript:;" class="text-center" style="">
+                                                <td class="text-left" title="@applyNotice.ADesc">
+                                                    <a href="@applyNotice.ApplyAction">@applyNotice.Title</a>
+                                                </td>
+                                                <td>
+                                                    @applyNotice.FlowName
+                                                </td>
+                                                @{
+                                                    string tStatusName = "未知";
+                                                    switch (applyNotice.CurrentState.ToInt())
+                                                    {
+                                                        case 0:
+                                                            {
+                                                                tStatusName = "新申请";
+                                                                break;
+                                                            }
+                                                        case 1:
+                                                            {
+                                                                tStatusName = "审批中";
+
+                                                                break;
+                                                            }
+                                                    }
+                                                }
+                                                <td class="text-right">@tStatusName</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title"><span class="panel-title-text">我的临时任务</span></div>
+                <div class="panel-row">
+                    <table class="table table-data table-hover table-fixed block-project">
+                        <tbody>
+                            @{
+                                List<Temporary_TaskModel> temporaryTaskList = new List<Temporary_TaskModel>();
+
+
+                                temporaryTaskList = Temporary_TaskBLL.GetTemporary_TaskBlockList(10, " (Assigned=" + userId + " OR TSuccess=" + userId + " OR CreateUserId=" + userId + ")", " AsTime");
+                            }
+                            <tr>
+                                <th class="text-left">任务名称</th>
+                                <th class="text-right w-100px" title="按工时计算">进度</th>
+                                <th class="text-right w-100px" title="状态">状态</th>
+                            </tr>
+                            @{
+                                foreach (var temporaryTask in temporaryTaskList)
+                                {
+                                    <tr data-url="javascript:;" class="text-center" style="">
+                                        @{
+                                            decimal doneHours = 0;//已耗时
+                                            decimal predictHours = 0;//预估剩余工时
+                                            decimal totalTExpected = 0; //获取项目总共最初预计，用于亮灯控制判断
+                                            try
+                                            {
+                                                doneHours = temporaryTask.ConsumTime.ToInt();
+                                                predictHours = temporaryTask.TheTime.ToInt();
+                                            }
+                                            catch { }
+
+
+                                            decimal percent = 0;
+                                            try
+                                            {
+                                                percent = doneHours / (doneHours + predictHours) * 100;
+
+                                                percent = System.Decimal.Round(percent, 2);
+                                            }
+                                            catch { }
+
+                                            totalTExpected += temporaryTask.TExpected.ToInt();
+                                        }
+                                        <td class="text-left" title="@temporaryTask.TName">
+                                            @{
+
+                                                //任务结束前一天 亮黄灯控制
+                                                TimeSpan ts = Convert.ToDateTime(temporaryTask.AsTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                                if (ts.Days == 1 && temporaryTask.TState != 4)
+                                                {
+                                                    <div class="circular Orange" title="仅剩一天时间"></div>
+                                                }
+                                                //超时
+                                                if (ts.Days < 0 && temporaryTask.TState != 4)
+                                                {
+                                                    <div class="circular red" title="已超时@(ts.Days*-1)天"></div>
+                                                }
+
+                                                @*//进度<90% 亮灯绿灯控制
+                                                    if (percent < 90 && temporaryTask.TState != 4)
+                                                    {
+                                                        <div class="circular green" title="进度已达(@percent)%"></div>
+                                                    }
+                                                    //进度到了90% 亮灯控制
+                                                    if (percent >= 90 && percent < 100 && temporaryTask.TState != 4)
+                                                    {
+                                                        <div class="circular Orange" title="进度已达(@percent)%"></div>
+                                                    }
+                                                    //进度已经所消耗时间超出前期预计总耗时 亮灯控制
+                                                    if (doneHours > totalTExpected)
+                                                    {
+                                                        <div class="circular red" title="总耗时已超出最初预计@(doneHours-totalTExpected)工时。"></div>
+                                                    }*@
+                                            }
+                                            <a href="javascript:;" onclick="goTemporary_Task(this)" val="@temporaryTask.Id">@temporaryTask.TName</a>
+                                        </td>
+
+                                        <td class="task-tab-td-center" title="@(percent + " %")">
+                                            <div class="layui-progress layui-progress-big" lay-showPercent="true">
+                                                <div class="layui-progress-bar layui-bg-red" lay-percent="@(percent + "%")"></div>
+                                            </div>
+                                        </td>
+                                        @{
+                                            string tStatusName = "未知";
+                                            switch (temporaryTask.TState.ToInt())
+                                            {
+                                                case 1:
+                                                    {
+                                                        tStatusName = "未完成";
+
+                                                        break;
+                                                    }
+                                                case 2:
+                                                    {
+                                                        tStatusName = "未开始";
+
+                                                        break;
+                                                    }
+                                                case 3:
+                                                    {
+                                                        tStatusName = "进行中";
+
+                                                        break;
+                                                    }
+                                                case 4:
+                                                    {
+                                                        tStatusName = "已完成";
+                                                        break;
+                                                    }
+                                                case 5:
+                                                    {
+                                                        tStatusName = "已取消";
+                                                        break;
+                                                    }
+                                                case 6:
+                                                    {
+                                                        tStatusName = "已关闭";
+                                                        break;
+                                                    }
+                                            }
+                                        }
+                                        <td class="text-right">@tStatusName</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title"><span class="panel-title-text">公告</span></div>
+                <div class="panel-row">
+                    <table class="table table-data table-hover table-fixed block-project">
+                        <tbody>
+                            @{
+                                List<News> noticeList = new List<News>();
+                                noticeList = NewsBLL.GetNewsTopList(10, -1, 0).ToList<News>();
+
+                                foreach (var newItem in noticeList)
+                                {
+                                    <tr data-url="javascript:;" class="text-center" style="">
+
+                                        <td class="text-left" title="@newItem.DName">
+                                            <a href="javascript:;" onclick="newlook(this)" val="@newItem.Id,公告">@newItem.DName</a>
+                                        </td>
+                                        @{
+                                            string userName = list.Where(l => l.Value == newItem.CreateUserId + "").FirstOrDefault().Text;
+                                        }
+                                        <td class="text-right w-100px" title="@userName">
+                                            @userName
+                                        </td>
+                                        <td class="text-right w-100px" title="@newItem.CreateTime">@newItem.CreateTime.ToShortDate()</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-box">
+                <div class="panel-title"><span class="panel-title-text">我提交的审批</span></div>
+                <div class="panel-row">
+                    <table class="table table-data table-hover table-fixed block-project">
+                        <tbody>
+                            <tr>
+                                <th class="text-left">名称</th>
+                                <th class="text-center w-120px" title="流程节点">节点</th>
+                                <th class="text-right w-100px" title="审批状态">状态</th>
+                            </tr>
+                            @{
+                                //获取相关审批
+                                List<AllApplyNotice> myCreateApplyNoticeList = new List<AllApplyNotice>();
+
+                                if (userId != 0)
+                                {
+                                    myCreateApplyNoticeList = AllApplyNoticeBLL.GetMyCreateApplyNoticeList(userId);
+
+                                    if (myCreateApplyNoticeList.Count > 0)
+                                    {
+                                        foreach (var applyNotice in myCreateApplyNoticeList)
+                                        {
+                                            <tr data-url="javascript:;" class="text-center" style="">
+                                                <td class="text-left" title="@applyNotice.ADesc">
+                                                    <a href="@applyNotice.ApplyAction">@applyNotice.Title</a>
+                                                </td>
+                                                <td>
+                                                    @applyNotice.FlowName
+                                                </td>
+                                                @{
+                                                    string tStatusName = "未知";
+                                                    switch (applyNotice.CurrentState.ToInt())
+                                                    {
+                                                        case 0:
+                                                            {
+                                                                tStatusName = "新申请";
+                                                                break;
+                                                            }
+                                                        case 1:
+                                                            {
+                                                                tStatusName = "审批中";
+                                                                break;
+                                                            }
+                                                        case 2:
+                                                            {
+                                                                tStatusName = "已审批";
+                                                                break;
+                                                            }
+                                                        case 3:
+                                                            {
+                                                                tStatusName = "驳回";
+                                                                break;
+                                                            }
+                                                    }
+                                                }
+                                                <td class="text-right">@tStatusName</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='dashboard-actions'>
+        @Html.Raw(ViewBag.CurrentBtnList34)
+    </div>
+</div>
+<script language='Javascript'>
+    //添加区块
+    function addBlock() {
+        win.open("/Temporary_Task_Block/AddEdit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 500, "添加区块");
+    }
+    //编辑区块
+    function editBlock(obj) {
+        var blockInfo = $(obj).attr("val");
+        var blockArray = blockInfo.split(',');
+        win.open("/Temporary_Task_Block/AddEdit?id=" + blockArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 800, 500, "添加区块")
+    }
+    //删除区块
+    function delBlock(obj) {
+        var blockInfo = $(obj).attr("val");
+        var blockArray = blockInfo.split(',');
+        layer.confirm("确认要删除[" + blockArray[1] + "]吗？", {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Project_Block/DeleteData", { id: blockArray[0] }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    window.location.href = "/Temporary_Task/Index?mid=" + $("#currentMid").val() + + "&secondMenuId=" + $("#secondMenuId").val();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+    //项目查看
+    function goProjectTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/Readonly?Id=" + tArray[0] + "&mid=" + $("#currentMid").val(), 1000, 700, "项目任务查看");
+    }
+
+    function goTemporary_Task(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Temporary_Task/Readonly?Id=" + tArray[0] + "&mid=" + $("#currentMid").val(), 1000, 700, "临时任务查看");
+    }
+
+    function newlook(obj) {
+        var valInfo = $(obj).attr("val");
+        var valArray = valInfo.split(',');
+        win.open("/news/Readonly?id=" + valArray[0], 900, 580, valArray[1]);
+    }
+
+</script>

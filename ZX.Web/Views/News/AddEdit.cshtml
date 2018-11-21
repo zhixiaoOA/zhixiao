@@ -1,0 +1,130 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.News
+@{
+    ViewBag.Title = "添加/编辑新闻-指效OA";
+}
+
+<link href="/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="/Static/js/Validform_v5.3.2_min.js"></script>
+<script src="/Static/js/jquery/chosen/chosen.min.js"></script>      
+<script src="/Static/js/zui/zui.min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<script src="/Static/js/layer/layer.js"></script>
+<script src="/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/framework.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<!--百度文本编辑器JS文件-->
+<script type="text/javascript" charset="utf-8" src="/Static/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/Static/js/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" charset="utf-8" src="/Static/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+
+
+<form action="/News/SaveData" method="post" class="form-horizontal" id="formNews">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="aMid" id="aMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class="form-group" style="padding-top:58Px;">
+        <label for="DName" class="col-sm-2">新闻名称</label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="DName" name="DName" value="@Model.DName" placeholder="新闻名称" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div id="div_DType" class="form-group">
+        <label for="DType" class="col-sm-2">
+            新闻分类
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select data-placeholder="选择分类..." class="form-control" tabindex="2" name="DType">
+                <option value="0" @(Model.DType == 0 ? "selected" : "")>公告</option>
+                <option value="10" @(Model.DType == 10 ? "selected" : "")>新闻</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="DContent" class="col-sm-2">新闻内容</label>
+        <div class="col-md-6 col-sm-10">
+            <textarea id="DContent" name="DContent" rows="6">@Model.DContent</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2">图片</label>
+        <div class="col-md-6 col-sm-10">
+            <button type="button" class="layui-btn" id="btnUpload">上传图片</button>
+            <a href="@(Model.DImageUrl.IsNullOrEmpty()?"javascript:;":Model.DImageUrl)" target="_blank" id="aNewImage"><img id="DImageUrl" src="@Model.DImageUrl" style="width:45px;height:45px;margin-left:10px;@(Model.DImageUrl + "" == "" ? "display:none" : "")" alt="@Model.DImageUrl" /></a>
+            <input type="hidden" name="DImageUrl" value="@Model.DImageUrl" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="DSort" class="col-sm-2">排序</label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="DSort" name="DSort" value="@Model.DSort" placeholder="排序" class="form-control" autocomplete="off" onkeypress="$.admin.keyPress(this)"
+                   onkeyup="$.admin.keyUp(this)"
+                   onblur="$.admin.keyBlur(this)">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            @Html.Raw(ViewBag.CurrentBtnList29)
+        </div>
+    </div>
+
+</form>
+<script type="text/javascript">
+    $(function () {
+        var edtor = initUEditor('DContent', 938, 386);
+
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/UploadFileByDire'
+                , data: { direName: "/News/Images" }
+                , done: function (res) {
+                    $("#DImageUrl").show().attr("src", res.Data);
+                    $("input[name='DImageUrl']").val(res.Data);
+                    $("#aNewImage").attr("href", res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+    function saveData() {
+        $("#formNews").submit();
+    }
+
+    $("#formNews").Validform({
+        tiptype: 3,
+        callback: function (form) {
+            $("#formNews").ajaxSubmit(function (data) {
+                if (data.Code == 300) {
+                    win.alert(data.Message);
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        window.location.href = "/News/Index?mid=" + $("#aMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>

@@ -1,0 +1,342 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model Document_Library
+@{
+    if (Model == null)
+    {
+        return;
+    }
+    ViewBag.Title = "文档视图:项目文档-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/jquery/treeview/min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+
+<style>
+    .outer {
+        overflow: auto
+    }
+
+    .doclib-action li {
+        list-style: none
+    }
+
+    .doc-content {
+        overflow-x: scroll;
+    }
+
+    label.checkbox {
+        float: left;
+        margin-right: 10px;
+        width: 100px;
+    }
+
+    input[type=checkbox] {
+        margin-top: 1px;
+    }
+
+    .table-form td + td, .table-form th + th {
+        padding-left: 20px;
+    }
+
+    .icon-2x {
+        font-size: 40px;
+    }
+
+    .libs-group-heading {
+        color: #808080;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+    }
+
+        .libs-group-heading a {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-decoration: none;
+        }
+
+    .libs-group {
+        padding: 10px;
+        height: 84px;
+    }
+
+    .lib {
+        float: left;
+        display: block;
+        width: 80px;
+        padding: 5px;
+        margin: 0px 3px;
+        text-align: center;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .lib .file-icon {
+            margin-bottom: 5px;
+        }
+
+        .lib .lib-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .lib:hover, .lib:focus, .lib:active {
+            border-color: #2e6dad;
+            background-color: #EBF2F9;
+            color: #2e6dad;
+            text-decoration: none;
+        }
+
+    .w-lib-p100 {
+        width: 100%;
+    }
+
+    .w-lib-p50 {
+        width: 45%;
+    }
+
+    .w-lib-p33 {
+        width: 30%;
+    }
+
+    #menu .nav > li > a {
+        display: inline-block;
+    }
+
+    #navBarActions {
+        position: absolute;
+        right: 100px;
+        top: 4px;
+        z-index: 10000;
+    }
+
+    .panel-body > form {
+        max-width: 1200px;
+    }
+
+    #libList .lib .icon-move {
+        display: none;
+        position: relative;
+        top: -20px;
+        right: -70px;
+    }
+
+    #libList .lib:hover .icon-move {
+        display: inline-block;
+        cursor: move;
+    }
+
+    #menu > .nav {
+        float: none;
+        margin-right: 200px;
+    }
+</style>
+
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="fk_LibraryId" value="@Model.Id">
+<input type="hidden" id="FK_Id" value="@Model.FK_Id">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <script language='Javascript'>v.libID = 7;</script>
+    <script language='Javascript'>v.libType = "project";</script>
+
+    <nav id='menu'>
+        <ul class='nav'>
+            @{
+                Project pro = ViewBag.Project;
+            }
+            <li>
+                <a href='javascript:;' onclick="jumpProjectLib(this)" val="@(pro.Id+","+Model.DType)">@pro.PName</a>
+            </li>
+            <li class='divider angle'></li>
+            <li>
+                <a href='javascript:;' onclick="GetDocumentListByTypeId(0)">@Model.DName</a>
+            </li>
+        </ul>
+    </nav>
+    <div id='menuActions'>
+        @Html.Raw(ViewBag.CurrentBtnList32)
+    </div>
+    <div class='row with-menu page-content'>
+        <div class='col-sm-3'>
+            <div class='panel' id='treebox'>
+                <div class='panel-heading'>
+                    <strong>@Model.DName</strong>
+                    <div class='panel-actions pull-right'>
+                    </div>
+                </div>
+                <div class='panel-body'>
+                    <ul class='tree'></ul>
+                    <div class='text-right'>
+                        @Html.Raw(ViewBag.CurrentBtnList31)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-9'>
+            <div class='panel'>
+                <div class='panel-heading'>
+                    <strong><i class='icon-list-ul'></i> 文档列表</strong>
+                </div>
+                <table class='table table-hover table-striped tablesorter table-fixed' id='docList'>
+                    <thead>
+                        <tr class='text-center'>
+                            <th class='w-100px'>
+                                <div>
+                                    <a href='javascript:;'>文档编号</a>
+                                </div>
+                            </th>
+                            <th class='text-left'>
+                                <div>
+                                    <a href='javascript:;'>文档标题</a>
+                                </div>
+                            </th>
+                            <th class='w-100px'>
+                                <div>
+                                    <a href='javascript:;'>文档类型</a>
+                                </div>
+                            </th>
+                            <th class='w-100px'>
+                                <div>
+                                    <a href='/javascript:;'>由谁添加</a>
+                                </div>
+                            </th>
+                            <th class='w-100px visible-lg'>
+                                <div>
+                                    <a href='javascript:;'>添加时间</a>
+                                </div>
+                            </th>
+                            <th class='w-100px'>
+                                <div>
+                                    <a href='javascript:;'>附件</a>
+                                </div>
+                            </th>
+                            <th class='w-120px {sorter:false}'>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class='table-footer'>
+                    <div style='float:right; clear:none;' class='page'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='~/res/js/jquery/form/min.js?v=4.6.2' type='text/javascript'></script>
+
+<script language='Javascript'>
+    $(document).ready(function () {
+        getTree($("#fk_LibraryId").val());
+        $('#aDocAdd').attr('href', "/Document_Manager/addedit?id=0&fk_TypeId=0&mid=" + $("#currentMid").val() + "&libraryId=" + $("#fk_LibraryId").val());
+
+        GetDocumentListByTypeId(0);
+    });
+    function getTree(libraryId) {
+        $.post("/Document_Manager/GetTree", { libraryId: libraryId }, function (data) {
+            if (data.Code == 200) {
+                $(".tree").html(data.Data);
+                $('.tree').each(function () {
+                    var $this = $(this);
+                    $this.treeview($.extend({ collapsed: false, unique: false }, $this.data()));
+                });
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+    function managerDocType(libraryId) {
+        window.location.href = "/Document_Type/Index?libraryId=" + libraryId + "&mid=" + $("#currentMid").val();
+    }
+    function jumpProjectLib(projectId, libType) {
+        window.location.href = "/Document_Library/ProjectLib?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&libType=" + libType + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //展示目录下的文档列表
+    function GetDocumentListByTypeId(id) {
+        //win.showLoadding("正在加载...");
+        //为添加按钮设置 跳转路径
+        if (id < 0) {
+            layer.alert("无效的分类", { icon: 7 });
+            return;
+        }
+        $('#aDocAdd').attr('href', "/Document_Manager/addedit?id=0&fk_TypeId=" + id + "&mid=" + $("#currentMid").val() + "&libraryId=" + $("#fk_LibraryId").val() + "&secondMenuId=" + $("#secondMenuId").val());
+
+        $.post("/Document_Manager/GetDocumentListByTypeId", { fk_TypeId: id, mid: $("#currentMid").val(), libraryId: $("#fk_LibraryId").val() + "&secondMenuId=" + $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("tbody").html(data.Data);
+            } else {
+                //win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+    function docDel(id, tId) {
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Document_Manager/DeleteData", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    GetDocumentListByTypeId(tId);
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        }, function () { });
+    }
+    function addDoc(id) {
+        window.location.href = "/Document_Manager/AddEdit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //跳转到项目文档库或者自定义库
+    function jumpProjectDocList(libraryId) {
+        window.location.href = "/Document_Library/ProjectLib?projectId=" + $("#FK_Id").val() + "&libType=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    //编辑文档库
+    function editLid(obj) {
+        var attrInfo = $(obj).attr("val");
+        var attrArray = attrInfo.split(',');
+
+        var title = "项目文档库编辑";
+        win.open("/Document_Library/ProjectLibAddEdit?id=0&FK_Id=" + $("#FK_Id").val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 770, 363, title);
+    }
+    //文档库删除
+    function delLib(obj) {
+        var attrInfo = $(obj).attr("val");
+        var attrArray = attrInfo.split(',');
+
+
+        layer.confirm('确认要删除<' + attrArray[2] + '>吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Document_Library/DeleteData", { id: attrArray[0] }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    window.location.href = jumpProjectDocList(attrArray[0]);
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        }, function () { });
+    }
+
+    function look(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+        window.location.href = "/Document_Manager/Readonly?id=" + dArray[0] + "&fk_TypeId=" + dArray[1] + "&libraryId=" + dArray[2] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

@@ -1,0 +1,228 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model My_Apply
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    string[] descs = (Model.ADesc + "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+    //List<Approval_User> listAuser = ViewBag.ListAUser ?? new List<Approval_User>();
+    List<Approval> listApproval = ViewBag.ListApproval ?? new List<Approval>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+        font-size:14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/My_Apply/SaveData" method="post" class="form" id="formMy_Apply">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class='text-center w-50px'>申请部门</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class="text-center w-120px">申请人</th>
+                        <td>
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-100px'>日期</th>
+                        <td>
+                            @(Model.AddTime.ToDateFormat("yyyy-MM-dd"))
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">事项</th>
+                        <td colspan="3">
+                            <ul id="ullist">
+                                @for (int i = 0; i < descs.Length; i++)
+                                {
+                                    <li>
+
+                                        <span>@(i + 1).</span>
+                                        <input name="ADesc" type="text" style="width:80%;border:0;border-bottom:1px solid #ddd;height:35px;padding-bottom:0;padding-left:10px;" datatype="*" nullmsg="请填写事项" value="@descs[i]" />
+                                        @if (i == descs.Length - 1)
+                                        {
+                                            <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="icon icon-minus-sign-alt" style="cursor:pointer;" title="删除" onclick="onAddOrDelRow(this)"></i>
+                                        }
+
+                                    </li>
+                                }
+                                @if (descs.Length == 0)
+                                {
+                                    <li>
+                                        <span>1.</span>
+                                        <input name="ADesc" type="text" style="width:80%;border:0;border-bottom:1px solid #ddd;height:35px;padding-bottom:0;padding-left:10px;" datatype="*" nullmsg="请填写事项" />
+                                        <i class="icon icon-plus-sign-alt" style="cursor:pointer;" title="新增" onclick="onAddOrDelRow(this)"></i>
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                        <th class="text-center w-60px">预计费用</th>
+                        <td>
+                            <input name="TotalMoney" style="width:100px;" class="form-control" value="@Model.TotalMoney" datatype="*" nullmsg="请填写预计费用"
+                                   onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" />
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="5">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    @*@if (listAuser.Count > 0)
+                        {
+                            <tr>
+                                <th>请选择审批人</th>
+                                <td colspan='9'>
+                                    <select class="form-control" style="width:200px;" name="FK_ApprovalUserId" datatype="*" nullmsg="请选择审批人">
+                                        <option value="">==请选择==</option>
+                                        @foreach (var item in listAuser)
+                                        {
+                                            <option value="@item.Id" @(Model.FK_ApprovalUserId == item.Id ? "selected" : "")>@item.FlowName</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                        }*@
+
+                    <tr>
+                        <th>请选择审批流程</th>
+                        <td colspan='5'>
+                            <select class="form-control" style="max-width:80%;" name="FK_ApprovalId" datatype="*" nullmsg="请选择审批流程">
+                                <option value="">==请选择==</option>
+                                @foreach (var item in listApproval)
+                                {
+                                    <option value="@item.Id" @(Model.FK_ApprovalId == item.Id ? "selected" : "")>@item.DName</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveCaogao()'>存为草稿</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="submitMsg" value="" />
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var rowIndex = parseInt("@(descs.Length+1)");
+    $(function () {
+        $("#formMy_Apply").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                if ($("input[name='Status']").val() == "@ApplyStatus.草稿.ToInt()") {
+                    win.showLoading("正在保存...");
+                    $("#formMy_Apply").ajaxSubmit(function (data) {
+                        if (data.Code == 300) {
+                            win.alert(data.Message);
+                        } else if (data.Code == 200) {
+                            win.success($("#submitMsg").val(), function () {
+                                goBack();
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    win.confirm("确认提交审批？", function () {
+                        win.showLoading("正在保存...");
+                        $("#formMy_Apply").ajaxSubmit(function (data) {
+                            if (data.Code == 300) {
+                                win.alert(data.Message);
+                            } else if (data.Code == 200) {
+                                win.success($("#submitMsg").val(), function () {
+                                    goBack();
+                                }, 1000);
+                            }
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+    });
+    function saveCaogao() {
+        $("input[name='Status']").val("@(ApplyStatus.草稿.ToInt())");
+        $("#submitMsg").val("保存草稿成功");
+        $("#formMy_Apply").submit();
+    }
+    function saveData() {
+        if(@Model.Id==0)$("input[name='Status']").val("@(ApplyStatus.新申请.ToInt())");
+        $("#submitMsg").val("提交审批成功");
+        $("#formMy_Apply").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    //新增行
+    function onAddOrDelRow(obj) {
+        if ($(obj).attr("title") == "新增") {
+            if (rowIndex == 1) rowIndex++;
+            var newTr = $(obj).parent().clone();
+            $(newTr).find("span").html(rowIndex + ".");
+            $(newTr).find("input").val("");
+            $("#ullist").append(newTr);
+            $(obj).removeClass("icon-plus-sign-alt").addClass("icon-minus-sign-alt").attr("title", "删除");
+            rowIndex++;
+        } else {
+            $(obj).parent().remove();
+        }
+    }
+</script>

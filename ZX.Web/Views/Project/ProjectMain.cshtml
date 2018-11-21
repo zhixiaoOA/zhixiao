@@ -1,0 +1,481 @@
+﻿@using ZX.Model
+@using ZX.BLL
+@using ZX.Tools
+@using System.Linq
+@{
+    ViewBag.Title = "项目管理-指效OA";
+    int userId = Session["UserId"].ToInt();
+    DateTime? currentTime = ViewBag.CurrentTime;
+}
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+    <style>
+        body {
+            background: #fafafa;
+        }
+
+        .dashboard {
+            position: relative;
+            padding-top: 25px;
+            z-index: 1030
+        }
+
+            .dashboard .row {
+                margin: 0 auto;
+            }
+
+            .dashboard .panel-actions {
+                margin-top: 0;
+                margin-right: 0;
+            }
+
+        .dashboard-actions {
+            position: absolute;
+            top: -35px;
+            right: 100px
+        }
+
+            .dashboard-actions .btn {
+                padding: 5px 12px
+            }
+
+        .dashboard .table tr[data-url] td {
+            cursor: pointer;
+        }
+
+        .dashboard .panel-heading {
+            height: 30px
+        }
+        .top-navbar-index {
+            position: inherit;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .row {
+            margin: 0;
+            padding:10px;
+        }
+    </style>
+<div class='row page-content' style="width:98%;">
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <div style="width:auto;float:right;">
+        <a href='javascript:;' onclick="add()" class="layui-btn layui-btn-normal temp-task-btn">添加区块</a>
+    </div>
+    <div class='dashboard dashboard-draggable' id='dashboard' data-confirm-remove-block='确定移除区块【{0}】吗？'>
+        <div class='row'>
+            @{
+                List<Project_Block> userBlockList = ViewBag.UserBlockList;
+                if (userBlockList != null)
+                {
+                    int i = 0;
+                    foreach (var item in userBlockList)
+                    {
+                        if (item.BType == 1)// 任务列表
+                        {
+                            <div class="panel-box">
+                                <div class="panel-title" id='block@(item.Id)' data-id='@item.Id' data-blockid='@item.Id' val="@item.Id,'@item.BName'" data-name='@item.BName'><span class="panel-title-text">@item.BName</span><i class="del-panel layui-icon layui-icon-delete" onclick="delBlock(@item.Id,'@item.BName')"></i></div>
+                                <div class="panel-row">
+                                    @{
+                                        int topCount = item.RowCounts.ToInt(3);
+                                        //1-指派给我 2-由我创建 3-由我完成 4-由我关闭 5-由我取消
+                                        int type = item.PTType.ToInt(1);
+
+                                        List<Project_Task> taskList = new List<Project_Task>();
+                                        switch (type)
+                                        {
+                                            case 1:
+                                                {
+                                                    taskList = Project_TaskBLL.GetTopList(topCount, d => d.Where(t => t.Assigned == userId + ""));
+                                                    break;
+                                                }
+                                            case 2:
+                                                {
+                                                    taskList = Project_TaskBLL.GetTopList(topCount, d => d.Where(t => t.CreateUserId == userId));
+                                                    break;
+                                                }
+                                            case 3:
+                                                {
+                                                    taskList = Project_TaskBLL.GetTopList(topCount, d => d.Where(t => t.TSuccess == userId + ""));
+                                                    break;
+                                                }
+                                            case 4:
+                                                {
+                                                    taskList = Project_TaskBLL.GetTopList(topCount, d => d.Where(t => t.TClosed == userId + ""));
+                                                    break;
+                                                }
+                                            case 5:
+                                                {
+                                                    taskList = Project_TaskBLL.GetTopList(topCount, d => d.Where(t => t.TCancel == userId + ""));
+                                                    break;
+                                                }
+                                        }
+
+                                        //状态
+
+                                        List<string> status = item.PTState.Split(',').ToList();
+                                        List<Project_Task> filterList = new List<Project_Task>();
+
+                                        // 1-未完成 2-未开始 3-进行中 4-已完成 5-已取消 6-已关闭
+                                        foreach (var task in status)
+                                        {
+                                            taskList.Where(l => l.TState == task.ToInt());
+                                            filterList.AddRange(taskList.Where(l => l.TState == task.ToInt()));
+                                        }
+                                    }
+                                    <table class="task-tab">
+                                        <tr>
+                                            <td class="task-tab-td-left">任务名称</td>
+                                            <td class="task-tab-td-right" title="状态">状态</td>
+                                        </tr>
+                                        @{
+                                            foreach (var task in filterList)
+                                            {
+
+                                                <tr data-url="javascript:;" class="text-center" style="">
+                                                    <td class="task-tab-td-left"><a class="task-text-color-blue" href="javascript:;" onclick="goTask(@task.Id,@task.FK_ProjectId)" val="@task.Id">@task.TName</a></td>
+                                                    @{
+                                                        string tStatusName = "未知";
+                                                        switch (task.TState.ToInt())
+                                                        {
+                                                            case 1:
+                                                                {
+                                                                    tStatusName = "未完成";
+
+                                                                    break;
+                                                                }
+                                                            case 2:
+                                                                {
+                                                                    tStatusName = "未开始";
+
+                                                                    break;
+                                                                }
+                                                            case 3:
+                                                                {
+                                                                    tStatusName = "进行中";
+
+                                                                    break;
+                                                                }
+                                                            case 4:
+                                                                {
+                                                                    tStatusName = "已完成";
+                                                                    break;
+                                                                }
+                                                            case 5:
+                                                                {
+                                                                    tStatusName = "已取消";
+                                                                    break;
+                                                                }
+                                                            case 6:
+                                                                {
+                                                                    tStatusName = "已关闭";
+                                                                    break;
+                                                                }
+                                                        }
+
+                                                    }
+                                                    <td class="task-tab-td-right">@tStatusName</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="panel-box">
+                                <div class="panel-title" id='block@(item.Id)' data-id='@item.Id' data-blockid='@item.Id' val="@item.Id,'@item.BName'" data-name='@item.BName'><span class="panel-title-text">@item.BName</span><i class="del-panel layui-icon layui-icon-delete" onclick="delBlock(@item.Id,'@item.BName')"></i></div>
+                                <div class="panel-row">
+                                    @{
+                                        List<Project> proList = new List<Project>();
+                                        try
+                                        {
+                                            int topCount = item.RowCounts.ToInt(3);
+
+                                            //1-我参与的 ; 2-进行中 ; 3-已完成 ;4-已挂起
+                                            string type = item.PTState.ToString();
+
+                                            switch (type)
+                                            {
+
+                                                case "1":
+                                                    {
+                                                        // 0-有效 10-挂起 20-完成 30-删除
+                                                        proList = ProjectBLL.GetTopList(topCount, d => d.Where(t => t.PStatus != "30" && (t.HeadUser == userId + "" || t.Visitors.Contains(userId + "") || t.CreateUserId == userId)));
+                                                        break;
+                                                    }
+                                                case "2":
+                                                    {
+                                                        // 0-有效 10-挂起 20-完成 30-删除
+                                                        proList = ProjectBLL.GetTopList(topCount, d => d.Where(t => t.PStatus == "0"));
+                                                        break;
+                                                    }
+                                                case "3":
+                                                    {
+                                                        proList = ProjectBLL.GetTopList(topCount, d => d.Where(t => t.PStatus == "20"));
+                                                        break;
+                                                    }
+                                                case "4":
+                                                    {
+                                                        proList = ProjectBLL.GetTopList(topCount, d => d.Where(t => t.PStatus == "10"));
+                                                        break;
+                                                    }
+                                            }
+                                            //识别排序规则
+                                            switch (item.BOrderBy)
+                                            {
+                                                //创建时间递增
+                                                case "createdDate_asc":
+                                                    {
+                                                        proList.OrderBy(d => d.CreateTime);
+                                                        break;
+                                                    }
+                                                case "createdDate_desc":
+                                                    {
+                                                        proList.OrderByDescending(d => d.CreateTime);
+                                                        break;
+                                                    }
+                                                case "begin_asc":
+                                                    {
+                                                        proList.OrderBy(d => d.StartTime);
+                                                        break;
+                                                    }
+                                                case "begin_desc":
+                                                    {
+                                                        proList.OrderByDescending(d => d.StartTime);
+                                                        break;
+                                                    }
+                                                case "end_asc":
+                                                    {
+                                                        proList.OrderBy(d => d.EndTime);
+                                                        break;
+                                                    }
+                                                case "end_desc":
+                                                    {
+                                                        proList.OrderByDescending(d => d.EndTime);
+                                                        break;
+                                                    }
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+
+                                        }
+
+                                        //循环展示区块项目列表
+                                        <table class="task-tab">
+                                            <tr>
+                                                <td class="task-tab-td-left" style="width:34%;">项目名称</td>
+                                                <td class="task-tab-td-center" style="width:18%;" title="任务数">已完成</td>
+                                                <td class="task-tab-td-center" style="width:18%;" title="任务数">未完成</td>
+                                                <td class="task-tab-td-right" style="width:30%;" title="按工时计算">进度</td>
+                                            </tr>
+                                            @{
+                                                foreach (var project in proList)
+                                                {
+                                                    //获取该项目下的所有任务(含子任务)
+                                                    List<Project_Task> projectAllTaskList = Project_TaskBLL.GetList(t => t.Where(d => d.FK_ProjectId == project.Id));
+                                                    //查询出主任务
+                                                    List<Project_Task> taskList = projectAllTaskList.Where(d => d.FK_ProjectId == project.Id && d.ParentId.ToInt() == 0).ToList();
+                                                    //计算进度值,第一步:统计当前项目下的任务总耗(任务和已完成子任务总耗时总和)工时T1.第二步,获取预计剩余工时 T2,  第三步: T1/(T1+T2)*100%
+                                                    decimal doneHours = 0;//已耗时
+                                                    decimal predictHours = 0;//预估剩余工时
+                                                    decimal totalTExpected = 0; //获取项目总共最初预计，用于亮灯控制判断
+                                                    foreach (var task in projectAllTaskList)
+                                                    {
+                                                        totalTExpected += task.TExpected.ToInt();
+                                                        if (task.ParentId.ToInt() == 0) //主任务
+                                                        {
+                                                            List<Project_Task_Team> list = Project_Task_TeamBLL.GetList(t => t.Where(d => d.FK_TaskId == task.Id));
+                                                            doneHours += list.Sum(d => d.ConsumTime).ToDecimal();
+                                                            predictHours += list.Sum(d => d.TheTime).ToDecimal();
+                                                        }
+                                                    }
+
+                                                    decimal percent = 0;
+                                                    try
+                                                    {
+                                                        percent = doneHours / (doneHours + predictHours) * 100;
+
+                                                        percent = System.Decimal.Round(percent, 2);
+                                                    }
+                                                    catch { }
+                                                    <tr>
+                                                        <td class="task-tab-td-left" title="@project.PName">
+                                                            @{
+                                                                @*//进度<90% 亮灯绿灯控制
+                                                                    if (percent < 90 && project.PStatus.Trim() != "20")
+                                                                    {
+                                                                        <div class="circular green" title="进度已达(@percent)%"></div>
+                                                                    }
+                                                                    //进度到了90% 亮灯控制
+                                                                    if (percent >= 90 && percent < 100 && project.PStatus.Trim() != "20")
+                                                                    {
+                                                                        <div class="circular Orange" title="进度已达(@percent)%"></div>
+                                                                    }
+                                                                    //进度已经所消耗时间超出前期预计总耗时 亮灯控制
+                                                                    if (doneHours > totalTExpected)
+                                                                    {
+                                                                        <div class="circular red" title="总耗时已超出最初预计@(doneHours-totalTExpected)工时。"></div>
+                                                                    }*@
+                                                                //任务结束前一天 亮黄灯控制
+                                                                TimeSpan ts = Convert.ToDateTime(project.EndTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                                                if (ts.Days == 1 && project.PStatus.Trim() != "20")
+                                                                {
+                                                                    <div class="circular Orange" title="仅剩一天时间"></div>
+                                                                }
+                                                                //超时
+                                                                if (ts.Days < 0 && project.PStatus.Trim() != "20")
+                                                                {
+                                                                    <div class="circular red" title="已超时@(ts.Days*-1)天"></div>
+                                                                }
+                                                            }
+                                                            @project.PName
+                                                        </td>
+                                                        @{
+                                                            //完成数
+                                                            int mainTaskfinish = 0;//主任务
+                                                            int childTaskfinish = 0;//子任务
+                                                                                    //未完成数
+                                                            int doing = 0;
+
+
+                                                            //追加主任务
+                                                            //遍历主任务下一级子任务,然后追加
+                                                            foreach (var task in taskList)
+                                                            {
+
+                                                                List<Project_Task> taskChildList = Project_TaskBLL.GetList(t => t.Where(d => d.ParentId == task.Id));
+                                                                if (taskChildList.Count == 0 && task.TState != 4)
+                                                                {
+                                                                    doing++;
+                                                                }
+
+                                                                if (task.TState == 4)
+                                                                {
+                                                                    mainTaskfinish++;
+                                                                }
+                                                                else
+                                                                {
+                                                                    childTaskfinish += taskChildList.Where(d => d.TState == 4).Count();
+                                                                    doing += taskChildList.Where(d => d.TState == 4).Count();
+                                                                }
+                                                            }
+
+                                                        }
+                                                        @**TState:1-未完成 2-未开始 3-进行中 4-已完成 5-已取消 6-已关闭**@
+                                                        <td class="task-tab-td-center">@(mainTaskfinish + childTaskfinish)</td>
+                                                        <td class="task-tab-td-center">@doing</td>
+                                                        <td title="@(percent + "%")">
+                                                            <div class="layui-progress layui-progress-big" lay-showPercent="true">
+                                                                @{ if (percent >= 90 && percent < 100)
+                                                                    {
+                                                                        <div class="layui-progress-bar layui-bg-orange" lay-percent="@percent%"></div>
+                                                                    }
+                                                                    else if (percent < 90)
+                                                                    {
+                                                                        <div class="layui-progress-bar layui-bg-blue" lay-percent="@percent%"></div>
+                                                                    }
+                                                                    if (doneHours > totalTExpected)
+                                                                    {
+                                                                        <div class="layui-progress-bar layui-bg-red" lay-percent="@percent%"></div>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+    <script>
+        var config = {
+            "webRoot": "\@ViewBag.webRoot/"
+            , "appName": "crm"
+            , "cookieLife": 30
+            , "requestType": "GET"
+            , "requestFix": "-"
+            , "moduleVar": "m"
+            , "methodVar": "f"
+            , "viewVar": "t"
+            , "defaultView": "html"
+            , "themeRoot": "\/theme\/"
+            , "currentModule": "contract"
+            , "currentMethod": "browse"
+            , "clientLang": "zh-cn"
+            , "requiredFields": ""
+            , "save": "\u4fdd\u5b58"
+            , "router": "@ViewBag.router"
+            , "runMode": "front"
+            , "timeout": 30000
+            , "pingInterval": 60
+        }
+        config.ordersSaved = '排序已保存';
+        config.confirmRemoveBlock = '确定移除区块【{0}】吗？';
+    </script>
+    <script language='Javascript'>
+        function getProjectBlock() {
+            $.post("/Project/GetProjectBlock", function (data) {
+                if (data.Code == 200) {
+                    if (data.Data.length <= 0 || data.Data == "") {
+                        return;
+                    } else {
+                        $(".tree").html(data.Data);
+                        $('.tree').each(function () {
+                            var $this = $(this);
+                            $this.treeview($.extend({ collapsed: false, unique: false }, $this.data()));
+                        });
+                    }
+                } else {
+                    win.alert("获取数据失败");
+                }
+                //win.hideLoadding();
+            });
+        }
+        function goTask(id, projectId) {
+            var url = "/Project_Task/Edit?id=" + id + "&mid=" + $("#currentMid").val() + "&projectId=" + projectId;
+            window.location.href = url;
+        }
+        //添加区块
+         function add() {
+            win.open("/Project_Block/AddEdit?id=0&mid="+@ViewBag.CurrentMid, 800, 500, "添加区块");
+        }
+         //删除区块
+         function delBlock(id,blockName) {
+             layer.confirm("确认要删除[" + blockName+"]吗？", {
+                 btn: ['确认', '取消'] //按钮
+             }, function () {
+                 $.post("/Project_Block/DeleteData", { id: id }, function (data) {
+                     if (data.Code == 200) {
+                         layer.msg('删除成功', { icon: 1 });
+                         window.location.href = "/Project/Index?mid=" + $("#currentMid").val() + "&status=0";
+                     } else {
+                         layer.alert(data.Message, { icon: 7 });
+                     }
+                 }, "json");
+             });
+         }
+    </script>
+</div>

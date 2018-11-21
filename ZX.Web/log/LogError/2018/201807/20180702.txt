@@ -1,0 +1,208 @@
+
+ 
+记录时间：2018-07-02 11:42:22,488 
+线程ID:[74] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:e8d6dfc0-918b-45a1-afd7-01f10114bf27
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 11:48:13,336 
+线程ID:[80] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:acc13aff-d16a-4015-a0de-829aa4f96606
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 11:49:55,937 
+线程ID:[87] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:7306051a-ae83-4ccd-afd8-2941e35809f0
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 11:51:46,136 
+线程ID:[94] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:8720ac42-ccc3-47e4-a451-6c3646f9e29b
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 11:52:06,699 
+线程ID:[93] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:71d6ac53-ef41-4334-a15c-34c7bd631c4d
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:13:05,876 
+线程ID:[54] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:4fc8f7c8-cc0b-4540-a01c-bce620d6550a
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:13:33,279 
+线程ID:[64] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:879594c4-0d88-4112-bd96-50b795f8e88f
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:13:33,279 
+线程ID:[69] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:879594c4-0d88-4112-bd96-50b795f8e88f
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:13:33,279 
+线程ID:[37] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:879594c4-0d88-4112-bd96-50b795f8e88f
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:38:56,045 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:0e5c9cbd-2453-4e5b-be13-2bc1299c0956
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:52:38,965 
+线程ID:[36] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:00a753b8-6b97-4214-bbdc-1cb66d0c1661
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:53:09,751 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:debdd6cc-6483-434f-a74d-fc5c0e953427
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-07-02 12:54:30,066 
+线程ID:[34] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiao"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.DAL.DbHelper.ExecuteToSingle[T](String sql, SqlParameter[] cmdParms) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\DBHelper\DbHelper.cs:行号 562
+   在 ZX.DAL.Sys_UserDAL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.DAL\Sys_UserDAL.cs:行号 109
+   在 ZX.BLL.Sys_UserBLL.GetUserLogin(String userName, String userPwd) 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.BLL\Sys_UserBLL.cs:行号 60
+   在 ZX.Web.Controllers.LoginController.AdminLogin() 位置 C:\Users\11948\Desktop\netpro\zhixiao\ZX.Web\Controllers\LoginController.cs:行号 42
+ClientConnectionId:1771b38b-05b7-4bb3-9073-d5a2e0e6b84c
+Error Number:4060,State:1,Class:11

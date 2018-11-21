@@ -1,0 +1,418 @@
+﻿
+@{
+    ViewBag.Title = "个人任务--指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/js/layui/css/layui.css" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .label.task-status-doing {
+        color: #D2322D
+    }
+
+    .label.task-status-done {
+        color: #229F24
+    }
+
+    .label.task-status-waiting {
+        color: #E48600
+    }
+
+    .label.task-status-cancel {
+        color: #333
+    }
+
+    .taskMenu {
+        width: 200px
+    }
+
+        .taskMenu + .page-content {
+            margin-left: 220px;
+        }
+
+    #dropMenu {
+        min-width: 200px;
+    }
+
+    #defaultMenu, #finishedMenu, #suspendMenu {
+        min-width: 168px;
+    }
+
+    #groupBar .btn-group {
+        margin-right: 15px;
+    }
+
+    #currentItem {
+        margin-right: 1px;
+    }
+
+    .children {
+        background: #f0f0f0;
+    }
+
+    .modal-team .table-form {
+        margin: auto;
+        width: 90%;
+    }
+
+    .modal-team .modal-content {
+        padding: 5px;
+    }
+
+        .modal-team .modal-content .table-form td + td, .table-form th + th {
+            padding-left: 5px;
+        }
+
+    .panel .panel-heading a:hover {
+        text-decoration: none;
+    }
+
+    #menu .pull-right {
+        margin-right: 5px;
+    }
+
+    .panel {
+        margin-left: 10px;
+    }
+
+    .page-content > .panel > .panel-heading > .panel-actions {
+        margin-left: -5px;
+    }
+
+    .tr-child, .tr-child > td {
+        padding: 0;
+    }
+
+        .tr-child > td > table {
+            padding: 5px;
+            background-color: #fff;
+            border: 2px solid #DDDDDD;
+        }
+
+    td.wait {
+        color: #808080;
+    }
+
+    td.doing {
+        color: #d2322d;
+    }
+
+    td.done {
+        color: #229f24;
+    }
+
+    td.closed {
+        color: #E48600;
+    }
+
+    td.cancel {
+        color: #888888;
+    }
+
+    .w-290px {
+        width: 310px;
+        font-size: 12.8;
+    }
+
+    .circular {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        float: left;
+        margin-right: 5px;
+    }
+
+    .red {
+        background-color: red;
+    }
+
+    .green {
+        background-color: green;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        background-color: white;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .active {
+        float: left;
+    }
+    .layui-table td{
+        font-family:微软雅黑;
+        font-size:14px!important;
+        color:#666;
+    }
+</style>
+
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<nav id='menu' style="width:98%;">
+    <ul class='nav'>
+        <li class='active' onclick="jumpTaskByPoint(this,'projectTask',1)">
+            <a href='javascript:;'>项目任务</a>
+        </li>
+        <li class='active' onclick="jumpTaskByPoint(this,'temporaryTask',1)">
+            <a href='javascript:;'>临时任务</a>
+        </li>
+    </ul>
+</nav>
+
+<div style="width:98%;">
+    <div class=''>
+        <div class='panel'>
+            <div>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-heading"></li>
+                            <li class='active' onclick="getListByPoint(this,1)">
+                                <a href='javascript:;' class="form-control">指派给我</a>
+                            </li>
+                            <li onclick="getListByPoint(this,2)">
+                                <a href='javascript:;' class="form-control">由我创建</a>
+                            </li>
+                            <li onclick="getListByPoint(this,3)">
+                                <a href='javascript:;' class="form-control">由我完成</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <form id='ajaxForm' method='post' action="">
+                <table class='layui-table' lay-size="sm">
+                    <thead>
+                        <tr class='text-center'>
+                            <th class='w-60px'>
+                                编号
+                            </th>
+                            <th class='w-100px'>
+                                <div>
+                                    <a href='javascript:;'>所属项目</a>
+                                </div>
+                            </th>
+                            <th class='w-40px'>
+                                P
+                            </th>
+                            <th>
+                                <a href='javascript:;'>名称</a>
+                            </th>
+                            <th class='w-100px'>
+                                截止日期
+                            </th>
+                            <th class='w-80px'>
+                                指派给
+                            </th>
+                            <th class='w-90px'>
+                                任务状态
+                            </th>
+                            <th class='w-90px'>
+                                创建日期
+                            </th>
+                            <th class='w-80px'>
+                                消耗(h)
+                            </th>
+                            <th class='w-100px'>
+                                预计剩余(h)
+                            </th>
+                            <th class='w-100px'>
+                                进度
+                            </th>
+                            <th class='w-290px'>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbList"></tbody>
+                </table>
+                <div class='table-footer'>
+                    <div class='pull-left text-danger'></div>
+                    <div style='float:right; clear:none;' class='pager form-inline'>
+                        <div id="myPager"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        $('.task-toggle').click(function () {
+            var obj = $(this).find('i');
+            if (obj.hasClass('icon-plus')) {
+                obj.parents('tr').next('tr').show();
+                obj.removeClass('icon-plus').addClass('icon-minus');
+            }
+            else if (obj.hasClass('icon-minus')) {
+                obj.parents('tr').next('tr').hide();
+                obj.removeClass('icon-minus').addClass('icon-plus');
+            }
+            return false;
+        });
+
+        $('.switcher').on('click', function () {
+            var url = $(this).attr('href');
+            bootbox.confirm($(this).data('confirm'), function (result) {
+                if (result) {
+                    $.getJSON(url, function (response) {
+                        if (response.result == 'success') {
+                            bootbox.alert(response.message, function () { location.reload() });
+                        }
+                        else {
+                            bootbox.alert(response.message);
+                        }
+                    })
+                }
+            })
+            return false;
+        });
+        adjustSortBtn();
+    });
+
+    function adjustSortBtn() {
+        $('.btn-move-up:first').addClass('disabled').attr('disabled', 'disabled');
+        $('.btn-move-down:last').addClass('disabled').attr('disabled', 'disabled');
+    }
+
+    function setComment() {
+        $('#commentBox').toggle();
+        $('.ke-container').css('width', '100%');
+        setTimeout(function () { $('#commentBox textarea').focus(); }, 50);
+    }
+    $(function () {
+        getList(1);
+    });
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList(selectType) {
+        $.post("/Project_Task/GetPersonalTask", { pageIndex: pageIndex, pageSize: pageSize, name: "", selectType: selectType, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage(selectType);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage(selectType) {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList(selectType);
+                    }
+                }
+            });
+        });
+    }
+    //创建任务
+    function addTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        window.location.href = "/Project_Task/Add?id=" + tArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    //编辑
+    function editTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        window.location.href = "/Project_Task/Edit?id=" + tArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //查看
+    function look(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        window.location.href = "/Project_Task/Readonly?id=" + tArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //工时
+    function workTimeTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        win.open("/Project_Task/WorkTime?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 370, tArray[3] + ".工时");
+    }
+    //开始
+    function runTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        win.open("/Project_Task/Run?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 420, tArray[3] + ".开始");
+    }
+    //指派
+    function appointTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        win.open("/Project_Task/AppointTask?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 370, tArray[3] + ".指派");
+    }
+    //完成
+    function finishTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        win.open("/Project_Task/Finish?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 450, tArray[3] + ".完成");
+    }
+    //子任务
+    function addChildTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        win.open("/Project_Task/Children?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 450, tArray[3] + ".子任务");
+    }
+    //关闭
+    function closeTask(obj) {
+        var taskinfo = $(obj).attr("val");
+        var tArray = taskinfo.split(',');
+        win.open("/Project_Task/Close?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 270, tArray[3] + ".关闭");
+    }
+
+    //进入任务
+    function goProject_Task(projectId) {
+
+        if (projectId == 0 || projectId == null || projectId == undefined) {
+            return;
+        }
+        window.location.href = "/Project_Task/GetProjectTaskList?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //跳转类型
+    function jumpTaskByPoint(obj, type, pointValue1) {
+
+        $(".nav-heading").html($(obj).children("a").html());
+        $(obj).addClass("active").siblings().removeClass("active");
+        pageIndex = 1;
+        var currentAction = "";
+        switch (type) {
+            case "projectTask": { //查询项目任务
+                window.location.href = "/PersonalSpace/MyProject_Task?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                break;
+            }
+            case "temporaryTask": { //临时任务
+                window.location.href = "/PersonalSpace/MyTemporary_Task?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                break;
+            }
+            default:
+        }
+    }
+
+    //快速切换
+    function getListByPoint(obj, pointValue1) {
+        $(obj).addClass("active").siblings().removeClass("active");
+        pageIndex = 1;
+        getList(pointValue1);
+    }
+</script>

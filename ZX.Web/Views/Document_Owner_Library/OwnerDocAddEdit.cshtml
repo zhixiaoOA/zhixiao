@@ -1,0 +1,149 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model Document_Manager
+@{
+    ViewBag.Title = "个人文档库-文档编辑-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .loadingWrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 300;
+        background-image: url(../img/loading2.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: #000;
+        background-color: rgba(234, 229, 229, 0.5);
+        filter: alpha(opacity=50);
+    }
+</style>
+<script language='javascript'>
+    $("body").children("div[class='container']").attr("class", "m-company-setbasic");
+</script>
+
+<input type="hidden" id="txtDTypeTree" value="@ViewBag.TreeJson" />
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<form id="ajaxForm" method="post" class="form-horizontal" style="padding-top: 38px;" action="/Document_Manager/SaveData">
+    <input type="hidden" id="FK_LibraryId" name="FK_LibraryId" value="@Model.FK_LibraryId">
+    <input type="hidden" id="Id" name="Id" value="@Model.Id">
+
+
+    <div class="form-group">
+        <label for="DTitle" class="col-sm-2">
+            文档名称<span style="color:red">*</span>
+        </label>
+        <div class="col-md-6 col-sm-9">
+            <div class="input-group">
+                <input type="text" id="DTitle" name="DTitle" value="@Model.DTitle" placeholder="名称" class="form-control" datatype="*" nullmsg="请输入文档名称">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Attach" class="col-sm-2">类型</label>
+        <div class="col-md-6 col-sm-8">
+            <input type="hidden" name="Postfix" value="@Model.Postfix" />
+            <label id="lblPostfix">@Model.Postfix</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Attach" class="col-sm-2">文档<span style="color:red">*</span></label>
+        <div class="col-md-6 col-sm-8">
+            <input type="hidden" name="Attach" id="Attach" value="@Model.Attach" datatype="*" nullmsg="请上传文件">
+            <button type="button" class="layui-btn" id="btnUpload">上传</button>
+            <a href="@Model.Attach" id="aAttach" style="@(Model.Attach.IsNullOrEmpty()?"display:none;":"")">下载</a>
+            <label id="lblAttach" style="@(Model.Attach.IsNotNullOrEmpty()?"display:none;":"")">暂无文档</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2">&nbsp;</label>
+        <div class="col-md-6 col-sm-9">
+            @Html.Raw(ViewBag.CurrentBtnList29)
+            <span id="spmsg"></span>
+        </div>
+    </div>
+
+</form>
+<script src='~/res/js/jquery/form/min.js?v=4.6.2' type='text/javascript'></script>
+<script language='javascript'>
+    $(function () {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/UploadFileNotRename'
+                , accept: 'file'
+                , data: { direName: "/OwnerDoc/Files" }
+                , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(); //上传loading
+                }
+                , done: function (res) {
+                    $("#Attach").val(res.Data);
+                    $("#aAttach").attr("href", res.Data);
+                    $("#aAttach").show();
+                    $("#lblAttach").hide();
+                    $("input[name='Postfix']").val(res.Postfix);
+                    $("#lblPostfix").text(res.Postfix);
+                    layer.closeAll('loading'); //关闭loading
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                    layer.closeAll('loading'); //关闭loading
+                }
+            });
+        });
+    });
+
+    //保存
+    function saveData() {
+        $("#ajaxForm").submit();
+    }
+
+    $("#ajaxForm").Validform({
+        tiptype: function (msg, o, cssctl) {
+            var objtip = $("#spmsg");
+            cssctl(objtip, o.type);
+            objtip.text(msg);
+        },
+        beforeSubmit: function () {
+            $('<div class="loadingWrap"></div>').appendTo("body");
+            //在验证成功后，表单提交前执行的函数，curform参数是当前表单对象。
+            //这里明确return false的话表单将不会提交;
+        },
+        callback: function (form) {
+            win.showLoading("正在保存...");
+            $("#ajaxForm").ajaxSubmit(function (data) {
+                $(".loadingWrap").remove();
+                if (data.Code == 300) {
+                    win.alert(data.Message);
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        parent.GetDocumentListByLibraryId(@Model.FK_LibraryId);
+                        win.close();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>

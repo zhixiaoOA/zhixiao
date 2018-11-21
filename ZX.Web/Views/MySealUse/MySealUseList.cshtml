@@ -1,0 +1,173 @@
+﻿@using ZX.Tools
+@{
+    ViewBag.Title = "印章使用申请单-指效OA";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .perip-box {
+        padding: 20px;
+        margin-top: 10%;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    legend {
+        font-size: 18px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class="panel-heading">
+            <strong><i class="icon-group"></i>印章使用申请单</strong>
+        </div>
+        <div class="panel-body">
+            <div>
+                <fieldset>
+                    <legend>查询条件</legend>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">日期</label>
+                            <input type="text" class="form-control" id="StartTime" placeholder="开始日期" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                            至
+                            <input type="text" class="form-control" id="EndTime" placeholder="结束日期" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputInviteCode3">状态</label>
+                            <select id="status" class="form-control">
+                                <option value="">==全部==</option>
+                                <option value="@ApplyStatus.新申请.ToInt()">@ApplyStatus.新申请.ToString()</option>
+                                <option value="@ApplyStatus.审核中.ToInt()">@ApplyStatus.审核中.ToString()</option>
+                                <option value="@ApplyStatus.已审核.ToInt()">@ApplyStatus.已审核.ToString()</option>
+                                <option value="@ApplyStatus.驳回.ToInt()">@ApplyStatus.驳回.ToString()</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">印章名称</label>
+                            <input type="text" class="form-control" id="adesc" placeholder="印章名称" style="width:150px;" />
+                        </div>
+                        <button type="button" class="btn btn-default" id="btnSearch">查询</button>
+                        <div style="width:auto;float:right;">
+                            <a href='javascript:;' onclick="add()" class="btn btn-primary"><i class="icon-plus"></i>新增申请</a>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <table class='layui-table' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-60px' rowspan="2" style="vertical-align: middle;">序号</th>
+                        <th class='text-left'>印章名称</th>
+                        <th class='text-left w-80px'>当前状态</th>
+                        <th class='text-left w-200px'>当前审批</th>
+                        <th class='text-left w-140px'>申请时间</th>
+                        <th class='text-left w-120px'>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+        $("#btnSearch").click(function () {
+            pageIndex = 1;
+            getList();
+        });
+    });
+    function add() {
+        window.location.href = "/MySealUse/addedit?mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    function edit(id) {
+        window.location.href = "/MySealUse/addedit/" + id+"?mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    function detail(id) {
+        window.location.href = "/MySealUse/ApprovalDetail/" + id+"?mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    function del(id) {
+        win.confirm("确认要删除吗?", function () {
+            $.post("/MySealUse/deletedata", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    getList();
+                    win.success("删除成功");
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        var beginTime = $("#StartTime").val();
+        var endTime = $("#EndTime").val();
+        var status = $("#status").val();
+        var adesc = $("#adesc").val();
+        $.post("/MySealUse/GetMySealUseList", {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            beginTime: beginTime,
+            endTime: endTime,
+            status: status,
+            adesc: adesc
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

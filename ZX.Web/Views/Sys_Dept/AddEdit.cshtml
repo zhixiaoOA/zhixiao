@@ -1,0 +1,321 @@
+﻿
+@{
+    ViewBag.Title = "部门管理-指效";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link rel='stylesheet' href='/Static/js/jquery/treeview/min.css?v=4.6.1' type='text/css' media='screen' />
+<link rel='stylesheet' href='/Static/js/jquery/treeview/min.css?v=4.6.1' type='text/css' media='print' />
+<link rel='stylesheet' href='/Static/css/theme/zui/css/min.css' type='text/css' media='screen' />
+<link rel='stylesheet' href='/Static/js/jquery/chosen/min.css' type='text/css' media='screen' />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link rel='stylesheet' href='/Static/js/jquery/chosen/min.css' type='text/css' media='print' />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="/Static/js/jquery/chosen/min.js"></script>
+<script src="~/Static/js/jquery/jquery-migrate-1.2.1.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.all-3.1.min.js"></script>
+<script src='/Static/js/jquery/treeview/min.js?v=4.6.1' type='text/javascript'></script>
+<style>
+    .page-content.with-menu {
+        margin: 0 0 0 160px;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        background-color: white;
+        width: 100%;
+    }
+
+    .group-item .checkbox {
+        display: inline-block;
+    }
+
+        .group-item .checkbox input {
+            margin: 2px 0 0 -16px;
+        }
+
+    .leftmenu > .nav > li > a {
+        padding: 0 15px;
+    }
+
+    .input-group-addon label.checkbox {
+        margin: 0;
+        padding-top: 3px;
+    }
+
+    #childList .sort-handle {
+        cursor: move;
+    }
+
+    #page-wrapper {
+        width: 90%;
+        background-color: white;
+    }
+
+    .doc-category {
+        margin: 41px 0 0;
+    }
+
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content' style="width:98%">
+    <div id="sysDeptTree" class="menuContent" style="display: none; position: absolute;">
+        <ul id="treeSysDept" class="ztree" style="margin-top: 0;"></ul>
+    </div>
+    <input type="hidden" id="txtDeptTree" value="@ViewBag.TreeJson" />
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <script>
+        window.chosenDefaultOptions = { no_results_text: '没有匹配的选项', disable_search_threshold: 1, search_contains: true, width: '100%', allow_single_deselect: true };
+        $(document).ready(function () {
+            $(".chosen").chosen(chosenDefaultOptions);
+        });
+    </script>
+    <div class='col-md-12'>
+        <div class='row'>
+            <div class='col-md-3'>
+                <div class='panel'>
+                    <div class='panel-heading'>
+                        <strong><i class="icon-sitemap"></i> 部门结构</strong>
+                    </div>
+                    <div class='panel-body'>
+                        <div id='treeMenuBox'>
+                            <ul class='tree'></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-8' id='categoryBox'>
+                <div class="form-horizontal" id="childForm">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <strong>部门结构 <i class="icon-double-angle-right"></i> </strong>
+                        </div>
+                        <div class="panel-body" id="childList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language='javascript'>
+    $(document).ready(function () {
+        getList();
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形部门
+        var menuNodes = eval($("#txtDeptTree").val());
+        menuTree = $.fn.zTree.init($("#treeSysDept"), menuSetting, menuNodes);
+    });
+
+    function getList() {
+        $.post("/sys_dept/GetList",{ mid:@ViewBag.CurrentMid, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                if (data.Data.length <= 0 || data.Data == "") {
+                    $(".col-md-3").remove();
+                } else {
+                    $(".tree").html(data.Data);
+                    $('.tree').each(function () {
+                        var $this = $(this);
+                        $this.treeview($.extend({ collapsed: true, unique: false }, $this.data()));
+                    });
+                }
+                sysDeptAddEdit("");
+            } else {
+                $(".col-md-3").remove();
+                win.alert("获取数据失败");
+            }
+        });
+    }
+</script>
+<script language='Javascript'>
+    //查看部门基本信息
+    function look(obj) {
+        var id = $(obj).attr("val");
+        $.post("/sys_dept/LookAt", { id: id, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("#childForm .panel").html("");
+                $("#childForm .panel").html(data.Data);
+            } else {
+                win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+    //添加子部门
+    function sysDeptAddEdit(obj) {
+        var id = 0;
+        var pid = 0;
+        if ($(obj).attr("val") != "" && $(obj).attr("val") != undefined) {
+            id = $(obj).attr("val");
+            pid = $(obj).attr("val");
+        }
+
+        $("#pid").attr("value", pid);
+        $.post("/sys_dept/GetDeptList", { id: id, pid: pid, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                if (data.Data.length <= 0 || data.Data == "") {
+                    $(".col-md-3").remove();
+                } else {
+                    $("#childForm .panel").html("");
+                    $("#childForm .panel").html(data.Data);
+                }
+            } else {
+                $(".col-md-3").remove();
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    //保存子部门
+    function saveDate() {
+        var currentOption = $("#currentOption").val();
+
+        switch (currentOption) {
+            case "editDept": {
+                saveCurrentDept()
+                break;
+            }
+            case "editChileDept": {
+                saveChildDate();
+                break;
+            }
+        }
+    }
+    //子部门保存
+    function saveChildDate() {
+        win.showLoading("正在保存...");
+        var items = [];
+        $("input[name='dept']").each(function () {
+            var item = { DName: "", DParentId: "" };
+            if ($(this).val().trim() != "") {
+                item.DName = $(this).val();
+                item.DParentId = $("#pid").val();
+                items.push(item);
+            }
+        });
+
+        var jsonData = JSON.stringify(items);
+        $.post("/Sys_Dept/SaveData", { jsonData: jsonData, pid: $("#pid").val() }, function (data) {
+            if (data.Code = 200) {
+                win.success("保存成功", function () {
+                    goBackToList();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+
+    //编辑部门
+    function sysDeptEdit(obj) {
+        var id = $(obj).attr("val");
+        $.post("/sys_dept/Edit", { id: id, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("#childForm .panel").html("");
+                $("#childForm .panel").html(data.Data);
+            } else {
+                win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+    function goBackToList() {
+        var url = "/Sys_Dept/Index?&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+        window.location.href = url;
+    }
+
+
+    //编辑部门保存
+    function saveCurrentDept() {
+        win.showLoading("正在保存...");
+
+        var item = { Id: "", DName: "", DParentId: "", FK_UserId: "", DDesc: "", DSort: "" };
+        item.Id = $("#did").val();
+        item.DName = $("#DName").val();
+        item.DParentId = $("#pid").val();
+        item.FK_UserId = $("#FK_UserId").val();
+        item.DDesc = $("#DDesc").val();
+        item.DSort = $("#DSort").val();
+
+        var jsonData = JSON.stringify(item);
+        $.post("/Sys_Dept/SaveEditData", { jsonData: jsonData }, function (data) {
+            if (data.Code = 200) {
+                win.success("保存成功", function () {
+                    goBackToList();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+
+    //删除
+    function sysDeptDel(obj) {
+        var id = $(obj).attr("val");
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("DeleteDataNotChild", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    goBackToList();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+
+    //点击选择部门
+    function onMenuClick(e, treeId, treeNode) {
+        $("#pid").val(treeNode.id);
+        $("#txtSysDept").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示部门
+    function showSysDeptTree() {
+        var cityObj = $("#txtSysDept");
+        var cityOffset = $("#txtSysDept").offset();
+        $("#treeSysDept").width(cityObj.width());
+        $("#sysDeptTree").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("#sysDeptTree").css("z-index", "10")
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏部门
+    function hideSysMenuMenu() {
+        $("#sysDeptTree").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏部门
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysDeptTree" || $(event.target).parents("#sysDeptTree").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+</script>

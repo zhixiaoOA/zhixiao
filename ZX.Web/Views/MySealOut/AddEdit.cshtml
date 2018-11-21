@@ -1,0 +1,325 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MySealOut
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<MySealOutDetail> listDetail = ViewBag.ListDetail ?? new List<MySealOutDetail>();
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    //List<Approval_User> listAuser = ViewBag.ListAUser ?? new List<Approval_User>();
+    List<Approval> listApproval = ViewBag.ListApproval ?? new List<Approval>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .perip-box {
+        padding: 20px;
+        margin-top: 10%;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        font-size: 14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>印章外带申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/MySealOut/SaveData" method="post" class="form" id="formMySealOut">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <input type="hidden" name="detail" value="" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-left w-120px">申请部门</th>
+                        <td>@user.DeptName</td>
+                        <th class='text-left w-70px'>申请人 </th>
+                        <td colspan="2">@user.RealName</td>
+                        <th class='text-left w-80px'>申请日期</th>
+                        <td>@(Model.AddTime.ToDateFormat("yyyy-MM-dd"))</td>
+                    </tr>
+                    <tr>
+                        <th>印章名称</th>
+                        <td colspan="6">
+                            <input type="checkbox" class="form-checkbox" name="YinzName" datatype="*" nullmsg="请选择印章" value="公章" @((Model.YinzName + "").Contains("公章") ? "checked" : "") />公章&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="YinzName" datatype="*" nullmsg="请选择印章" value="法人章" @((Model.YinzName + "").Contains("法人章") ? "checked" : "") />法人章&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="YinzName" datatype="*" nullmsg="请选择印章" value="合同章" @((Model.YinzName + "").Contains("合同章") ? "checked" : "") />合同章&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="YinzName" datatype="*" nullmsg="请选择印章" value="财务章" @((Model.YinzName + "").Contains("财务章") ? "checked" : "") />财务章
+                        </td>
+                    </tr>
+                    @{int rowIndex = 1; }
+                    @foreach (var item in listDetail)
+                    {
+                        <tr name="trDetail">
+                            @if (rowIndex == 1)
+                            {
+                                <th rowspan="4" class="text-center">资料名称</th>
+                                <td><input name="ZlName" class="form-control" value="@item.ZlName" datatype='*' nullmsg="请填写资料名称" /></td>
+                            }
+                            else
+                            {
+                                <td><input name="ZlName" class="form-control" value="@item.ZlName" /></td>
+                            }
+                            <th class="text-center">份数</th>
+                            <td>
+                                @if (rowIndex == 1)
+                                {
+                                    <input name="ZlCount" class="form-control" style="width:60px;" value="@item.ZlCount"
+                                           onkeypress="$.admin.keyPress(this)"
+                                           onkeyup="$.admin.keyUp(this)"
+                                           onblur="$.admin.keyBlur(this);" datatype='*' nullmsg="请填写份数" />
+                                }
+                                else
+                                {
+                                    <input name="ZlCount" class="form-control" style="width:60px;" value="@item.ZlCount"
+                                           onkeypress="$.admin.keyPress(this)"
+                                           onkeyup="$.admin.keyUp(this)"
+                                           onblur="$.admin.keyBlur(this);" />
+                                }
+                            </td>
+                            @if (rowIndex == 1)
+                            {
+                                <th rowspan="4" class="text-center">合同类填写编号</th>
+                            }
+                            <th>合同编号</th>
+                            <td name="moneys">
+                                <input name="HtNo" class="form-control" value="@item.HtNo" />
+                            </td>
+                        </tr>
+                        rowIndex++;
+                    }
+                    @if (listDetail.Count == 0)
+                    {
+                        <tr name="trDetail">
+                            <th rowspan="4" class="text-center">资料名称</th>
+                            <td><input name="ZlName" class="form-control" value="" datatype="*" nullmsg="请填写资料名称" /></td>
+                            <th class="text-center">份数</th>
+                            <td>
+                                <input name="ZlCount" class="form-control" style="width:60px;" value=""
+                                       onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this);" datatype="*" nullmsg="请填写份数" />
+                            </td>
+                            <th rowspan="4" class="text-center">合同类填写编号</th>
+                            <th>合同编号</th>
+                            <td name="moneys"><input name="HtNo" class="form-control" value="" /></td>
+                        </tr>
+                        <tr name="trDetail">
+                            <td><input name="ZlName" class="form-control" value="" /></td>
+                            <th class="text-center">份数</th>
+                            <td>
+                                <input name="ZlCount" class="form-control" style="width:60px;" value=""
+                                       onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this);" />
+                            </td>
+                            <th>合同编号</th>
+                            <td name="moneys"><input name="HtNo" class="form-control" value="" /></td>
+                        </tr>
+                        <tr name="trDetail">
+                            <td><input name="ZlName" class="form-control" value="" /></td>
+                            <th class="text-center">份数</th>
+                            <td>
+                                <input name="ZlCount" class="form-control" style="width:60px;" value=""
+                                       onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this);" />
+                            </td>
+                            <th>合同编号</th>
+                            <td name="moneys"><input name="HtNo" class="form-control" value="" /></td>
+                        </tr>
+                        <tr name="trDetail">
+                            <td><input name="ZlName" class="form-control" value="" /></td>
+                            <th class="text-center">份数</th>
+                            <td>
+                                <input name="ZlCount" class="form-control" style="width:60px;" value=""
+                                       onkeypress="$.admin.keyPress(this)"
+                                       onkeyup="$.admin.keyUp(this)"
+                                       onblur="$.admin.keyBlur(this);" />
+                            </td>
+                            <th>合同编号</th>
+                            <td name="moneys"><input name="HtNo" class="form-control" value="" /></td>
+                        </tr>
+                    }
+                    <tr>
+                        <th class="text-center">保管人</th>
+                        <td><input name="BgName" class="form-control" value="@Model.BgName" datatype="*" nullmsg="请填写保管人" /></td>
+                        <th class="text-right" colspan="2">返还时间</th>
+                        <td colspan="3">
+                            <input type="text" class='form-control form-date' placeholder="返还时间" name="ReturnTime" value="@Model.ReturnTime.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:130px;" onblur="getDateDiff()" datatype="*" nullmsg="请填写返还时间" />
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="6">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>请选择审批流程<span style="color:red">*</span></th>
+                        <td colspan='6'>
+                            <select class="form-control" style="max-width:80%;" name="FK_ApprovalId" datatype="*" nullmsg="请选择审批流程">
+                                <option value="">==请选择==</option>
+                                @foreach (var item in listApproval)
+                                {
+                                    <option value="@item.Id" @(Model.FK_ApprovalId == item.Id ? "selected" : "")>@item.DName</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='6'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveCaogao()'>存为草稿</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="submitMsg" value="" />
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#formMySealOut").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                if ($("input[name='Status']").val() == "@ApplyStatus.草稿.ToInt()") {
+                    win.showLoading("正在保存...");
+                    var details = [];
+                    $("tr[name='trDetail']").each(function () {
+                        if ($.trim($(this).find("input[name='ZlName']").val()) != "") {
+                            var detail = {
+                                ZlName: $(this).find("input[name='ZlName']").val(),
+                                ZlCount: $(this).find("input[name='ZlCount']").val(),
+                                HtNo: $(this).find("input[name='HtNo']").val()
+                            };
+                            details.push(detail);
+                        }
+                    });
+                    $("input[name='detail']").val(JSON.stringify(details));
+                    $("#formMySealOut").ajaxSubmit(function (data) {
+                        if (data.Code == 300) {
+                            win.alert(data.Message);
+                        } else if (data.Code == 200) {
+                            win.success($("#submitMsg").val(), function () {
+                                goBack();
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    win.confirm("确认提交审批？", function () {
+                        win.showLoading("正在保存...");
+                        var details = [];
+                        $("tr[name='trDetail']").each(function () {
+                            if ($.trim($(this).find("input[name='ZlName']").val()) != "") {
+                                var detail = {
+                                    ZlName: $(this).find("input[name='ZlName']").val(),
+                                    ZlCount: $(this).find("input[name='ZlCount']").val(),
+                                    HtNo: $(this).find("input[name='HtNo']").val()
+                                };
+                                details.push(detail);
+                            }
+                        });
+                        $("input[name='detail']").val(JSON.stringify(details));
+                        $("#formMySealOut").ajaxSubmit(function (data) {
+                            if (data.Code == 300) {
+                                win.alert(data.Message);
+                            } else if (data.Code == 200) {
+                                win.success($("#submitMsg").val(), function () {
+                                    goBack();
+                                }, 1000);
+                            }
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+        //$(".form-checkbox").click(function () {
+        //    $(this).prop("checked", true).siblings().prop("checked", false);
+        //});
+    });
+   function saveCaogao() {
+       $("input[name='Status']").val("@(ApplyStatus.草稿.ToInt())");
+       $("#submitMsg").val("保存草稿成功");
+       $("#formMySealOut").submit();
+    }
+    function saveData() {
+        if(@Model.Id==0)$("input[name='Status']").val("@(ApplyStatus.新申请.ToInt())");
+        $("#submitMsg").val("提交审批成功");
+        $("#formMySealOut").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    //新增行
+    function onAddOrDelRow(obj) {
+        if ($(obj).attr("title") == "新增") {
+            var newTr = $(obj).parent().parent().clone();
+            $(newTr).find("input").val("");
+            $(newTr).find("td[name='moneys']").html("");
+            $("#tblist").append(newTr);
+            $(obj).removeClass("icon-plus-sign-alt").addClass("icon-minus-sign-alt").attr("title", "删除");
+        } else {
+            $(obj).parent().parent().remove();
+        }
+    }
+    function setMoney(obj) {
+        var count = $(obj).parent().parent().find("input[name='Count']").val();
+        var price = $(obj).parent().parent().find("input[name='Price']").val();
+        if (count != "" && price != "") {
+            $(obj).parent().parent().find("td[name='moneys']").html(parseInt(count) * parseFloat(price));
+        }
+        var totalMoney = 0;
+        $("#tblist tr").each(function () {
+            var count = $(this).find("input[name='Count']").val();
+            var price = $(this).find("input[name='Price']").val();
+            if (count != "" && price != "") {
+                totalMoney = totalMoney + parseInt(count) * parseFloat(price);
+            }
+        });
+        $("#spmoney").html(totalMoney + "（元）");
+    }
+</script>

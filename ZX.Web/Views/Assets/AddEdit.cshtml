@@ -1,0 +1,263 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Assets
+@{
+    ViewBag.Title = "添加或编辑资产管理信息-指效OA";
+    List<Supplier> listSupplier = ViewBag.ListSupplier ?? new List<Supplier>();
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.core-3.1.min.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.excheck-3.1.min.js"></script>
+<script src="~/Static/js/jquery/jquery-migrate-1.2.1.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    #treeSysMenu {
+        border: 1px solid #617775;
+        background: #ffffff;
+        overflow-y: scroll;
+        overflow-x: auto;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    .table td, .table th {
+        font-size:14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>@(Model.Id > 0 ? "编辑资产信息" : "新增资产")</strong></div>
+        <div class='panel-body'>
+            <form action="/Assets/SaveData" method="post" class="form" id="myForm">
+                <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                <input type="hidden" name="FK_TypeId" value="@Model.FK_TypeId" />
+                <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
+                <input type="hidden" name="NatureOfAssets" value="@Model.NatureOfAssets" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="w-100px">资产编号</th>
+                        <td class="w-500px" style="border-right:0;"><input type='text' placeholder="资产编号" name="ACode" value="@Model.ACode" class='form-control' /></td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>名称<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <input type='text' placeholder="名称" datatype="*" name="AName" value="@Model.AName" class='form-control' />
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>供应商<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <select data-placeholder="选择供应商..." name="FK_SupplierId" class="chosen-select form-control" tabindex="2" datatype="*" nullmsg="请选择供应商">
+                                @foreach (var item in listSupplier)
+                                {
+                                    <option value="@item.Id" data-keys="@item.SName" @(item.Id == Model.FK_SupplierId ? "selected" : "")>@item.SName</option>
+                                }
+                            </select>
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>所属分类<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <input type='text' placeholder="@(ViewBag.TypeName ?? "所属分类")" datatype="*" value="@(ViewBag.TypeName=="所属分类"?"": ViewBag.TypeName)" id="txtSysMenu" class='form-control' onclick="showSysMenuMenu();" readonly="readonly" />
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>使用部门</th>
+                        <td style="border-right:0;">
+                            <input type='text' placeholder="使用部门" name="DeptName" value="@Model.DeptName" class='form-control' />
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+
+                    <tr>
+                        <th>数量<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <input type="text" placeholder="数量" datatype="*" name="ANum"
+                                   onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" value="@Model.ANum" class='form-control' />
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>价格<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <input type='text' placeholder="价格" datatype="*" name="APrice"
+                                   onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" value="@Model.APrice" class='form-control' />
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>单位<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <input type='text' placeholder="单位" datatype="*" name="UnitName" value="@Model.UnitName" class='form-control' />
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>资产资质</th>
+                        <td style="border-right:0;">
+                            @Model.NatureOfAssets
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+
+                    <tr>
+                        <th>购买日期<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <input type="text" name="PurchaseDay" value="@Model.PurchaseDay.ToDateFormat("yyyy-MM-dd")" placeholder="购买日期" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});" class="form-control form-date" autocomplete="off" datatype="*">
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+
+                    <tr>
+                        <th>使用期限<span style="color:red">*</span></th>
+                        <td style="border-right:0;">
+                            <input type='text' placeholder="使用期限" datatype="*" name="UsePeriod"
+                                   onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" style="width:80px;float:left;" value="@Model.UsePeriod" class='form-control' />
+                            <select name="UsePeriodUnit" style="width:60px;" class='form-control'>
+                                <option value="天" @(Model.UsePeriodUnit == "天" ? "selected" : "")>天</option>
+                                <option value="月" @(Model.UsePeriodUnit == "月" ? "selected" : "")>月</option>
+                                <option value="年" @(Model.UsePeriodUnit == "年" ? "selected" : "")>年</option>
+                            </select>
+                        </td>
+                        <td style="border-left:0;"><div class="Validform_checktip"></div></td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='2'>
+                            @Html.Raw(ViewBag.CurrentBtnList29)
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div name="" id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+    <ul name="" id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+</div>
+<input type="hidden" name="" id="txtMenuzTree" value="@ViewBag.TreeJson" />
+
+<script type="text/javascript">
+    var menuTree;
+    function saveData() {
+        $("#myForm").submit();
+    }
+
+    $(function () {
+        $("select[name='FK_SupplierId']").chosen({ disable_search_threshold: 10 });
+        $("#myForm").Validform({
+            tiptype: 2,
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#myForm").ajaxSubmit(function (data) {
+                    win.hideLoading();
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            goBack();
+                        }, 1000);
+                    }
+                });
+                return false;
+            }
+        });
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形菜单
+        var menuNodes = eval($("#txtMenuzTree").val());
+        menuTree = $.fn.zTree.init($("#treeSysMenu"), menuSetting, menuNodes);
+
+        //上传图片
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload1'
+                , url: '/upload/uploadfile'
+                , done: function (res) {
+                    $("#ImageUrl").show().attr("src", res.Data);
+                    $("input[name='ImageUrl']").val(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+    //点击选择菜单
+    function onMenuClick(e, treeId, treeNode) {
+        $("#myForm input[name='FK_TypeId']").val(treeNode.id);
+        $("#txtSysMenu").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示菜单
+    function showSysMenuMenu() {
+        var cityObj = $("#txtSysMenu");
+        var cityOffset = $("#txtSysMenu").offset();
+        $("#treeSysMenu").width(cityObj.width());
+        $("#sysMenuMenu").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function hideSysMenuMenu() {
+        $("#sysMenuMenu").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysMenuMenu" || $(event.target).parents("#sysMenuMenu").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+
+    function goBack() {
+        window.history.go(-1);
+    }
+</script>

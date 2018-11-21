@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "角色设置-指效";
+}
+<style>
+    body {
+        padding-top: 58px
+    }
+
+    .top-navbar-index {
+        top: 50px;
+        left: 150px;
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .tdStyle {
+        width: 140px;
+        display: block;
+        height: 32px;
+        padding: 6px 10px;
+        font-size: 13px;
+        line-height: 1.42857143;
+        color: #222;
+        vertical-align: middle;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <form method='post' id='rolesForm'>
+        <div class='panel'>
+            <div class="panel-heading">
+                <strong><i class="icon-wrench"></i> 角色设置</strong>
+            </div>
+            <table class='table table-condensed' id="rolesTable">
+                <tr>
+                    <th class='w-150px text-center'>键</th>
+                    <th class='w-400px'>值</th>
+                    <th></th>
+                </tr>
+                <tr class='text-center'>
+                    <td class='text-middle'>
+                        NULL<input type='hidden' name='keys[]' id='keys[]' value='' readonly='readonly' />
+                        <input type='hidden' name='systems[]' id='systems[]' value='1' readonly='readonly' />
+                    </td>
+                    <td>
+                        <div class='input-group'>
+                            <input type='text' name='values[]' id='values[]' value='' class='form-control' readonly='readonly' />
+                        </div>
+                    </td>
+                    <td class='text-left text-middle'>
+                        <a href='javascript:;' class='btn btn-mini add'><i class='icon-plus'></i></a>
+                    </td>
+                </tr>
+                <tr class='text-center'>
+                    <td class='text-middle'>
+                        dev<input type='hidden' name='keys[]' id='keys[]' value='dev' />
+                        <input type='hidden' name='systems[]' id='systems[]' value='1' />
+                    </td>
+                    <td>
+                        <div class='input-group'>
+                            <input type='text' name='values[]' id='values[]' value='研发' class='form-control' />
+                        </div>
+                    </td>
+                    <td class='text-left text-middle'>
+                        <a href='javascript:;' class='btn btn-mini add'><i class='icon-plus'></i></a>
+                    </td>
+                </tr>
+                <tr class='text-center'>
+                    <td class='text-middle'>
+                        ccc<input type='hidden' name='keys[]' id='keys[]' value='ccc' />
+                        <input type='hidden' name='systems[]' id='systems[]' value='0' />
+                    </td>
+                    <td>
+                        <div class='input-group'>
+                            <input type='text' name='values[]' id='values[]' value='ccc' class='form-control' />
+                        </div>
+                    </td>
+                    <td class='text-left text-middle'>
+                        <a href='javascript:;' class='btn btn-mini add'><i class='icon-plus'></i></a>
+                        <a href='javascript:;' class='btn btn-mini remove'><i class='icon-remove'></i></a>
+                    </td>
+                </tr>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan='2'>
+                            <label class='radio-inline'><input type='radio' name='lang' value='all' checked='checked' id='langall' /> 适用所有语言</label><label class='radio-inline'><input type='radio' name='lang' value='zh-cn' id='langzh-cn' /> 适用当前语言</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button id='btnSubmit' class='btn btn-primary' onclick="roleSubmit()">保存</button><a href='javascript::' class='btn deleter'>恢复默认</a>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </form>
+    <script language='Javascript'>v.itemRow = "  <tr class='text-center'>\n    <td>\n      <input type='text' value=\"\" name=\"keys[]\" class='tdStyle' placeholder='\u53d8\u91cf\u540d'>\n      <input type='hidden' value=\"0\" name=\"systems[]\">\n    <\/td>\n    <td>\n      <div class='input-group'>\n        <input type='text' value=\"\" name=\"values[]\" class='form-control' placeholder='\u81ea\u5b9a\u4e49\u663e\u793a\u503c'>\n      <\/div>\n    <\/td>\n    <td class='text-left text-middle'>\n      <a href='javascript:;' class='btn btn-mini add'><i class='icon-plus'><\/i><\/a>\n      <a href='javascript:;' class='btn btn-mini remove'><i class='icon-remove'><\/i><\/a>\n    <\/td>\n  <\/tr>";</script>
+    <script language='Javascript'>v.module = "user";</script>
+    <script language='Javascript'>v.field = "roleList";</script>
+    <script language='Javascript'>v.valueplaceholder = "\u81ea\u5b9a\u4e49\u663e\u793a\u503c";</script>
+    <script language='Javascript'>v.infoplaceholder = "\u8be6\u7ec6\u63cf\u8ff0";</script>
+    <script src='~/res/js/jquery/form/min.js?v=4.6.1' type='text/javascript'></script>
+    <script language='Javascript'>
+        $(function () {
+            /* Highlight current nav. */
+            /* eg set the role of user. */
+            var menu = $('.leftmenu .nav li').size() == 0 ? '.nav li' : '.leftmenu .nav li';
+            if (v.module == 'user' && v.field == 'roleList') menu = '';
+            $(menu).removeClass('active');
+            if (menu) $(menu + " a[href*='" + v.module + "'][href*='" + v.field + "']").parent().addClass('active');
+
+            /* Add an item. */
+            $(document).on('click', '.add', function () {
+                $(this).parent().parent().after(v.itemRow);
+                value = $(this).parent().prev().find('.input-group').html();
+                $(this).parent().parent().next().find('.input-group').html(value);
+                $(this).parent().parent().next().find('.input-group input').val('');
+                $(this).parent().parent().next().find('.input-group input').eq(0).attr('placeholder', v.valueplaceholder).removeAttr('readonly');
+                $(this).parent().parent().next().find('.input-group input').eq(1).attr('placeholder', v.infoplaceholder).removeAttr('readonly');
+            })
+
+            /* Remove an item. */
+            $(document).on('click', '.remove', function () {
+                $(this).parent().parent().remove();
+            })
+
+            $('[name*=currency]').change(function () {
+                debugger;
+                var mainCurrency = $('#mainCurrency').val();
+                $('#mainCurrency').empty().append('<option></option>');
+                $('[name*=currency]').each(function () {
+                    if ($(this).prop('checked')) {
+                        var text = $(this).parent().html();
+                        text = $.trim(text.substr(text.lastIndexOf('>') + 1));
+                        $('#mainCurrency').append("<option value='" + $(this).val() + "'>" + text + '</option>');
+                    }
+                });
+
+                $('#mainCurrency').val(mainCurrency);
+            });
+
+            $('[name*=currency]').change();
+        })
+        function roleSubmit() {
+            var st1r = "";
+
+            $("#rolesTable tbody tr").each(function (index, item) {
+                alert($(this).find('td').eq(0).find('input').eq(0).val() + "," + $(this).find('td').eq(0).find('input').eq(1).val() + "," + $(this).find('td').eq(1).find('input').val());
+            });
+        }
+    </script>
+</div>

@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "指效OA登陆";
+}
+<!DOCTYPE html>
+<html>
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel='icon' href='/favicon.ico' type='image/x-icon' />
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>资产日志二维码</title>
+    <link rel="stylesheet" href="~/Content/css.css">
+
+    <style>
+        .user-control-nav {
+            margin-bottom: 20px;
+        }
+
+        body {
+            padding-top: 0;
+        }
+
+        .page-content {
+            padding: 0;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        .container {
+            margin: 10% auto 0 auto
+        }
+
+        #login {
+            margin: 0 auto;
+            width: 500px;
+            min-height: 230px;
+            background-color: #fff;
+            border: 1px solid #dfdfdf;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            -moz-box-shadow: 0px 1px 15px rgba(0,0,0,0.15);
+            -webkit-box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.15)
+        }
+
+            #login .panel-head {
+                min-height: 55px;
+                background-color: #edf3fe;
+                border-bottom: 1px solid #dfdfdf;
+                position: relative
+            }
+
+                #login .panel-head h4 {
+                    margin: 0 0 0 20px;
+                    padding: 0;
+                    line-height: 55px;
+                    font-size: 14px
+                }
+
+            #login .panel-actions {
+                float: right;
+                position: absolute;
+                right: 15px;
+                top: 12px;
+                padding: 0
+            }
+
+                #login .panel-actions .dropdown {
+                    display: inline-block;
+                    margin-right: 2px
+                }
+
+            #login #submit {
+                min-width: 100px;
+            }
+
+        #loginForm {
+            padding: 20px 20px;
+        }
+
+        .table-form th, .table-form td {
+            padding: 8px 5px
+        }
+
+        .checkbox {
+            display: inline-block;
+            padding-left: 80px;
+        }
+
+        .notice {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body style="background:#3583d8;">
+    <div class="bg_bank">
+        <a class="re_bank" href=""></a>
+        <div class="re_min_infor">
+            <div class="re_logo"></div>
+            <form method='post' target='hiddenwin' class='form-condensed'>
+                @*autocomplete="off"*@
+                <input type="hidden" id="AssetId" value="@ViewBag.AssetId">
+                <input type="hidden" id="Remark" value="@(ViewBag.Dept + "-" + ViewBag.Name)">
+                <div class="bg_color">
+                    <div class="re_min" style="text-align:center;@(ViewBag.Dept==null?"display:none;":"")">
+                        @(ViewBag.Dept + "-" + ViewBag.Name)
+                    </div>
+                    <div class="re_min">
+                        <span class="icon_phone"></span>
+                        <input class="input01" type="text" name="gh_name" id="userName" placeholder="账号">
+                    </div>
+                    <div class="re_min">
+                        <span class="icon_passwarde"></span>
+                        <input class="input01" type="password" name="gh_tel" id="userPwd" placeholder="密码"><div id="div1"></div>
+                        <span class="the_eyes"></span>
+                    </div>
+                </div>
+                <div class="re_regist">
+                    <input class="btn_regist" type="submit" id="submit" name="submit" onclick="checkform();" value="提 交">
+                </div>
+                <div class="re_regist02">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src='~/res/js/jquery/form/min.js?v=4.6.1' type='text/javascript'></script>
+    <script language='Javascript'>
+        $('#submit').click(function () {
+            var userName = $("#userName").val();
+            var userPwd = $('#userPwd').val();
+            var AssetId = $('#AssetId').val();
+            $.ajax(
+                {
+                    contentType: 'application/x-www-form-urlencoded',
+                    type: "POST",
+                    data: { UserName: userName, userPwd: userPwd, AssetId: AssetId, Remark: $("#Remark").val() },
+                    url: "/AssetsQrCode/Authentication",
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.Code == 200) {
+                            win.success("登记成功！");
+                            window.parent.location.reload();
+                        } else {
+                            layer.alert(data.Message, { icon: 7 });
+                        }
+                    },
+                    error: function (data) { }
+                })
+            return false;
+        })
+
+    </script>
+</body>
+</html>

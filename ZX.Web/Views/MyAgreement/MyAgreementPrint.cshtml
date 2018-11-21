@@ -1,0 +1,143 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MyAgreement
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Sys_User> userList = ViewBag.UserList ?? new List<Sys_User>();
+    string userSign0 = "";
+    string yymmdd0 = "";
+    string userSign1 = "";
+    string yymmdd1 = "";
+    string userSign2 = "";
+    string yymmdd2 = "";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>加班/调休审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/MyAgreement/SaveApproval" method="post" class="form" id="formMyAgreement">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-left" colspan="2">经办部门：@user.DeptName</th>
+                        <th class='text-left'>经办人：@user.RealName</th>
+                        <th class='text-left'>电话：@user.UPhone</th>
+                    </tr>
+                    <tr>
+                        <th class="text-left" colspan="2">填报日期：@(Model.AddTime.ToDateFormat("yyyy-MM-dd"))</th>
+                        <th class='text-left' colspan="2">合同编号：@Model.HtNo</th>
+                    </tr>
+                    <tr>
+                        <th class='text-center' rowspan="4">合同立项内容</th>
+                        <th class='text-center'>合同名称</th>
+                        <td colspan="2">@Model.HtName</td>
+                    </tr>
+                    <tr>
+                        <th class='text-center'>甲方</th>
+                        <td colspan="2">@Model.JiaName</td>
+                    </tr>
+                    <tr>
+                        <th class='text-center'>乙方</th>
+                        <td colspan="2">@Model.YiName</td>
+                    </tr>
+                    <tr>
+                        <th class='text-center'>合同金额</th>
+                        <td colspan="2">@Model.TotalMoney</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">使用印章名称</th>
+                        <td colspan="3">@Model.YinzName</td>
+                    </tr>
+
+                    <tr>
+                        <th class="text-center">评审部门</th>
+                        <th class='text-center'>评审范围</th>
+                        <th class='text-center' colspan="2">评审意见及签字</th>
+                    </tr>
+                    @{
+
+
+                        try
+                        {
+                            userSign0 = userList[0].USgin;
+                            DateTime applyTime0 = Convert.ToDateTime(userList[0].CreateTime);
+                            yymmdd0 = applyTime0.Year + "年" + applyTime0.Month + "月" + applyTime0.Day + "日";
+                        }
+                        catch { }
+
+                        try
+                        {
+                            userSign1 = userList[1].USgin;
+                            DateTime applyTime1 = Convert.ToDateTime(userList[1].CreateTime);
+                            yymmdd1 = applyTime1.Year + "年" + applyTime1.Month + "月" + applyTime1.Day + "日";
+                        }
+                        catch { }
+
+                        try
+                        {
+                            userSign2 = userList[2].USgin;
+                            DateTime applyTime2 = Convert.ToDateTime(userList[2].CreateTime);
+                            yymmdd2 = applyTime2.Year + "年" + applyTime2.Month + "月" + applyTime2.Day + "日";
+                        }
+                        catch { }
+
+                    }
+                    <tr>
+                        <th class="text-center">1、部门负责人意见</th>
+                        <td>负责对合同文本审核</td>
+                        <td colspan="2" style="width:233px;height:50px;">
+                            @if (userSign2.IsNotNullOrEmpty())
+                            {
+                                <label>签字:</label><img src="@userSign2" style="width:200px;height:50px;margin-left:7px;" /><br />
+                                <label style="float:right">@yymmdd2</label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">2、财务部意见</th>
+                        <td>付款是否在公司预算范围内、付款支付方式的合理性</td>
+                        <td colspan="2" style="width:233px;height:50px;">
+                            @if (userSign1.IsNotNullOrEmpty())
+                            {
+                                <label>签字:</label><img src="@userSign1" style="width:200px;height:50px;margin-left:7px;" /><br />
+                                <label style="float:right">@yymmdd1</label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">3、总经理意见</th>
+                        <td>负责对合同的全面评审</td>
+                        <td colspan="2" style="width:233px;height:50px;">
+                            @if (userSign0.IsNotNullOrEmpty())
+                            {
+                                <label>签字:</label><img src="@userSign0" style="width:200px;height:50px;margin-left:7px;" /><br />
+                                <label style="float:right">@yymmdd0</label>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        onprint();
+    });
+    function printHtml(html) {
+        var bodyHtml = html;
+        document.body.innerHTML = html;
+        window.print();
+        document.body.innerHTML = bodyHtml;
+    }
+    function onprint() {
+        var html = $(".panel-body").html();
+        printHtml(html);
+    }
+</script>

@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "项目文件-指效OA";
+}
+
+<div class='row page-content with-menu'>
+    <input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+    <input type="hidden" id="currentMid" name="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" name="UserId" id="UserId" value="@ViewBag.UserId" />
+    <input type="hidden" id="RoleId" name="RoleId" value="@ViewBag.RoleId" />
+    <input type="hidden" id="fk_LibraryId" name="fk_LibraryId" value="@ViewBag.FK_LibraryId" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <div class='panel'>
+        <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-100px'>
+                        <div >
+                            <a href='javascript:;'>文档编号</a>
+                        </div>
+                    </th>
+                    <th class='text-left'>
+                        <div>
+                            <a href='javascript:;'>文档标题</a>
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            <a href='javascript:;'>文档类型</a>
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            <a href='/javascript:;'>由谁添加</a>
+                        </div>
+                    </th>
+                    <th class='w-100px visible-lg'>
+                        <div>
+                            <a href='javascript:;'>添加时间</a>
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            <a href='javascript:;'>附件</a>
+                        </div>
+                    </th>
+                    <th class='w-120px {sorter:false}'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        getList();
+    });
+
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/Document_Manager/GetDocument_ManagerList", { pageIndex: pageIndex, pageSize: pageSize, name: "", userId: $("#UserId").val(), roleId: $("#RoleId").val(), fk_LibraryId: $("#fk_LibraryId").val(), secondMenuId: $("#secondMenuId").val(),mid: $("#currentMid").val() },  function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+
+    function docDel(id, tId) {
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Document_Manager/DeleteData", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    getList();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        }, function () { });
+    }
+
+    function look(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+        window.location.href = "/Document_Manager/Readonly?id=" + dArray[0] + "&fk_TypeId=" + dArray[1] + "&libraryId=" + dArray[2] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

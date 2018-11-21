@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "个人文件-指效";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 20px;
+    }
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content with-menu'>
+    <input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+    <input type="hidden" id="currentMid" name="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" name="UserId" id="UserId" value="@ViewBag.UserId" />
+    <input type="hidden" id="RoleId" name="RoleId" value="@ViewBag.RoleId" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class='panel'>
+        <table class='layui-table'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-100px'>
+                        <div>
+                            <a href='javascript:;'>文档编号</a>
+                        </div>
+                    </th>
+                    <th class='text-left'>
+                        <div>
+                            文档标题
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            文档类型
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            由谁添加
+                        </div>
+                    </th>
+                    <th class='w-100px visible-lg'>
+                        <div>
+                            添加时间
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            附件
+                        </div>
+                    </th>
+                    <th class='w-120px {sorter:false}'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        getList();
+    });
+
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        $.post("/Document_Manager/GetMyDocList", { pageIndex: pageIndex, pageSize: pageSize, name: "", userId: $("#UserId").val(), roleId: $("#RoleId").val(), mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+
+    function delDoc(obj) {
+
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            var docInfo = $(obj).attr("val");
+            var dArray = docInfo.split(',');
+            $.post("/Document_Manager/DeleteData", { id: dArray[0] }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    getList();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        }, function () { });
+    }
+    function addDoc() {
+        window.location.href = "/Document_Manager/AddEdit?id= 0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    function editDoc(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+        window.location.href = "/Document_Manager/MyDocEdit?id=" + dArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    function look(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+        window.location.href = "/Document_Manager/MyDocReadonly?id=" + dArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

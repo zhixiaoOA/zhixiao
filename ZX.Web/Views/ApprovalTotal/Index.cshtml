@@ -1,0 +1,153 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@{
+    /**/
+
+    ViewBag.Title = "审批单统计-指效OA";
+}
+<style>
+    .loadingWrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 300;
+        background-image: url(../img/loading2.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: #000;
+        background-color: rgba(234, 229, 229, 0.5);
+        filter: alpha(opacity=50);
+    }
+</style>
+
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div style="display: none;">
+    <input type="file" id="fileOrganReport12" multiple="multiple" name="fileOrganReport12_upload" onchange="OnChangeUpload()" />
+</div>
+
+<div class='row with-menu page-content' style="margin-top:-10px">
+    <div class='panel'>
+        <div class='panel-heading'>
+            <strong><i class='icon-list-ul'></i> 审批单列表</strong>
+        </div>
+        <div class="panel-body">
+            <div>
+                <form action="OutExcel" id="doForm">
+                    <fieldset>
+                        <legend>查询条件</legend>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label for="exampleInputEmail3">日期</label>
+                                <input type="text" class="form-control" id="StartTime" placeholder="开始日期" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                                至
+                                <input type="text" class="form-control" id="EndTime" placeholder="结束日期" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputInviteCode3">状态</label>
+                                <select id="status" class="form-control">
+                                    <option value="@(ApplyStatus.审核中.ToInt()+","+ApplyStatus.新申请.ToInt()+","+ApplyStatus.驳回.ToInt())">==全部==</option>
+                                    <option value="@ApplyStatus.审核中.ToInt()">@ApplyStatus.审核中.ToString()</option>
+                                    <option value="@ApplyStatus.新申请.ToInt()">@ApplyStatus.新申请.ToString()</option>
+                                    <option value="@ApplyStatus.驳回.ToInt()">@ApplyStatus.驳回.ToString()</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-default" id="btnSearch">查询</button>
+                            <div style="width:auto;float:right;">
+                                <a href='javascript:;' onclick="exportExcel()" class="btn btn-primary">导出Excel</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed' id='docList'>
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-100px'>
+                            <div>
+                                序号
+                            </div>
+                        </th>
+                        <th class='w-150px'>
+                            <div>
+                                名称
+                            </div>
+                        </th>
+                        <th class='w-150px'>
+                            <div>
+                                描述
+                            </div>
+                        </th>
+                        <th class='w-150px'>
+                            <div>
+                                节点
+                            </div>
+                        </th>
+                        <th class='w-150px visible-lg'>
+                            <div>
+                                状态
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class='table-footer'>
+            <div style='float:right; clear:none;' class='page'></div>
+        </div>
+    </div>
+</div>
+<script language='Javascript'>
+    $(function () {
+        getApprovalNotPageList();
+        $("#btnSearch").click(function () {
+            getApprovalNotPageList();
+        });
+    });
+
+    //展示待审批
+    function getApprovalNotPageList() {
+        win.showLoading();
+        var beginTime = $("#StartTime").val();
+        var endTime = $("#EndTime").val();
+        var status = $("#status").val();
+        $.post("/Approval/GetApprovalNotPageList", {
+            beginTime: beginTime,
+            endTime: endTime,
+            status: status
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("tbody").html(data.Data);
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        getApprovalNotPageList();
+                    }
+                }
+            });
+        });
+    }
+
+
+    function exportExcel() {
+        $("#doForm").submit();
+    }
+</script>

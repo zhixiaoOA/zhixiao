@@ -1,0 +1,150 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model  ZX.Model.Sys_User
+@{
+    ViewBag.Title = "添加/编辑-指效";
+    List<Sys_Role> listRole = ViewBag.RoleList ?? new List<Sys_Role>();
+}
+<link href="~/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link rel='stylesheet' href='/Static/js/jquery/chosen/min.css' type='text/css' media='print' />
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="/Static/js/jquery/chosen/min.js"></script>
+<script src="~/Static/js/jquery/jquery-migrate-1.2.1.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.all-3.1.min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<div class='row page-content'>
+    <input type="hidden" id="txtDeptTree" value="@ViewBag.TreeJson" />
+    <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <div id="sysDeptTree" class="menuContent" style="display: none; position: absolute;">
+        <ul id="treeSysDept" class="ztree" style="margin-top: 0;"></ul>
+    </div>
+    <div class="col-md-12">
+        <div class='col-md-10'>
+            <div class="panel">
+                <div class='panel-body'>
+                    <div id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+                        <ul id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+                    </div>
+                    <form method='post' id='ajaxForm' action="/Sys_User/SaveUpdatePwd">
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                        <table class='table table-form'>
+                            <tr>
+                                <th class='w-100px'>用户名</th>
+                                <td class='w-p40'>
+                                    @{
+                                        <input type='text' name='UserName' id='UserName' value='@Model.UserName' class='form-control' autocomplete='off' readonly />
+                                    }
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>姓名</th>
+                                <td>
+                                    <input type='text' name='RealName' id='RealName' value='@Model.RealName' class='form-control' autocomplete='off' datatype="*" />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>新密码</th>
+                                <td>
+                                    <input type='password' name='Pwd' id='Pwd1' value='' class='form-control' autocomplete='off' placeholder='新密码' maxlength="8" />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"><span id="txspan1"> 8位数字密码</span><span id="spanpwd1" style="color:red;display:none;">必须是8位数字密码</span></div></td>
+                            </tr>
+                            <tr>
+                                <th>确认密码</th>
+                                <td>
+                                    <input type='password' name='Pwd2' id='Pwd2' value='' class='form-control' autocomplete='off' placeholder='再次输入一次新密码' maxlength="8" onblur="" />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"><span id="spanpwd2" style="color:red;display:none;">密码不一致</span></div></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <button type='button' id='submit' class='btn btn-primary' data-loading='稍候...' onclick="saveData()">保存</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="sysCompanyPosition" class="CompanyPositionContent" style="display: none; position: absolute;">
+    <ul id="treeSysCompanyPosition" class="ztree" style="margin-top: 0;max-height: 280px;"></ul>
+</div>
+<input type="hidden" id="txtCompanyPositionzTree" value="@ViewBag.ZwTreeJson" />
+<script language='Javascript'>
+    var CompanyPositionTree, menuTree;
+    var reg = /^\d{8,}$/;
+    $(document).ready(function () {
+        $("#Pwd2").blur(function () {
+            if ($("#Pwd2").val() != $("#Pwd1").val()) {
+
+                $("#Pwd2").css("background-color", "#ff9999");
+                $("#spanpwd2").show();
+            } else {
+                $('#Pwd2').css('background', 'none');
+                $("#spanpwd2").hide();
+            }
+        });
+
+        $("#Pwd1").blur(function () {
+
+            if (!reg.test($("#Pwd1").val())) {
+                $("#spanpwd1").show();
+                $("#txspan1").hide();
+            } else {
+                $("#spanpwd1").hide();
+                $("#txspan1").show();
+            }
+        });
+
+
+        $("#ajaxForm").Validform({
+            tiptype: 2,
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#ajaxForm").ajaxSubmit(function (data) {
+                    win.hideLoading();
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            parent.window.location.href = "/Login/Login_Out";
+                            win.close();
+                        });
+                    }
+                });
+                return false;
+            }
+        });
+    });
+
+    function saveData() {
+
+        if (!reg.test($("#Pwd1").val())) {
+            $("#spanpwd1").show();
+            $("#txspan1").hide();
+            return;
+        }
+        if ($("#Pwd2").val() != $("#Pwd1").val()) {
+            $("#Pwd2").add("background-color", "#ff9999");
+            $("#spanpwd2").show();
+            return;
+        } else {
+            $('#Pwd2').css('background', 'none');
+            $("#spanpwd2").hide();
+            $("#ajaxForm").submit();
+        }
+    }
+</script>

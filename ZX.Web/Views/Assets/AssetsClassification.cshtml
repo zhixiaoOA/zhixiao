@@ -1,0 +1,324 @@
+﻿@model List<ZX.Model.Assets>
+@using ZX.Model
+@{
+    ViewBag.Title = "资产管理-指效OA";
+    var indexpage = 0;
+    var List = ViewBag.AssetsList as List<AssetsModel>;
+}
+<style>
+    body {
+        padding-top: 58px
+    }
+
+    .page-content.with-menu {
+        margin: 0 0 0 160px;
+    }
+
+    .group-item .checkbox {
+        display: inline-block;
+    }
+
+        .group-item .checkbox input {
+            margin: 2px 0 0 -16px;
+        }
+
+    .leftmenu > .nav > li > a {
+        padding: 0 15px;
+    }
+
+    .input-group-addon label.checkbox {
+        margin: 0;
+        padding-top: 3px;
+    }
+
+    #childList .sort-handle {
+        cursor: move;
+    }
+
+    .doc-category {
+        margin: 41px 0 0;
+    }
+
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+</style>
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='row page-content'>
+    <link rel='stylesheet' href='~/res/js/jquery/treeview/min.css' type='text/css' media='screen' />
+    <link rel='stylesheet' href='~/res/js/jquery/treeview/min.css' type='text/css' media='print' />
+    <script src='~/res/js/jquery/treeview/min.js' type='text/javascript'></script>
+    <script src='~/res/js/jquery/form/min.js' type='text/javascript'></script>
+
+    <div class="col-md-12">
+        <div class='row'>
+            <div class='col-md-2'>
+                <div class='panel'>
+                    <div class='panel-heading'><strong><i class="icon-building"></i> 资产分类</strong></div>
+                    <div class='panel-body'>
+                        <div id='treeMenuBox'>
+                            <ul class='tree'></ul>
+                        </div>
+                        <a href='/Assets/AssetsTypeAddEdit' class='btn btn-primary btn-xs'>资产分类</a>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-10'>
+                <div class='clearfix'>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <strong><i class="icon-group"></i>资产管理</strong>
+                            <div class="pull-right panel-actions">
+                                <a href='javascript::' id="m_Btn_Add" class='btn btn-primary pull-left' style='margin-right: 10px;'>新增</a>
+                            </div>
+                        </div>
+                        <table class='table table-hover table-striped table-bordered tablesorter table-fixed'>
+                            <thead>
+                                <tr class='text-center'>
+                                    <th class='w-60px'>
+                                        <div>
+                                            <a href='javascript::'>序号</a>
+                                        </div>
+                                    </th>
+                                    <th class='w-60px'>
+                                        <div class='headerSortUp'>
+                                            <a href='javascript::'>资产编号</a>
+                                        </div>
+                                    </th>
+                                    <th class='w-60px'>
+                                        <div>
+                                            <a href='javascript::'>名称</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>资产分类编号</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>创建时间</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>数量</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>价格</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>使用期限</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>单位</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>资产性质</a>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div>
+                                            <a href='javascript::'>是否处理</a>
+                                        </div>
+                                    </th>
+                                    <th class='w-100px'>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbList"></tbody>
+                        </table>
+                        <div class='table-footer'>
+                            <div class='pull-left text-danger'></div>
+                            <div style='float:right; clear:none;' class='pager form-inline'>
+                                <div id="myPager"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script language='Javascript'>
+            //获取资产数据信息
+            $(document).ready(function () {
+                $('.form-search').submit(function () {
+                    var inputValue = $(".search-query").val();
+                    if (inputValue == '') {
+                        alert('请输入用户名');
+                        return false;
+                    }
+                });
+
+                if (v.deptID) $('#category' + v.deptID).addClass('text-bold');
+                /* Set forbid link options. */
+                $('td.operate a.forbider').click(function () {
+                    $.getJSON($(this).attr('href'), function (data) {
+                        if (data.result == 'success') return location.href = data.locate;
+                        bootbox.alert(data.message + '');
+                    });
+                    return false;
+                });
+                GetAssetsTypeList();
+                GetAssetsList();
+            });
+            function GetAssetsTypeList() {
+                //win.showLoadding("正在加载...");
+                $.post("/Assets/GetAssetsTypeList", {mid:@ViewBag.CurrentMid,secondMenuId:$("#secondMenuId").val()}, function (data) {
+                    if (data.Code == 200) {
+                        //alert(data.Data);
+                        $(".tree").html(data.Data);
+                        $('.tree').each(function () {
+                            var $this = $(this);
+                            $this.treeview($.extend({ collapsed: false, unique: false }, $this.data()));
+                        });
+                    } else {
+                        //win.alert("获取数据失败");
+                    }
+                    //win.hideLoadding();
+                });
+            }
+        var pageIndex = 1, pageSize = 10, count = 0;
+            //获取资产管理列表数据
+            function GetAssetsList() {
+                win.showLoading();
+                $.post("/Assets/GetAssetsList", { pageIndex: pageIndex, pageSize: pageSize, name: "",secondMenuId:$("#secondMenuId").val()}, function (data) {
+                    win.hideLoading();
+                    if (data.Code == 200) {
+                        $("#tbList").html(data.Data);
+                        count = data.TotalCount;
+                        initPage();
+                    } else {
+                        win.alert("获取数据失败");
+                    }
+                });
+            }
+            function initPage() {
+                layui.use(['laypage', 'layer'], function () {
+                    var laypage = layui.laypage
+                        , layer = layui.layer;
+                    //完整功能
+                    laypage.render({
+                        elem: 'myPager'
+                        , limit: pageSize
+                        , curr: pageIndex
+                        , count: count
+                        , theme: '#1E9FFF'
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , jump: function (obj, first) {
+                            if (!first) {
+                                pageIndex = obj.curr;
+                                pageSize = obj.limit;
+                                GetAssetsTypeList();
+                GetAssetsList();
+                            }
+                        }
+                    });
+                });
+            }
+            //////////////////////////////////////////////////////////////////////////////
+    //            $(function () {
+    //    $("#btnSearch").click(function () {
+    //        $("input[name='pageIndex']").val(1);
+    //        getList();
+    //    });
+    //    getList();
+    //});
+    //function getList() {
+    //    win.showLoading();
+    //    var pageIndex = $("input[name='pageIndex']").val();
+    //    var key = $("#key").val();
+    //    $.post("/Admin/Assets/GetAssetsList", { pageIndex: pageIndex, key: key }, function (data) {
+    //        $("input[name='pageIndex']").val(data.PageIndex);
+    //        $(".pagination").attr("pageindex", data.PageIndex).attr("totalpage", data.PageTotal);
+    //        if (data.PageTotal > 0) {
+    //            $.jqPaginator('.pagination', {
+    //                totalPages: data.PageTotal,
+    //                visiblePages: 10,
+    //                currentPage: data.PageIndex,
+    //                onPageChange: function (num, type) {
+    //                    if (type != "init") {
+    //                        $("input[name='pageIndex']").val(num);
+    //                        getList();
+    //                    }
+    //                }
+    //            });
+    //        }
+    //        $("#listTbody").html(data.Data);
+    //        win.hideLoading();
+    //    }, "json").error(function () { win.hideLoading(); });
+    //        }
+
+            ////////////////////////////////////////////////////////////////////////////////
+
+            //删除
+            function sysMenuDel(id,istype) {
+                layer.confirm('确认要删除吗？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $.post("/Assets/DeleteData", { id: id ,istype:istype}, function (data) {
+                        if (data.Code == 200) {
+                            layer.msg('删除成功', { icon: 1 });
+                            window.location.href = '/Assets/index?mid=' + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                        } else {
+                            layer.alert(data.Message, { icon: 7 });
+                        }
+                    }, "json");
+                });
+            }
+
+            //给新增按钮添加事件
+            $('#m_Btn_Add').attr('href', "/Assets/addedit?id=0");
+
+            //展示菜单所拥有的按钮
+            function showSysMenuBtn(id) {
+                //win.showLoadding("正在加载...");
+                //为添加按钮设置 跳转路径
+                $('#m_Btn_Add').attr('href', "/Assets/addedit?id=" + id);
+
+                $.post("/Assets/GetAssetsList", { id: id, secondMenuId: $("#secondMenuId").val() }, function (data) {
+                    if (data.Code == 200) {
+                        $("tbody").html(data.Data);
+                    } else {
+                        //win.alert("获取数据失败");
+                    }
+                    //win.hideLoadding();
+                });
+            }
+            function m_Btn_Del(id, pid) {
+                layer.confirm('确认要删除吗？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $.post("/Assets/DeleteData", { id: id }, function (data) {
+                        if (data.Code == 200) {
+                            layer.msg('删除成功', { icon: 1 });
+                            showSysMenuBtn(pid);
+                        } else {
+                            layer.alert(data.Message, { icon: 7 });
+                        }
+                    }, "json");
+                }, function () { });
+            }
+            function m_Btn_Edit(id, mid) {
+                $.post("/Assets/AddEdit", { id: id, mid: mid }, function (data) {
+                    if (data.Code == 200) {
+                        layer.msg('编辑成功', { icon: 1 });
+                    } else {
+                        layer.alert(data.Message, { icon: 7 });
+                    }
+                }, "json");
+            }
+
+
+</script>
+

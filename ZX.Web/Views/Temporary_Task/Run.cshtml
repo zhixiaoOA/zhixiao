@@ -1,0 +1,139 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Temporary_Task
+@{
+    ViewBag.Title = "开始-指效OA";
+    int userId = Session["UserId"].ToInt();
+}
+<link href="~/Static/js/datetimepicker/datetimepicker.min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/datetimepicker/datetimepicker.min.js"></script>
+<style>
+    .col-sm-2 {
+        width: 14%;
+    }
+</style>
+<form id="doTaskForm" method="post" class="form-horizontal" style="padding-top: 38px;" action="/Temporary_Task/RunSave">
+    <input type="hidden" id="Id" name="Id" value="@Model.Id">
+    <input type="hidden" id="TExpected" name="TExpected" value="@Model.TExpected">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <input type="hidden" name="ParentId" value="@Model.ParentId" />
+
+    <div id="StartTime" class="form-group">
+        <label for="ActualStart" class="col-sm-2">
+            实际开始
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" name="actualStart" class="form-control form-datetime" placeholder="选择一个日期+时间：yyyy-MM-dd hh:mm" readonly="readonly">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ConsumTime" class="col-sm-2">
+            总消耗
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <div class="input-group">
+                <input id="ConsumTime" name="ConsumTime" class='form-control' placeholder="例如:3" value="@ViewBag.ConsumTime" onkeypress="$.admin.keyPress(this)"
+                       onkeyup="$.admin.keyUp(this)"
+                       onblur="$.admin.keyBlur(this)" />
+                <span class="input-group-addon ">小时</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="TheTime" class="col-sm-2">
+            预计剩余
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <div class="input-group">
+                <input id="TheTime" name="TheTime" class='form-control' placeholder="预计剩余" value="@ViewBag.TheTime" onkeypress="$.admin.keyPress(this)"
+                       onkeyup="$.admin.keyUp(this)"
+                       onblur="$.admin.keyBlur(this)" />
+                <span class="input-group-addon ">小时</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="LogRemark" class="col-sm-2">
+            描述
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <textarea name="LogRemark" id="LogTextRemark" class='form-control' rows='5' placeholder="描述"></textarea>
+        </div>
+    </div>
+    @{
+        bool bl = true;
+        //判断是否指派或者自己创建
+        if (Model.Assigned == (userId + "") || Model.CreateUserId == userId)
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-primary" onclick="saveData()">保存</button>
+                </div>
+            </div>
+            bl = false;
+        }
+        //是否已经开放权限，如没有，继续走角色设定权限
+        if (bl)
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    @Html.Raw(ViewBag.CurrentBtnList29)
+                </div>
+            </div>
+        }
+    }
+
+</form>
+<script type="text/javascript">
+    // 选择时间和日期
+    $(".form-datetime").datetimepicker(
+        {
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1,
+            format: "yyyy-mm-dd hh:ii"
+        });
+
+    function saveData() {
+        $("#doTaskForm").submit();
+    }
+
+    $("#doTaskForm").Validform({
+        tiptype: 3,
+        callback: function (form) {
+            win.showLoading("正在保存...");
+            $("#doTaskForm").ajaxSubmit(function (data) {
+                if (data.Code == 300) {
+                    win.alert("保存失败");
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        win.hideLoading();
+                        window.parent.location.reload();//刷新当前页面.
+                        win.close();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+</script>

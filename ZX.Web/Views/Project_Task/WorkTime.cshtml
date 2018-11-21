@@ -1,0 +1,111 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model Project_Task
+
+@{
+    ViewBag.Title = "工时-指效OA";
+    int userId = Session["UserId"].ToInt();
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    #WorkTime {
+        padding: 20px;
+    }
+</style>
+<form id="WorkTime" method="post" class="form-horizontal" style="padding-top: 38px;" action="/Project_Task/WorkTimeSave">
+    <input type="hidden" id="Id" name="Id" value="@Model.Id">
+    <input type="hidden" id="TExpected" name="TExpected" value="@Model.TExpected">
+    <input type="hidden" id="FK_ProjectId" name="FK_ProjectId" value="@Model.FK_ProjectId">
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+    <input type="hidden" name="ParentId" value="@Model.ParentId" />
+
+    <div class="form-group">
+        <label for="ConsumTime" class="col-sm-2">
+            我的消耗
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input id="ConsumTime" name="ConsumTime" class='form-control' placeholder="我的消耗" value="@ViewBag.ConsumTime" onkeypress="$.admin.keyPress(this)"
+                   onkeyup="$.admin.keyUp(this)"
+                   onblur="$.admin.keyBlur(this)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="TheTime" class="col-sm-2">
+            预计剩余
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input id="TheTime" name="TheTime" class='form-control' placeholder="预计剩余" value="@ViewBag.TheTime" onkeypress="$.admin.keyPress(this)"
+                   onkeyup="$.admin.keyUp(this)"
+                   onblur="$.admin.keyBlur(this)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="LogRemark" class="col-sm-2">
+            描述
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <textarea name="LogRemark" id="LogTextRemark" class='form-control' rows='5' placeholder="描述"></textarea>
+        </div>
+    </div>
+    @{
+        bool bl = true;
+        //判断是否指派或者自己创建
+        if (Model.Assigned == (userId + "") || Model.CreateUserId == userId)
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-primary" onclick="saveData()">保存</button>
+                </div>
+            </div>
+            bl = false;
+        }
+        //是否已经开放权限，如没有，继续走角色设定权限
+        if (bl)
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    @Html.Raw(ViewBag.CurrentBtnList29)
+                </div>
+            </div>
+        }
+    }
+
+</form>
+<script>
+
+    function saveData() {
+        $("#WorkTime").submit();
+    }
+    $("#WorkTime").Validform({
+        tiptype: 3,
+        callback: function (form) {
+            win.showLoading("正在保存...");
+            $("#WorkTime").ajaxSubmit(function (data) {
+                if (data.Code == 300) {
+                    win.alert("保存失败");
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        win.hideLoading();
+                        window.parent.location.reload();//刷新当前页面.
+                        win.close();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+
+</script>

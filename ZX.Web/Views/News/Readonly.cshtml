@@ -1,0 +1,43 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.News
+@{
+    ViewBag.Title = "添加/编辑新闻-指效OA";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<!--百度文本编辑器JS文件-->
+<script src="~/Static/js/framework.js"></script>
+
+<form action="/News/SaveData" method="post" class="form-horizontal" id="formNews">
+
+    <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+            <div class="article">
+                <header>
+                    <h3><strong>@Model.DName</strong></h3>
+                    <dl class="dl-inline" style="text-align: right;">
+                        <dd data-toggle="tooltip" data-placement="right"><strong>时间：</strong><i class="icon-time icon-large"></i>@Model.CreateTime.ToDateFormat("yyyy-MM-dd hh:mm:ss")</dd>
+                    </dl>
+                </header>
+                <section class="announce-content">
+                    <p>
+                        @Html.Raw(Model.DContent)
+                    </p>
+                    <p>
+                        <a href="@(Model.DImageUrl.IsNullOrEmpty()?"javascript:;":Model.DImageUrl)" target="_blank" id="aNewImage"><img id="DImageUrl" src="@Model.DImageUrl" style="width:300px;height:270px;margin-left:10px;@(Model.DImageUrl + "" == "" ? "display:none" : "")" alt="@Model.DImageUrl" /></a>
+                    </p>
+                </section>
+                <footer>
+                    <div class="row">
+                    </div>
+                </footer>
+                <footer>
+                </footer>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "文档管理-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 20px;
+    }
+    #tbList td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+    .navbar-brand {
+        font-size: 17px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content with-menu'>
+    <input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+    <input type="hidden" id="currentMid" name="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" name="UserId" id="UserId" value="@ViewBag.UserId" />
+    <input type="hidden" id="RoleId" name="RoleId" value="@ViewBag.RoleId" />
+    <input type="hidden" id="fk_LibraryId" name="fk_LibraryId" value="@ViewBag.FK_LibraryId" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class='panel'>
+        <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-100px'>
+                        <div>
+                            文档编号
+                        </div>
+                    </th>
+                    <th class='text-left'>
+                        <div>
+                            文档标题
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            文档类型
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            由谁添加
+                        </div>
+                    </th>
+                    <th class='w-120px visible-lg'>
+                        <div>
+                            添加时间
+                        </div>
+                    </th>
+                    <th class='w-240px {sorter:false}'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        getList();
+    });
+
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/Document_Manager/GetDocument_ManagerList", { pageIndex: pageIndex, pageSize: pageSize, name: "", roleId: -1, mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+
+    function docDel(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Document_Manager/DeleteData", { id: dArray[0] }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    getList();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        }, function () { });
+    }
+
+    function look(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+
+        win.open("/Document_Manager/Readonly?id=" + dArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 770, 400, "文档查看");
+    }
+
+    //编辑文档
+    function docEdit(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+        window.location.href = "/Document_Manager/AddEdit?id=" + dArray[0] + "&fk_TypeId=" + dArray[1] + "&libraryId=" + dArray[2] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "进度统计-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+ <style>
+     .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content with-menu' style="margin-top:40px">
+    <input type="hidden" name="count" id="count" value="@ViewBag.Count" />
+    <input type="hidden" id="currentMid" name="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" name="UserId" id="UserId" value="@ViewBag.UserId" />
+    <input type="hidden" id="RoleId" name="RoleId" value="@ViewBag.RoleId" />
+    <input type="hidden" id="fk_LibraryId" name="fk_LibraryId" value="@ViewBag.FK_LibraryId" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div>
+        <table class='layui-table'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-100px'>
+                        序号
+                    </th>
+                    <th class='text-left'>
+                        项目名称
+                    </th>
+                    <th class='w-100px'>
+                        状态
+                    </th>
+                    <th class='w-100px'>
+                        任务数
+                    </th>
+                    <th class='w-100px visible-lg'>
+                        已完成
+                    </th>
+                    <th class='w-100px visible-lg'>
+                        进行中
+                    </th>
+
+                    <th class='w-100px visible-lg'>
+                        未开始
+                    </th>
+
+                    <th class='w-120px visible-lg'>
+                        进度
+                    </th>
+                    <th class='w-100px visible-lg'>
+                        创建时间
+                    </th>
+                    <th class='w-90px {sorter:false}'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        getList();
+    });
+
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/Project/ProjectStatisticsList", { pageIndex: pageIndex, pageSize: pageSize, userId: -1, roleId: -1, mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+    //进入任务
+    function goProject_Task(obj) {
+        var projectId = $(obj).attr("val");
+        win.showLoading("正在加载...");
+        window.location.href = "/Project_Task/GetProjectTaskList?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&secondMenuId=14";//暂时先手工设定
+        win.hideLoading();
+    }
+</script>

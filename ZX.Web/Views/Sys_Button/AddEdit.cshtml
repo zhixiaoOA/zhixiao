@@ -1,0 +1,152 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@using ZX.BLL
+@model ZX.Model.Sys_Button
+@{
+    ViewBag.Title = "添加或编辑按钮-指效";
+}
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel-body {
+        padding: 80px;
+        padding-top: 20px;
+    }
+</style>
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-body'>
+            <form action="/Sys_Button/SaveData" method="post" class="layui-form" id="formMenu">
+                <input type="hidden" name="FK_MenuId" value="@Model.FK_MenuId" />
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="MenuName" value="@(ViewBag.MenuName)" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">按钮名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="BName" autocomplete="off" value="@Model.BName" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">操作类型</label>
+                    <div class="layui-input-inline">
+                        @Html.DropDownListFor(model => model.BType, ViewBag.ButtonType as IEnumerable<SelectListItem>)
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-inline">
+                        <select name="BGroup" lay-verify="">
+                            @{
+                                List<Dictionary> ditList = DictionaryBLL.GetList(d => d.Where(t => t.ParentId == 26));
+                                foreach (var item in ditList)
+                                {
+                                    if (Model.BGroup == item.Id)
+                                    {
+                                        <option value="@item.Id" lay-verify="required" data-keys="@item.Name" selected>@item.Name</option>
+                                        continue;
+                                    }
+                                    <option value="@item.Id" lay-verify="required" data-keys="@item.Name">@item.Name </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">执行方法</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="BOptionFun" autocomplete="off" value="@Model.BOptionFun" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否禁用</label>
+                    <div class="layui-input-block">
+                        @if (Model.BIsUse == 1)
+                        {
+                            <input name="BIsUse" type="checkbox" lay-skin="primary" id="checkBIsUse" checked>
+                        }
+                        else
+                        {
+                            <input name="BIsUse" type="checkbox" lay-skin="primary" id="checkBIsUse" />
+                        }
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="BSort" autocomplete="off" value="@Model.BSort" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">按钮描述</label>
+                    <div class="layui-input-inline">
+                        <textarea name='BDesc' id='BDesc' class='layui-textarea' rows='5'>@Model.BDesc</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn" onclick="saveDate()">保存</button>
+                        <button type="button" class="layui-btn" onclick="goBack(this)">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use("form", function () {
+        var form = layui.form;
+    });
+    $(document).ready(function () {
+        $('select').addClass("form-control");
+    });
+
+    $("#checkBIsUse").change(function () {
+        if ($("#checkBIsUse").prop('checked')) {
+            $("#BIsUse").val(1);
+        } else {
+            $("#BIsUse").val(0);
+        }
+    });
+
+    function saveDate() {
+        $("#formMenu").submit();
+    }
+
+    function goBack(obj) {
+        win.close();
+    }
+
+    $(function () {
+        $("#formMenu").Validform({
+            tiptype: 2,
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#formMenu").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert("保存失败");
+                    } else if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            parent.showSysMenuBtn($("#FK_MenuId").val());
+                            win.close();
+                        });
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>

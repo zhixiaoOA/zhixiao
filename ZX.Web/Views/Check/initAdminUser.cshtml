@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>设置管理员信息</title>
+    <link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+    <script src="/Static/script/jquery-1.10.2.min.js"></script>
+    <script src="~/Static/js/layui/layui.js"></script>
+    <script src="~/Static/js/layer/layer.js"></script>
+    <script src="~/Static/js/layer/layer.tools.js"></script>
+    <style>
+        .zx-user-title {
+            font-size: 1.2rem;
+        
+        }
+        .zx-center-box {
+            position: absolute;
+            height: 18rem;
+            width: 22rem;
+            top: 50%;
+            left: 50%;
+            margin-left: -18rem;
+            margin-top: -14rem;
+            border: 1px solid;
+            padding: 4rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="zx-center-box">
+        <div class="zx-user-title">
+            <form class="layui-form" action="/">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="UserName" required lay-verify="required" placeholder="请输用户名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码框</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="Pwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="RealName" required lay-verify="required" placeholder="请输姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="USex" value="1" title="男">
+                        <input type="radio" name="USex" value="2" title="女" checked>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="user-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+
+    layui.use('form', function () {
+        var form = layui.form;
+    });
+
+    $(function () {
+        //发送表单ajax请求
+        $('#user-btn').on('click', function () {
+            var data = JSON.stringify($('form').serializeObject());
+            $.ajax({
+                url: "/Check/saveUser",
+                type: "POST",
+                data: data,
+                contentType: "application/json", //缺失会出现URL编码，无法转成json对象
+                success: function (data) {
+                    if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            window.location.href = "/login";
+                        });
+                    }
+                },
+                error: function (data) {
+                    layer.msg(data.Message, { time: 10 * 1000 });
+                }
+            });
+        });
+
+        /**
+            * 自动将form表单封装成json对象
+            */
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    });
+</script>

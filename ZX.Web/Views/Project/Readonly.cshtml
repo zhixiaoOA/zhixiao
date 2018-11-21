@@ -1,0 +1,188 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Project
+@{
+    ViewBag.Title = "查看项目—指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<style>
+    .col-sm-2 {
+        width: 14%;
+    }
+</style>
+<form method="post" class="form-horizontal" action="/Project/SaveData" id="formProject">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="form-group" style="padding-top:16Px;">
+        <label for="BType" class="col-sm-2">项目名称</label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="PName" name="PName" value="@Model.PName" placeholder="项目名称" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2">创建时间</label>
+        <div class="col-xs-5">
+            <span class="label label-badge">@Model.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss")</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            负责人
+        </label>
+        @*<input type="hidden" id="HeadUser" name="HeadUser" class="form-control" value="" placeholder="负责人">*@
+        <div class="col-md-6 col-sm-10">
+            <select name="HeadUser" data-placeholder="选择负责人..." class="chosen-select form-control" tabindex="2">
+                @{
+                    foreach (var item in ViewBag.HeadUserList as IEnumerable<SelectListItem>)
+                    {
+                        bool bl = true;
+                        if (Model.HeadUser.IsNotNullOrEmpty())
+                        {
+                            if (Model.HeadUser.Equals(item.Value))
+                            {
+                                <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                bl = false;
+                                continue;
+                            }
+                        }
+
+                        if (bl)
+                        {
+                            <option value="@item.Value" data-keys="@item.Value"> @item.Text </option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div id="div_TeamUser" class="form-group">
+        <label for="TeamUser" class="col-sm-2">
+            团队
+        </label>
+        <input type="hidden" id="TeamUser" name="TeamUser" class="form-control" value="" placeholder="团队">
+        <div class="col-md-6 col-sm-10">
+            <select data-placeholder="选择团队..." class="chosen-select form-control" tabindex="2" multiple="">
+                @{
+                    List<Project_Team> teamList = ViewBag.TeamList;
+                    foreach (var item in ViewBag.TeamUserList as IEnumerable<SelectListItem>)
+                    {
+                        bool bl = true;
+                        if (teamList != null)
+                        {
+                            foreach (var team in teamList)
+                            {
+                                if (team.FK_UserId.ToString().Equals(item.Value))
+                                {
+                                    <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                    bl = false;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        if (bl)
+                        {
+                            <option value="@item.Value" data-keys="@item.Value"> @item.Text </option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div id="StartTime" class="form-group">
+        <label for="StartTime" class="col-sm-2">
+            开始日期
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <div class="required required-wrapper"></div>
+            <div class="required required-wrapper"></div>
+            <input type="text" name="StartTime" value="@Model.StartTime.ToDateFormat()" placeholder="开始日期" onclick="WdatePicker()" class="form-control form-date">
+        </div>
+    </div>
+    <div id="EndTime" class="form-group">
+        <label for="EndTime" class="col-sm-2">
+            结束日期
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <div class="required required-wrapper"></div>
+            <div class="required required-wrapper"></div>
+            <input type="text" name="EndTime" value="@Model.EndTime.ToDateFormat()" placeholder="结束日期" onclick="WdatePicker()" class="form-control form-date">
+        </div>
+    </div>
+    <div id="div_PDesc" class="form-group">
+        <label for="PDesc" class="col-sm-2">
+            项目描述
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <textarea name="PDesc" id="PDesc" class='form-control' rows='5' placeholder="项目描述">@Model.PDesc</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="hidden" id="Visitors" name="Visitors" value="@Model.Visitors" placeholder="参观者" class="form-control">
+        <label for="RoleList" class="col-sm-2">
+            参观者
+        </label>
+        <div class="col-md-6 col-sm-10">
+            @{
+                List<Sys_Role> list = ViewBag.RoleListList;
+                foreach (var item in list)
+                {
+                    bool bl = true;
+                    if (!Model.Visitors.IsNullOrEmpty())
+                    {
+                        string[] visitors = Model.Visitors.Split(',');
+                        foreach (var visitorId in visitors)
+                        {
+                            if (visitorId == item.Id.ToString())
+                            {
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="visitorsList" value="@item.Id" id="whitelist+@item.Id" checked> @item.RName
+                                </label>
+                                bl = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (bl)
+                    {
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="visitorsList" value="@item.Id" id="whitelist+@item.Id"> @item.RName
+                        </label>
+                    }
+
+                }
+            }
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+        search_contains: true         // 从任意位置开始检索
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#TeamUser").val($(this).val());
+
+    });
+</script>

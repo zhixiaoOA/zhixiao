@@ -1,0 +1,30 @@
+﻿/*==========以下部分是表单验证===========*/
+.Validform_checktip {
+    /*margin-left: 8px;*/
+    line-height: 20px;
+    height: 20px;
+    overflow: hidden;
+    color: #999;
+    font-size: 12px;
+    /*margin-left: 35%;*/
+}
+
+.Validform_right {
+    color: #71b83d;
+    padding-left: 20px;
+    background: url(../img/stateicon/right.png) no-repeat left center;
+    /*margin-left: 35%;*/
+}
+
+.Validform_wrong {
+    color: red;
+    padding-left: 20px;
+    white-space: nowrap;
+    background: url(../img/stateicon/error.png) no-repeat left center;
+    /*margin-left: 35%;*/
+}
+
+.Validform_loading {
+    padding-left: 20px;
+    background: url(../img/stateicon/onLoad.gif) no-repeat left center;
+}

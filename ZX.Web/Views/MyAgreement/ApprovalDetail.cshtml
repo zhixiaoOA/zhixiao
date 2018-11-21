@@ -1,0 +1,171 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MyAgreement
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_Log> listLog = ViewBag.ListLog;
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i> 合同(协议)审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/MyAgreement/SaveApproval" method="post" class="form" id="formMyAgreement">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-left" colspan="2">经办部门：@user.DeptName</th>
+                        <th class='text-left'>经办人：@user.RealName</th>
+                        <th class='text-left'>电话：@user.UPhone</th>
+                    </tr>
+                    <tr>
+                        <th class="text-left" colspan="2">填报日期：@(Model.AddTime.ToDateFormat("yyyy-MM-dd"))</th>
+                        <th class='text-left' colspan="2">合同编号：@Model.HtNo</th>
+                    </tr>
+                    <tr>
+                        <th class='text-center' rowspan="5">合同立项内容</th>
+                        <th class='text-center'>合同名称</th>
+                        <td colspan="2">@Model.HtName</td>
+                    </tr>
+                    @*<tr>
+                            <th class='text-center'>甲方</th>
+                            <td colspan="2">@Model.JiaName</td>
+                        </tr>
+                        <tr>
+                            <th class='text-center'>乙方</th>
+                            <td colspan="2">@Model.YiName</td>
+                        </tr>*@
+                    <tr>
+                        <th class="text-center">当事人</th>
+                        <td colspan="2">
+                            <textarea cols="20" style="background-color:white;" readonly="readonly" rows="5" name="Party" class="form-control">@Model.Party</textarea>
+                        </td>
+                        @*<td colspan="2"><input name="Party" class="form-control" placeholder="开始日期" value="@Model.Party" /></td>*@
+                    </tr>
+                    <tr>
+                        <th class='text-center'>合同金额</th>
+                        <td colspan="2">@Model.TotalMoney</td>
+                    </tr>
+                    <tr>
+                        <th class='text-center'>合同附件</th>
+                        <td colspan="2"><a href="@Model.HtFile" target="_blank" style="@(Model.HtFile.IsNullOrEmpty()?"display:none":"")" id="afj">下载附件</a></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">使用印章名称</th>
+                        <td colspan="3">@Model.YinzName</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">合同摘要</th>
+                        <td colspan="3">
+                            <textarea cols="20" style="background-color:white;" readonly="readonly" rows="5" name="Description" class="form-control">@Model.Description</textarea>
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="3">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    @if ((Model.Status == ApplyStatus.新申请.ToInt() || Model.Status == ApplyStatus.审核中.ToInt()) && ViewBag.UserId != Model.FK_UserId)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批意见</th>
+                            <td colspan="3">
+                                <textarea style="width:100%;" cols="3" name="applyMsg" class='form-control' autocomplete="off"></textarea>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='3'>
+                            @if ((Model.Status == ApplyStatus.新申请.ToInt() || Model.Status == ApplyStatus.审核中.ToInt()) && ViewBag.UserId != Model.FK_UserId)
+                            {
+                                <a href='javascript:;' class='btn btn-warning' onclick='bohui()'>驳回</a>
+                                <span>&nbsp; &nbsp;</span>
+                                <a href='javascript:;' class='btn btn-success' onclick='tongguo()'>通过</a>
+                                <span>&nbsp; &nbsp;</span>
+                            }
+                            @if (Model.Status == ApplyStatus.已审核.ToInt())
+                            {
+                                <span>&nbsp;&nbsp;</span>
+                                <a href='javascript:;' class='btn btn-primary' onclick='printApply(@Model.Id)'>打印</a>
+                            }
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<iframe frameborder="0" src="" id="printFrame" style="width: 0;height: 0;"></iframe>
+<script type="text/javascript">
+    $(function () {
+        $("#formMyAgreement").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                win.showLoading("正在提交...");
+                $("#formMyAgreement").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("审核成功", function () {
+                            goBack();
+                        }, 1000);
+                    }
+                });
+                return false;
+            }
+        });
+    });
+    function bohui() {
+        $("input[name='status']").val("@ApplyStatus.驳回.ToInt()");
+        $("#formMyAgreement").submit();
+    }
+    function tongguo() {
+        $("input[name='status']").val("@ApplyStatus.审核中.ToInt()");
+        $("#formMyAgreement").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    function printApply(id) {
+        $("#printFrame").attr('src', '/MyAgreement/MyAgreementPrint?id=' + id);
+    }
+</script>

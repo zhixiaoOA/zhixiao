@@ -1,0 +1,161 @@
+﻿@model List<ZX.Model.Assets>
+@using ZX.Model
+@{
+    ViewBag.Title = "资产管理-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/treeview/min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/jquery/treeview/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    .layui-table td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content'>
+    <div class="col-md-12">
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='clearfix'>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <strong><i class="icon-group"></i>资产日志信息</strong>
+                        </div>
+                        <div class="panel-body">
+                            <form action="OutExcel" id="doForm">
+                                <fieldset>
+                                    <legend>查询条件</legend>
+
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <label>资产名称</label>
+                                            <input type="text" class="form-control" id="txtAname">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>借用人</label>
+                                            <input type="text" class="form-control" id="txtCreateAccount">
+                                        </div>
+                                        <button type="button" id="btnSearch" class="btn btn-default">查询</button>&nbsp;&nbsp;
+                                        @Html.Raw(ViewBag.CurrentBtnList32)
+                                    </div>
+                                </fieldset>
+                            </form>
+                            <table class='layui-table' style="border: 1px solid #ddd;">
+                                <thead>
+                                    <tr class='text-center'>
+                                        <th>
+                                            资产编号
+                                        </th>
+                                        <th>
+                                            资产名称
+                                        </th>
+                                        <th>
+                                            状态
+                                        </th>
+                                        <th>
+                                            借用人
+                                        </th>
+                                        <th>
+                                            借用日期
+                                        </th>
+                                        <th>
+                                            返还日期
+                                        </th>
+                                        <th>
+                                            备注
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbList"></tbody>
+                            </table>
+                        </div>
+                        <div class='table-footer' style="border-top:1px solid #ddd;">
+                            <div class='pull-left text-danger'></div>
+                            <div style='float:right; clear:none;' class='pager form-inline'>
+                                <div id="myPager"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language='Javascript'>
+    //获取资产日志数据信息
+    $(document).ready(function () {
+        $("#btnSearch").click(function () {
+            AssetsLogList();
+        });
+        AssetsLogList();
+    });
+
+    var pageIndex = 1, pageSize = 10, count = 0;
+    //获取资产管理列表数据
+    function AssetsLogList() {
+        var anameKey = $.trim($("#txtAname").val());
+        var createAccountKey = $.trim($("#txtCreateAccount").val());
+        win.showLoading();
+        $.post("/Assets_Log/AssetsLogList", { pageIndex: pageIndex, pageSize: pageSize, anameKey: anameKey, createAccountKey: createAccountKey }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                if (data.Data != null) {
+                    $("#tbList").html(data.Data);
+                    count = data.TotalCount;
+                    initPage();
+                }
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        AssetsLogList();
+                    }
+                }
+            });
+        });
+    }
+    function doExport() {
+        $("#doForm").submit();
+    }
+</script>

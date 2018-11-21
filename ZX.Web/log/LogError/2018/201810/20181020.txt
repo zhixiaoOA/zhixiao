@@ -1,0 +1,110 @@
+
+ 
+记录时间：2018-10-20 09:26:05,066 
+线程ID:[10] 
+日志级别：  ERROR 
+错误描述：无法打开登录所请求的数据库 "zhixiaoOA"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiaoOA"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.Web.Controllers.init.CheckController.generSql(SqlConnection connectstring) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 286
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 80
+ClientConnectionId:04d67a68-b3c3-4e47-aef7-fda0862b6a45
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-10-20 09:26:25,431 
+线程ID:[9] 
+日志级别：  ERROR 
+错误描述：无法打开登录所请求的数据库 "zhixiaoOA"。登录失败。
+用户 'sa' 登录失败。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 无法打开登录所请求的数据库 "zhixiaoOA"。登录失败。
+用户 'sa' 登录失败。
+   在 ZX.Web.Controllers.init.CheckController.generSql(SqlConnection connectstring) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 286
+   在 ZX.Web.Controllers.init.CheckController.GenerateDataBase() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\init\CheckController.cs:行号 80
+ClientConnectionId:fd92bac9-d236-419f-93bb-0938dc5372f3
+Error Number:4060,State:1,Class:11
+
+ 
+记录时间：2018-10-20 11:03:43,297 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:对象名 'Sys_Menu' 无效。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 对象名 'Sys_Menu' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(String strWhere) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 482
+   在 ZX.BLL.BaseBLL`2.GetList(String where) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 163
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 231
+ClientConnectionId:5172eb8b-2c80-4a33-a43e-bd4b28c9c73d
+Error Number:208,State:1,Class:16
+
+ 
+记录时间：2018-10-20 11:03:43,357 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：获取按钮异常
+ 
+System.Data.SqlClient.SqlException (0x80131904): 对象名 'Sys_Role_Menu' 无效。
+   在 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   在 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   在 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   在 System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   在 System.Data.SqlClient.SqlDataReader.get_MetaData()
+   在 System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   在 System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   在 System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 ZX.DAL.DBBase`1.GetList(String strWhere) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DBBase.cs:行号 482
+   在 ZX.BLL.BaseBLL`2.GetList(String where) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\Base\BaseBLL.cs:行号 163
+   在 ZX.Web.Controllers.BaseController.GetButtonListByMenuId(Int32 menuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 320
+ClientConnectionId:5172eb8b-2c80-4a33-a43e-bd4b28c9c73d
+Error Number:208,State:1,Class:16
+
+ 
+记录时间：2018-10-20 11:44:21,384 
+线程ID:[47] 
+日志级别：  ERROR 
+错误描述：登陆异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.LoginController.AdminLogin()
+
+ 
+记录时间：2018-10-20 11:47:22,921 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.RecursionGetFirstMenu(List`1 menuList, Int32 mid) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 298
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMainNavbarByUserId(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 166
+
+ 
+记录时间：2018-10-20 11:47:22,955 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：获取当前登录用户所具备传入菜单的下一级菜单HTML异常,异常信息:未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Controllers.BaseController.<>c.<GetSysAdminMiddleMenu>b__23_1(Sys_Menu t) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265
+   在 System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   在 System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   在 System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   在 ZX.Web.Controllers.BaseController.GetSysAdminMiddleMenu(Int32 pMenuId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\BaseController.cs:行号 265

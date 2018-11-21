@@ -1,0 +1,274 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@{
+    ViewBag.Title = "文件系统-项目文档库-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .outer {
+        overflow: auto
+    }
+
+    .doclib-action li {
+        list-style: none
+    }
+
+    .doc-content {
+        overflow-x: scroll;
+    }
+
+    label.checkbox {
+        float: left;
+        margin-right: 10px;
+        width: 100px;
+    }
+
+    input[type=checkbox] {
+        margin-top: 1px;
+    }
+
+    .table-form td + td, .table-form th + th {
+        padding-left: 20px;
+    }
+
+    .icon-2x {
+        font-size: 40px;
+    }
+
+    .libs-group-heading {
+        color: #808080;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+    }
+
+        .libs-group-heading a {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-decoration: none;
+        }
+
+    .libs-group {
+        padding: 10px;
+        height: 84px;
+    }
+
+    .lib {
+        float: left;
+        display: block;
+        width: 80px;
+        padding: 5px;
+        margin: 0px 3px;
+        text-align: center;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .lib .file-icon {
+            margin-bottom: 5px;
+        }
+
+        .lib .lib-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .lib:hover, .lib:focus, .lib:active {
+            border-color: #2e6dad;
+            background-color: #EBF2F9;
+            color: #2e6dad;
+            text-decoration: none;
+        }
+
+    .w-lib-p100 {
+        width: 100%;
+    }
+
+    .w-lib-p50 {
+        width: 45%;
+    }
+
+    .w-lib-p33 {
+        width: 30%;
+    }
+
+    #menu .nav > li > a {
+        display: inline-block;
+    }
+
+    #navBarActions {
+        position: absolute;
+        right: 100px;
+        top: 4px;
+        z-index: 10000;
+    }
+
+    .panel-body > form {
+        max-width: 1200px;
+    }
+
+    #libList .lib .icon-move {
+        display: none;
+        position: relative;
+        top: -20px;
+        right: -70px;
+    }
+
+    #libList .lib:hover .icon-move {
+        display: inline-block;
+        cursor: move;
+    }
+
+    .lib-heading {
+        border-right: 1px solid #ddd;
+    }
+
+    .lib-more a.more {
+        font-weight: bold;
+        display: block;
+    }
+
+    #libs .libs-group-heading {
+        border: 1px solid #ddd;
+    }
+
+    #libs .libs-group {
+        border: 1px solid #ddd;
+        border-top: 0px;
+        margin-bottom: 20px;
+    }
+
+        #libs .libs-group.lib-more {
+            border: 0px;
+            text-align: center;
+            height: 120px;
+            line-height: 110px;
+        }
+
+            #libs .libs-group.lib-more:hover {
+                background-color: #EBF2F9
+            }
+
+    #libs .libs-custom-heading {
+        text-align: center;
+        height: 120px;
+        line-height: 110px;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        #libs .libs-custom-heading:hover {
+            background-color: #EBF2F9
+        }
+
+        #libs .libs-custom-heading a {
+            display: block;
+            height: 100%;
+        }
+
+        #libs .libs-custom-heading .lable-custom {
+            position: absolute;
+            left: 8px;
+        }
+
+    #libs hr {
+        margin-top: 0px;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 20px;
+    }
+   
+    .navbar-brand {
+        font-size: 17px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div id='libs' style="width:98%">
+    <div class='row' id="div_ProjectLibs">
+    </div>
+    <hr />
+    <div class='table-footer'>
+        <div class='pull-left text-danger'></div>
+        <div style='float:right; clear:none;' class='pager form-inline'>
+            <div id="projectLibsPager"></div>
+        </div>
+    </div>
+
+</div>
+<script language='Javascript'>
+    $(function () {
+        getprojectLidsList();
+    });
+
+    function jumpProjectLib(projectId, libType) {
+        window.location.href = "/Document_Project_Library/ProjectLib?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&libType=" + libType + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    var projectLidsPageIndex = 1, projectLidsPageSize = 10, projectLidsCount = 0;
+
+    function getprojectLidsList() {
+        win.showLoading("正在加载...");
+        $.post("/Document_Project_Library/GetProjectLibs", { pageIndex: projectLidsPageIndex, pageSize: projectLidsPageSize, name: "", mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#div_ProjectLibs").html(data.Data);
+                projectLidsCount = data.TotalCount;
+                projectLidsPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function projectLidsPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'projectLibsPager'
+                , limit: projectLidsPageSize
+                , curr: projectLidsPageIndex
+                , count: projectLidsCount
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        projectLidsPageIndex = obj.curr;
+                        projectLidsPageSize = obj.limit;
+                        getprojectLidsList();
+                    }
+                }
+            });
+        });
+    }
+</script>

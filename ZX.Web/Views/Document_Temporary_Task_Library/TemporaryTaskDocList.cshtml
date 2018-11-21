@@ -1,0 +1,326 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@model Document_Library
+@{
+    if (Model == null)
+    {
+        return;
+    }
+    ViewBag.Title = "临时任务文档-指效OA";
+    Temporary_Task tTask = ViewBag.Temporary_TaskModel;
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+
+<style>
+    .outer {
+        overflow: auto
+    }
+
+    .doclib-action li {
+        list-style: none
+    }
+
+    .doc-content {
+        overflow-x: scroll;
+    }
+
+    label.checkbox {
+        float: left;
+        margin-right: 10px;
+        width: 100px;
+    }
+
+    input[type=checkbox] {
+        margin-top: 1px;
+    }
+
+    .table-form td + td, .table-form th + th {
+        padding-left: 20px;
+    }
+
+    .icon-2x {
+        font-size: 40px;
+    }
+
+    .libs-group-heading {
+        color: #808080;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+    }
+
+        .libs-group-heading a {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-decoration: none;
+        }
+
+    .libs-group {
+        padding: 10px;
+        height: 84px;
+    }
+
+    .lib {
+        float: left;
+        display: block;
+        width: 80px;
+        padding: 5px;
+        margin: 0px 3px;
+        text-align: center;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .lib .file-icon {
+            margin-bottom: 5px;
+        }
+
+        .lib .lib-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .lib:hover, .lib:focus, .lib:active {
+            border-color: #2e6dad;
+            background-color: #EBF2F9;
+            color: #2e6dad;
+            text-decoration: none;
+        }
+
+    .w-lib-p100 {
+        width: 100%;
+    }
+
+    .w-lib-p50 {
+        width: 45%;
+    }
+
+    .w-lib-p33 {
+        width: 30%;
+    }
+
+    #menu .nav > li > a {
+        display: inline-block;
+    }
+
+    #navBarActions {
+        position: absolute;
+        right: 100px;
+        top: 4px;
+        z-index: 10000;
+    }
+
+    .panel-body > form {
+        max-width: 1200px;
+    }
+
+    #libList .lib .icon-move {
+        display: none;
+        position: relative;
+        top: -20px;
+        right: -70px;
+    }
+
+    #libList .lib:hover .icon-move {
+        display: inline-block;
+        cursor: move;
+    }
+
+    #menu > .nav {
+        float: none;
+        margin-right: 200px;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+    .top-navbar-index>li>a {
+        color:black!important;
+    }
+    .row {
+        margin: 0;
+        padding: 20px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="fk_LibraryId" value="@Model.Id">
+<input type="hidden" id="FK_Id" value="@Model.FK_Id" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<input type="hidden" id="docType" value="">
+
+<div class='row page-content'>
+    <nav id='menu'>
+        <ul class='nav'>
+            <li>
+                <a href='javascript:;' onclick="jumpTemporary_TaskLib(this)" val="@(tTask.Id+","+Model.DType)">@tTask.TName</a>
+            </li>
+            <li class='divider angle'></li>
+            <li>
+                <a href='javascript:;' onclick="GetDocumentListByTypeId(0)">@Model.DName</a>
+            </li>
+        </ul>
+    </nav>
+    <div id='menuActions'>
+        @{
+            try
+            {
+                List<Sys_Button> currentBtnList = ViewBag.RoleButtonList;
+                List<Sys_Button> currentBtnList32 = currentBtnList.Where(l => l.BGroup == 32 && l.BIsUse == 0).ToList();
+                foreach (var item in currentBtnList32)
+                {
+                    <a href='javascript:;' class='btn btn-primary' onclick="@item.BOptionFun" val="@Model.Id">@item.BName</a>
+                }
+            }
+            catch
+            {
+            }
+        }
+    </div>
+    <div class='row with-menu page-content'>
+        <div>
+            <div class='panel'>
+                <div class='panel-heading'>
+                    <strong><i class='icon-list-ul'></i> 文档列表</strong>
+                </div>
+                <table class='table table-hover table-striped tablesorter table-fixed' id='docList'>
+                    <thead>
+                        <tr class='text-center'>
+                            <th class='w-100px'>
+                                <div>
+                                    序号
+                                </div>
+                            </th>
+                            <th class='text-left'>
+                                <div>
+                                    文档标题
+                                </div>
+                            </th>
+                            <th class='w-100px'>
+                                <div>
+                                    文档类型
+                                </div>
+                            </th>
+                            <th class='w-100px visible-lg'>
+                                <div>
+                                    添加时间
+                                </div>
+                            </th>
+                            <th class='w-120px {sorter:false}'>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class='table-footer'>
+                    <div style='float:right; clear:none;' class='page'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script language='Javascript'>
+    $(function () {
+         GetDocumentListByLibraryId(@Model.Id);
+    });
+
+    function jumpTemporary_TaskLib(obj) {
+        var attrInfo = $(obj).attr("val");
+        var attrArray = attrInfo.split(',');
+        window.location.href = "/Document_Temporary_Task_Library/Temporary_TaskLib?taskId=" + attrArray[0] + "&mid=" + $("#currentMid").val() + "&libType=" + attrArray[1] + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //展示文档库下的文档列表
+    function GetDocumentListByLibraryId(id) {
+        //win.showLoadding("正在加载...");
+        //为添加按钮设置 跳转路径
+
+        $.post("/Document_Temporary_Task_Library/GetDocumentListByLibraryId", { libraryId: $("#fk_LibraryId").val(), mid: $("#currentMid").val(),  "secondMenuId": $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("tbody").html(data.Data);
+            } else {
+                //win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+
+    function docEdit(obj) {
+        var attrInfo = $(obj).attr("val");
+        var attrArray = attrInfo.split(',');
+        window.location.href = "/Document_Temporary_Task_Library/TemporaryTaskDocAddEdit?id=" + attrArray[0] + "&fk_TypeId=" + attrArray[1] + "&libraryId=" + attrArray[2] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    function docDel(id) {
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            //var attrInfo = $(obj).attr("val");
+            //var attrArray = attrInfo.split(',');
+            $.post("/Document_Manager/DeleteData", { id: id }, function (data) {
+                win.hideLoading();
+                if (data.Code == 200) {
+                    win.success("删除成功", function () {
+                        GetDocumentListByLibraryId($("#fk_LibraryId").val());
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        }, function () { });
+    }
+    function addDoc() {
+        win.open("/Document_Temporary_Task_Library/TemporaryTaskDocAddEdit?id=0&libraryId=" + $("#fk_LibraryId").val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 770, 400, "创建项目文档");
+    }
+    //跳转到项目文档库或者自定义库
+    function jumpTemporary_TaskLibList(libraryId) {
+        window.location.href = "/Document_Temporary_Task_Library/Temporary_TaskLib?taskId=" + $("#FK_Id").val() + "&libType=10&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    //编辑文档库
+    function editLid(obj) {
+        var attrInfo = $(obj).attr("val");
+        var attrArray = attrInfo.split(',');
+
+        var title = "项目文档库编辑";
+        win.open("/Document_Temporary_Task_Library/TemporaryTaskLibAddEdit?id=" + attrArray[0] + "&FK_Id=" + $("#FK_Id").val() + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 770, 509, title);
+    }
+    //文档库删除
+    function delLib(obj) {
+        var attrInfo = $(obj).attr("val");
+        var attrArray = attrInfo.split(',');
+
+
+        layer.confirm('确认要删除<' + attrArray[2] + '>吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.post("/Document_Library/DeleteData", { id: attrArray[0] }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    jumpTemporary_TaskLibList(attrArray[0]);
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        }, function () { });
+    }
+
+    function look(obj) {
+        var docInfo = $(obj).attr("val");
+        var dArray = docInfo.split(',');
+        win.open("/Document_Temporary_Task_Library/Readonly?id=" + dArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 770, 400, "临时任务文档查看");
+    }
+</script>

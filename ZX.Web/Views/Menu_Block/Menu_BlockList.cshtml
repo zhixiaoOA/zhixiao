@@ -1,0 +1,124 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@{
+    ViewBag.Title = "区块管理-指效OA";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<style>
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+</style>
+<input type="hidden" id="currentMid" name="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class='with-menu'>
+    <div id='menuActions' style="float:right;margin-top:-50px;">
+        <a href="javascript:;" onclick="add()" class="btn btn-primary" val="{0}">添加区块</a>
+    </div>
+    <div class='panel'>
+        <table class='layui-table'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-60px'>序号</th>
+                    <th class='text-left'>菜单</th>
+                    <th class='text-left'>区块名称</th>
+                    <th class='text-left'>对应表名</th>
+                    <th class='text-left'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        getList();
+    });
+    function add() {
+        win.open("/Menu_Block/addedit?id=0&secondMenuId=" + $("#secondMenuId").val(), 500, 400, "新增区块");
+    }
+    function edit(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Menu_Block/addedit?id=" + id + "&secondMenuId=" + $("#secondMenuId").val(), 500, 400, "编辑区块");
+    }
+    function look(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Menu_Block/Readonly?id=" + id + "&secondMenuId=" + $("#secondMenuId").val(), 500, 400, "查看区块");
+    }
+    function del(obj) {
+        var id = $(obj).attr("val");
+        win.confirm("确认要删除吗?", function () {
+            $.post("/Menu_Block/deletedata", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功");
+                    count = data.TotalCount;
+                    getList();
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/Menu_Block/GetList", { pageIndex: pageIndex, pageSize: pageSize, name: "", mid: $("#currentMid").val(), secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

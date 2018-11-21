@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel='icon' href='/favicon.ico' type='image/x-icon' />
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
+    <title>@ViewBag.Title</title>
+    <script language='Javascript'>
+        var config = { "webRoot": "\/", "appName": "sys", "cookieLife": 30, "requestType": "GET", "requestFix": "-", "moduleVar": "m", "methodVar": "f", "viewVar": "t", "defaultView": "html", "themeRoot": "\/theme\/", "currentModule": "company", "currentMethod": "setbasic", "clientLang": "zh-cn", "requiredFields": "", "save": "\u4fdd\u5b58", "router": "\/sys\/index.php", "runMode": "front", "timeout": 30000, "pingInterval": 60 }
+    </script>
+
+    <link rel='stylesheet' href='~/res/theme/zui/css/min.css?v=4.6.1' type='text/css' media='screen' />
+    <link rel='stylesheet' href='~/res/theme/zui/css/min.css?v=4.6.1' type='text/css' media='print' />
+    <link rel='stylesheet' href='~/res/theme/default/style.css?v=4.6.1' type='text/css' media='screen' />
+    <link rel='stylesheet' href='~/res/theme/default/style.css?v=4.6.1' type='text/css' media='print' />
+    <link rel='stylesheet' href='~/res/theme/default/admin.css?v=4.6.1' type='text/css' media='screen' />
+    <link rel='stylesheet' href='~/res/theme/default/admin.css?v=4.6.1' type='text/css' media='print' />
+    <link href="/Scripts/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="/Scripts/zTree/css/demo.css" rel="stylesheet" />
+
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="/Scripts/admin.min.js"></script>
+    <script src="/Scripts/layer/layer_bak.js"></script>
+    <script src="/Scripts/layer/layer.tools.js"></script>
+    <script src="/Scripts/zTree/js/jquery.ztree.core-3.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/zTree/js/jquery.ztree.excheck-3.1.js" type="text/javascript"></script>
+    <script src="/Scripts/zTree/js/jquery.ztree.all-3.1.js" type="text/javascript"></script>
+    <script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <link href="/Scripts/Validform/css/style.css" rel="stylesheet" />
+    <script src="/Scripts/Validform/js/Validform_v5.3.2.js" type="text/javascript"></script>
+    <script src="/Scripts/form/jquery.form.min.js"></script>
+    <link href="/Scripts/layui/css/layui.css" rel="stylesheet" />
+    <script src="/Scripts/layui/layui.all.js"></script>
+    <script language='Javascript'>if (typeof (v) != "object") v = {}; v.mid= "@ViewBag.mid";</script>
+
+
+    <script language='Javascript'>v.lang = { "confirmDelete": "\u60a8\u786e\u5b9a\u8981\u6267\u884c\u5220\u9664\u64cd\u4f5c\u5417\uff1f", "deleteing": "\u5220\u9664\u4e2d", "doing": "\u5904\u7406\u4e2d", "timeout": "\u7f51\u7edc\u8d85\u65f6,\u8bf7\u91cd\u8bd5", "confirmDiscardChanges": "\u8868\u5355\u5df2\u66f4\u6539\uff0c\u786e\u5b9a\u5173\u95ed\uff1f", "yes": "\u662f", "no": "\u5426" };</script>
+</head>
+<body class='m-company-setbasic'>
+    @RenderBody()
+</body>
+</html>

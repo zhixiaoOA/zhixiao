@@ -1,0 +1,79 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@using ZX.BLL
+@model Menu_Block
+@{
+    ViewBag.Title = "菜单区块-指效OA";
+}
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .layui-form-select dl {
+        max-height: 150px;
+    }
+</style>
+<div style="padding-left:30px;padding-top:20px;">
+    <form action="/Menu_Block/SaveData" method="post" class="layui-form" id="formMenu_Block">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单</label>
+            <div class="layui-input-inline">
+                <select name="FK_MenuId">
+                    @{
+                        List<Sys_Menu> listMenuClassA = Sys_MenuBLL.GetList(d => d.Where(t => t.MParentId == 0));
+                        foreach (var item in listMenuClassA)
+                        {
+                            if (Model.FK_MenuId == item.Id)
+                            {
+                                <option value="@item.Id" selected>@item.MName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.MName</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="MBName" value="@Model.MBName" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">对应表名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="MBName" value="@Model.ToTableName" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    layui.use("form", function () {
+        var form = layui.form;
+    });
+    function saveData() {
+        $("#formMenu_Block").submit();
+    }
+    $(function () {
+        $("#formMenu_Block").Validform({
+            tiptype: 3,
+            callback: function (form) {
+                $("#formMenu_Block").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            window.parent.location.reload();//刷新当前页面.
+                            win.close();
+                        });
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>

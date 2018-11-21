@@ -1,0 +1,150 @@
+﻿@using ZX.Model
+@{
+    ViewBag.Title = "公告管理-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 20px;
+    }
+    #tbList td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+
+    .navbar-brand {
+        font-size: 17px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='active' style="height:41px;">
+        </li>
+    </ul>
+</nav>
+<div class='row page-content with-menu'>
+    <div id='menuActions'>
+        @Html.Raw(ViewBag.CurrentBtnList32)
+    </div>
+    <div class='panel'>
+        <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-60px'>序号</th>
+                    <th class='text-left'>标题</th>
+                    <th class='text-left'>分类</th>
+                    <th class='text-left'>创建时间</th>
+                    <th class='text-left'>创建人</th>
+                    <th class='text-left'>最后修改时间</th>
+                    <th class='text-left'>最后修改人</th>
+                    <th class='text-left'>排序</th>
+                    <th class="text-left">图片</th>
+                    <th class='text-left'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        getList();
+    });
+    function add() {
+        window.location.href = "/news/addedit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+       //win.open("/news/addedit?id=0&mid=" + $("#currentMid").val() +"&secondMenuId=" + $("#secondMenuId").val(), 900, 650, "新增");
+    }
+    function edit(obj) {
+        var id = $(obj).attr("val");
+        window.location.href = "/news/addedit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+       // win.open("/news/addedit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId="+$("#secondMenuId").val(), 900, 650, "编辑");
+    }
+    function look(obj) {
+        var id = $(obj).attr("val");
+        win.open("/news/Readonly?id=" + id, 900, 580, "编辑");
+    }
+    function del(obj) {
+        var id = $(obj).attr("val");
+        win.confirm("确认要删除吗?", function () {
+            $.post("/news/deletedata", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功");
+                    getList();
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        $.post("/news/GetList", { pageIndex: pageIndex, pageSize: pageSize, name: "",mid:@ViewBag.CurrentMid, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

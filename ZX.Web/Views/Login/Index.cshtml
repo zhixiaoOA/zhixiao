@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = ZXConfig.SYSNAME + "登录";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="~/Static/css/login2.css" rel="stylesheet" />
+    <script src="/Static/js/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="~/Static/js/login.js"></script>
+</head>
+<body style="height:58%">
+    <div class="login">
+        <div class="header">
+            <div class="switch" id="switch">
+                <a class="switch_btn_focus" id="switch_qlogin" href="javascript:void(0);" tabindex="7">快速登录</a>
+                <a class="switch_btn" id="switch_login" href="javascript:void(0);" tabindex="8">小程序</a>
+                <div class="switch_bottom" id="switch_bottom" style="position: absolute; width: 64px; left: 0px;"></div>
+            </div>
+        </div>
+        <div class="web_qr_login" id="web_qr_login" style="display: block; <!--height: 235px;-->">
+            <!--登录-->
+            <form action="" name="loginform" accept-charset="utf-8" id="login_form" class="loginForm form-condensed" method="post">
+                <div class="web_login" id="web_login" style="padding-bottom: 60px;">
+                    <div class="login-box">
+                        <div class="login_form">
+                            <input type="hidden" name="did" value="0" />
+                            <input type="hidden" name="to" value="log" />
+                            <div style="text-align: center;padding-bottom: 10px;padding-top: 10px;">
+                                <img src="~/Static/images/login/logo.png" width="110px" />
+                            </div>
+                            <div class="uinArea" id="uinArea">
+                                <label class="input-tips" for="u">帐号：</label>
+                                <div class="inputOuter" id="uArea">
+                                    <input type="text" id="u" name="username" class="inputstyle form-control" />
+                                </div>
+                            </div>
+                            <div class="pwdArea" id="pwdArea">
+                                <label class="input-tips" for="p">密码：</label>
+                                <div class="inputOuter" id="pArea">
+                                    <input type="password" id="p" name="pwd" class="inputstyle form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="valid-msg">
+                            <label id="msg"></label>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="color: #999;font-size: 12px;">体验账号：zhixiao&nbsp;&nbsp;&nbsp;&nbsp;密码：123456</p>
+                        </div>
+                        <div style="margin-top:20px;">
+                            <button type="button" style="width:100%;" id="register" class="button_blue">登录</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!--登录end-->
+        </div>
+        <!--扫码-->
+        <div class="qlogin" id="qlogin" style="display: none; ">
+            <div class="web_login" style="padding: 20px 0;text-align: center;">
+                <p style="color: #999;font-size: 14px;">请使用微信扫描二维码体验“指效小程序”</p>
+                <img src="~/Static/images/login/erweima.jpg" />
+            </div>
+        </div>
+        <!--扫码end-->
+    </div>
+    <script language='Javascript'>
+        $(document).ready(function () {
+
+            $("body").keydown(function () {
+                if (event.keyCode == "13") {//keyCode=13是回车键
+                    $('#register').click();
+                }
+            });
+            if (window != top) {
+                top.location.href = location.href;
+            }
+            /**
+             * 自动将form表单封装成json对象
+             */
+            $.fn.serializeObject = function () {
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function () {
+                    if (o[this.name]) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+            //发送表单ajax请求
+            $('#register').on('click', function () {
+                $.ajax({
+                    url: "/Login/AdminLogin",
+                    type: "POST",
+                    data: JSON.stringify($('form').serializeObject()),
+                    contentType: "application/json", //缺失会出现URL编码，无法转成json对象
+                    success: function (data) {
+                        if (data.Code == 200) {
+                            window.location.href = "/Main/Index";
+                        } else if (data.Code == 300) {
+                            $("#msg").removeClass().html("");
+                            $("#msg").html(data.Message);
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            });
+
+        });
+
+    </script>
+</body>
+</html>

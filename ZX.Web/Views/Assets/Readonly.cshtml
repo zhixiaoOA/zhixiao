@@ -1,0 +1,184 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Assets
+@{
+    ViewBag.Title = "资产管理信息-指效OA";
+}
+<style type="text/css">
+    .form-control {
+        display: table-cell;
+    }
+</style>
+<div class='row page-content'>
+    <script src="/Scripts/My97DatePicker/WdatePicker.js"></script>
+    <div id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+        <ul id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+    </div>
+    <div class="page-content">
+        <form action="SaveData" method="post" class="form" id="formMenu">
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" name="FK_TypeId" value="@Model.FK_TypeId" />
+            <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
+            <table class='table table-form'>
+                <tr>
+                    <th style='width:100px'>资产编号</th>
+                    <td>
+                        <input type='text' placeholder="资产编号" datatype="*" name="ACode" id="ACode" value="@Model.ACode" class='form-control' />
+                    </td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>名称</th>
+                    <td>
+                        <input type='text' placeholder="名称" datatype="*" name="AName" id="AName" value="@Model.AName" class='form-control' />@*readonly="readonly"*@
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>所属分类</th>
+                    <td>
+                        <input type='text' placeholder="@(ViewBag.TypeName ?? "所属分类")" datatype="*" value="@(ViewBag.TypeName=="所属分类"?"": ViewBag.TypeName)" id="txtSysMenu" class='form-control' onclick="showSysMenuMenu();" readonly="readonly" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th style='width:100px'>数量</th>
+                    <td>
+                        <input type="number" placeholder="数量" datatype="*" name="ANum" id="ANum" value="@Model.ANum" class='form-control' />
+                    </td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>价格</th>
+                    <td>
+                        <input type='text' placeholder="价格" datatype="*" name="APrice" id="APrice" value="@Model.APrice" class='form-control' />
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>单位</th>
+                    <td>
+                        <input type='text' placeholder="单位" datatype="*" name="UnitName" id="UnitName" value="@Model.UnitName" class='form-control' />
+                    </td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>使用期限</th>
+                    <td>
+                        <input type='text' placeholder="使用期限" datatype="*" name="UsePeriod" id="UsePeriod" value="@Model.UsePeriod" class='form-control' />
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>资产性质</th>
+                    <td>
+                        <input type='text' placeholder="资产性质" datatype="*" name="NatureOfAssets" id="NatureOfAssets" value="@Model.NatureOfAssets" class='form-control' />
+                    </td>
+                </tr>
+                @*<tr>
+                        <th style='width:100px'>是否处理</th>
+                        <td>
+                            <input type='text' placeholder="是否处理" datatype="*" name="IsWhether" id="IsWhether" value="@Model.IsWhether" class='form-control' />
+                        </td>
+                    </tr>*@
+                <tr>
+                    <th style='width:100px'>新旧程度</th>
+                    <td>
+                        <input type='text' placeholder="新旧程度" datatype="*" name="Degree" id="Degree" value="@Model.Degree" class='form-control' />
+                    </td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>图片</th>
+                    <td>
+                        <img id="ImageUrl" src="@Model.ImageUrl" style="width:45px;height:45px;margin-left:10px; @(Model.ImageUrl + "" == "" ? "display:none" : "")" alt="@Model.ImageUrl" />
+                    </td>
+                    <td></td>
+                </tr>
+                <tr class="table-footer">
+                    <td colspan="2">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<div name="" id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+    <ul name="" id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+</div>
+<input type="hidden" name="" id="txtMenuzTree" value="@ViewBag.TreeJson" />
+<script type="text/javascript">
+    var menuTree;
+    $(function () {
+
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形菜单
+        var menuNodes = eval($("#txtMenuzTree").val());
+        menuTree = $.fn.zTree.init($("#treeSysMenu"), menuSetting, menuNodes);
+
+        //上传二维码
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/uploadfile'
+                , done: function (res) {
+                    $("#QrCodeUrl").show().attr("src", res.Data);
+                    $("input[name='QrCodeUrl']").val(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+        //上传图片
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload1'
+                , url: '/upload/uploadfile'
+                , done: function (res) {
+                    $("#ImageUrl").show().attr("src", res.Data);
+                    $("input[name='ImageUrl']").val(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+    //点击选择菜单
+    function onMenuClick(e, treeId, treeNode) {
+        $("#formMenu input[name='FK_TypeId']").val(treeNode.id);
+        $("#txtSysMenu").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示菜单
+    function showSysMenuMenu() {
+        var cityObj = $("#txtSysMenu");
+        var cityOffset = $("#txtSysMenu").offset();
+        $("#treeSysMenu").width(cityObj.width());
+        $("#sysMenuMenu").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function hideSysMenuMenu() {
+        $("#sysMenuMenu").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysMenuMenu" || $(event.target).parents("#sysMenuMenu").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+</script>

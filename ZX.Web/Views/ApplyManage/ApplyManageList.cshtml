@@ -1,0 +1,117 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@{
+    ViewBag.Title = "我的申请-指效OA";
+}
+<style>
+    .loadingWrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 300;
+        background-image: url(../img/loading2.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: #000;
+        background-color: rgba(234, 229, 229, 0.5);
+        filter: alpha(opacity=50);
+    }
+    .icon-right {
+        font-size: 30px;
+        float: left;
+        margin-top:5px;
+        width: 20px;
+        height: 30px;
+        background-image: url(/Static/images/bg/right.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .cur {
+        height:40px;
+        line-height:40px;
+        float: left;
+    }
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+</style>
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+<div class='row page-content'>
+
+    <nav id='menu'>
+        <ul class='nav'>
+            <li class='cur'>我的申请</li>
+            <i class="icon-right"></i>
+            <li class='cur'>列表</li>
+        </ul>
+    </nav>
+    <div class='row with-menu page-content'>
+        <div>
+            <div class='panel'>
+                <div class='panel-heading'>
+                    <strong><i class='icon-list-ul'></i> 申请列表</strong>
+                </div>
+                <table class='layui-table'>
+                    <thead>
+                        <tr class='text-center'>
+                            <th class='w-100px'>
+                                <div>
+                                    序号
+                                </div>
+                            </th>
+                            <th class='text-left'>
+                                <div>
+                                    名称
+                                </div>
+                            </th>
+                            <th class='text-left'>
+                                <div>
+                                    描述
+                                </div>
+                            </th>
+                            <th class='w-240px'>
+                                <div>
+                                    节点
+                                </div>
+                            </th>
+                            <th class='w-100px visible-lg'>
+                                <div>
+                                    状态
+                                </div>
+                            </th>
+                            <th class='w-150px visible-lg'>
+                                <div>
+                                    时间
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language='Javascript'>
+    $(function () {
+        getApplyNoticeList();
+    });
+
+    //展示目录下的文档列表
+    function getApplyNoticeList() {
+        $('<div class="loadingWrap"></div>').appendTo("body");
+        $.post("/ApplyManage/GetMyCreateApplyList", { mid: $("#currentMid").val(), "secondMenuId": $("#secondMenuId").val() }, function (data) {
+            $(".loadingWrap").remove();
+            if (data.Code == 200) {
+                $("tbody").html(data.Data);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+</script>

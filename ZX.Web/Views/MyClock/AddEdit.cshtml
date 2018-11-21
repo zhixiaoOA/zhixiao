@@ -1,0 +1,202 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MyClock
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_Log> listLog = ViewBag.ListLog ?? new List<Approval_Log>();
+    List<Approval> listApproval = ViewBag.ListApproval ?? new List<Approval>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        font-size: 14px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>未打卡证明申请单</strong></div>
+        <div class='panel-body'>
+            <form action="/MyClock/SaveData" method="post" class="form" id="formMyClock">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class='text-center w-150px'>姓名</th>
+                        <td class="w-110px">
+                            @user.RealName
+                        </td>
+                        <th class="text-center w-100px">部门</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-100px'>职位</th>
+                        <td>
+                            @user.PositionName
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">未打卡次数</th>
+                        <td colspan="5">
+                            <input type="checkbox" class="form-checkbox" name="NoClockCount" value="1" @(Model.NoClockCount == 1 ? "checked" : "") datatype="*" nullmsg="请选择未打卡次数" />1次&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="NoClockCount" value="2" @(Model.NoClockCount == 2 ? "checked" : "") datatype="*" nullmsg="请选择未打卡次数" />2次&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="NoClockCount" value="3" @(Model.NoClockCount == 3 ? "checked" : "") datatype="*" nullmsg="请选择未打卡次数" />3次&nbsp;
+                            <input type="checkbox" class="form-checkbox" name="NoClockCount" value="4" @(Model.NoClockCount == 4 ? "checked" : "") datatype="*" nullmsg="请选择未打卡次数" />超过3次&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">第一次未打卡日期</th>
+                        <td><input type="text" class='form-control form-date' placeholder="未打卡日期" name="OneDate" value="@Model.OneDate.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" /></td>
+                        <th class="text-center">因由</th>
+                        <td colspan="3">
+                            <textarea style="width:100%;" cols="3" name="OneDesc" class='form-control' autocomplete="off">@Model.OneDesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">第二次未打卡日期</th>
+                        <td><input type="text" class='form-control form-date' placeholder="未打卡日期" name="TwoDate" value="@Model.TwoDate.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" /></td>
+                        <th class="text-center">因由</th>
+                        <td colspan="3">
+                            <textarea style="width:100%;" cols="3" name="TwoDesc" class='form-control' autocomplete="off">@Model.TwoDesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">第三次未打卡日期</th>
+                        <td><input type="text" class='form-control form-date' placeholder="未打卡日期" name="ThreeDate" value="@Model.ThreeDate.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" /></td>
+                        <th class="text-center">因由</th>
+                        <td colspan="3">
+                            <textarea style="width:100%;" cols="3" name="ThreeDesc" class='form-control' autocomplete="off">@Model.ThreeDesc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">超过三次未打卡日期</th>
+                        <td><input type="text" class='form-control form-date' placeholder="未打卡日期" name="OutThreeDate" value="@Model.OutThreeDate.ToDateFormat("yyyy-MM-dd")" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" /></td>
+                        <th class="text-center">因由</th>
+                        <td colspan="3">
+                            <textarea style="width:100%;" cols="3" name="OutThreeDesc" class='form-control' autocomplete="off">@Model.OutThreeDesc</textarea>
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="5">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>请选择审批流程</th>
+                        <td colspan='5'>
+                            <select class="form-control" style="max-width:80%;" name="FK_ApprovalId" datatype="*" nullmsg="请选择审批流程">
+                                <option value="">==请选择==</option>
+                                @foreach (var item in listApproval)
+                                {
+                                    <option value="@item.Id" @(Model.FK_ApprovalId == item.Id ? "selected" : "")>@item.DName</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveCaogao()'>存为草稿</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-primary' onclick='saveData()'>提交</a>
+                            &nbsp;&nbsp;
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="submitMsg" value="" />
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#formMyClock").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                if ($("input[name='Status']").val() == "@ApplyStatus.草稿.ToInt()") {
+                    win.showLoading("正在保存...");
+                    $("#formMyClock").ajaxSubmit(function (data) {
+                        if (data.Code == 300) {
+                            win.alert(data.Message);
+                        } else if (data.Code == 200) {
+                            win.success($("#submitMsg").val(), function () {
+                                goBack();
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    win.confirm("确认提交审批？", function () {
+                        win.showLoading("正在保存...");
+                        $("#formMyClock").ajaxSubmit(function (data) {
+                            if (data.Code == 300) {
+                                win.alert(data.Message);
+                            } else if (data.Code == 200) {
+                                win.success($("#submitMsg").val(), function () {
+                                    goBack();
+                                }, 1000);
+                            }
+                        });
+                    });
+                }
+                return false;
+            }
+        });
+        $(".form-checkbox").click(function () {
+            $(this).prop("checked", true).siblings().prop("checked", false);
+        });
+    });
+    function saveCaogao() {
+        $("input[name='Status']").val("@(ApplyStatus.草稿.ToInt())");
+        $("#submitMsg").val("保存草稿成功");
+        $("#formMyClock").submit();
+    }
+    function saveData() {
+        if(@Model.Id==0)$("input[name='Status']").val("@(ApplyStatus.新申请.ToInt())");
+        $("#submitMsg").val("提交审批成功");
+        $("#formMyClock").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+
+</script>

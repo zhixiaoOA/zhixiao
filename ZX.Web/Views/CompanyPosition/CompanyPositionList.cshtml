@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "职位管理-指效";
+}
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/treeTable/default/jquery.treeTable.css" rel="stylesheet" />
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/jquery/treeTable/jquery.treeTable.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .btn-fearch {
+        float: right;
+        margin-top: 30px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .navbar-fixed-top {
+        position: inherit;
+        float: left;
+    }
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        color: #333;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<form action="" method="post" style="display:none;">
+    <button class="btn btn-xs btn-info" type="submit" id="btnSearch">搜 索</button>
+</form>
+<div class='page-content with-menu'>
+    <div class='panel'>
+        <div class="btn-fearch">
+            <form action="OutExcel" id="doForm">
+                <div style="width:auto;float:right;">
+                    <a href='javascript:;' onclick="add()" class="btn btn-primary"><i class="icon-plus"></i>创建职位</a>
+                </div>
+            </form>
+        </div>
+        <table class='layui-table' lay-size="lg">
+            <thead>
+                <tr class='text-center'>
+                    <th class='text-left'>职位名称</th>
+                    <th class='text-left'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList">
+                @Html.Raw(ViewBag.List)
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        var option = {
+            theme: 'default',
+            expandLevel: 4,
+            beforeExpand: function ($treeTable, id) {
+            },
+            onSelect: function ($treeTable, id) {
+            }
+        };
+        $('#tbList').treeTable(option);
+    });
+    //添加
+    function add(obj) {
+        var pid = 0;
+        if (obj != undefined) {
+            var ids = $(obj).attr("val").split(",");
+            pid = ids[0];
+        }
+        win.open('/CompanyPosition/AddEdit?id=0&pid=' + pid, 500, 400, "新增");
+    }
+    //删除
+    function del(obj) {
+        var ids = $(obj).attr("val").split(",");
+        win.confirm("确认要删除吗？", function () {
+            $.post("/CompanyPosition/DeleteData", { id: ids[0] }, function (data) {
+                if (data.Code == 200) {
+                    win.success('删除成功');
+                    $("#btnSearch").click();
+                } else {
+                    win.alert(data.Message);
+                }
+            }, "json");
+        });
+    }
+    //编辑
+    function edit(obj) {
+        var ids = $(obj).attr("val").split(",");
+        win.open('/CompanyPosition/AddEdit?id=' + ids[0] + '&pid=0', 550, 450, "编辑");
+    }
+    //排序
+    function onSort(id, obj) {
+        $.post("/CompanyPosition/UpdateSort/", { id: id, sort: $(obj).val() }, function (data) {
+        }, "json");
+    }
+</script>

@@ -1,0 +1,171 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model My_Ask
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_Log> listLog = ViewBag.ListLog;
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .perip-box {
+        padding: 20px;
+        margin-top: 10%;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>请假审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/My_Ask/SaveApproval" method="post" class="form" id="formMy_Ask">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="FK_ApprovalId" value="@Model.FK_ApprovalId" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-center w-120px">姓名</th>
+                        <td>
+                            @user.RealName
+                        </td>
+                        <th class='text-center w-50px'>部门</th>
+                        <td>
+                            @user.DeptName
+                        </td>
+                        <th class='text-center w-50px'>职位</th>
+                        <td>
+                            @user.PositionName
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">请假类型</th>
+                        <td colspan="5">@ViewBag.TypeName</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">事由</th>
+                        <td colspan="5">
+                            @Model.ADesc
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">请假时间</th>
+                        <td colspan="3">
+                            @(Model.StartTime.ToDateFormat("yyyy-MM-dd HH:mm") + "至" + Model.EndTime.ToDateFormat("yyyy-MM-dd HH:mm"))
+                        </td>
+                        <td id="tdDay" colspan="2">@ViewBag.AppLen</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center w-120px">附件</th>
+                        <td colspan="5">
+                            <input type="hidden" value="" name="MAttach" id="MAttach" />
+                            <a href="@Model.MAttach" target="_blank">@(Model.MAttach.IsNullOrEmpty() ? "无附件" : "查看附件")</a>
+                        </td>
+                    </tr>
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="5">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    @if ((Model.Status == ApplyStatus.新申请.ToInt() || Model.Status == ApplyStatus.审核中.ToInt()) && ViewBag.UserId != Model.CreateUserId)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批意见</th>
+                            <td colspan="5">
+                                <textarea style="width:100%;" cols="3" name="applyMsg" class='form-control' autocomplete="off"></textarea>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='5'>
+                            @if ((Model.Status == ApplyStatus.新申请.ToInt() || Model.Status == ApplyStatus.审核中.ToInt()) && ViewBag.UserId != Model.CreateUserId)
+                            {
+                                <a href='javascript:;' class='btn btn-warning' onclick='bohui()'>驳回</a>
+                                <span>&nbsp; &nbsp;</span>
+                                <a href='javascript:;' class='btn btn-success' onclick='tongguo()'>通过</a>
+                                <span>&nbsp; &nbsp;</span>
+                            }
+                            @if (Model.Status == ApplyStatus.已审核.ToInt())
+                            {
+                                <span>&nbsp;&nbsp;</span>
+                                <a href='javascript:;' class='btn btn-primary' onclick='printApply(@Model.Id)'>打印</a>
+                            }
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<iframe frameborder="0" src="" id="printFrame" style="width: 0;height: 0;"></iframe>
+<script type="text/javascript">
+    $(function () {
+        $("#formMy_Ask").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                win.showLoading("正在提交...");
+                $("#formMy_Ask").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("审核成功", function () {
+                            goBack();
+                        }, 1000);
+                    }
+                });
+                return false;
+            }
+        });
+    });
+    function bohui() {
+        $("input[name='status']").val("@ApplyStatus.驳回.ToInt()");
+        $("#formMy_Ask").submit();
+    }
+    function tongguo() {
+        $("input[name='status']").val("@ApplyStatus.审核中.ToInt()");
+        $("#formMy_Ask").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    function printApply(id) {
+        $("#printFrame").attr('src', '/My_Ask/My_AskPrint?id=' + id);
+    }
+</script>

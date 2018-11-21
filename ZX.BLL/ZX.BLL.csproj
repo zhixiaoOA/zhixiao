@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7E87ED46-A746-42D1-AC8F-3EAC1B279B8C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZX.BLL</RootNamespace>
+    <AssemblyName>ZX.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AllApplyNoticeBLL.cs" />
+    <Compile Include="ApplyFlowBLL.cs" />
+    <Compile Include="ApprovalBLL.cs" />
+    <Compile Include="ApprovalStatisticalBLL.cs" />
+    <Compile Include="ApprovalTotalBLL.cs" />
+    <Compile Include="Approval_LogBLL.cs" />
+    <Compile Include="Approval_TypeBLL.cs" />
+    <Compile Include="Approval_UserBLL.cs" />
+    <Compile Include="AssetsBLL.cs" />
+    <Compile Include="AssetsUseBLL.cs" />
+    <Compile Include="AssetsUseDetailBLL.cs" />
+    <Compile Include="Assets_LogBLL.cs" />
+    <Compile Include="Assets_TypeBLL.cs" />
+    <Compile Include="AttendanceTimeBLL.cs" />
+    <Compile Include="Base\BaseBLL.cs" />
+    <Compile Include="CompanyPositionBLL.cs" />
+    <Compile Include="DictionaryBLL.cs" />
+    <Compile Include="Document_LibraryBLL.cs" />
+    <Compile Include="Document_ManagerBLL.cs" />
+    <Compile Include="Document_TypeBLL.cs" />
+    <Compile Include="MapPositionBLL.cs" />
+    <Compile Include="MemberBLL.cs" />
+    <Compile Include="Menu_BlockBLL.cs" />
+    <Compile Include="Menu_Block_SortBLL.cs" />
+    <Compile Include="Menu_Block_TypeOrStatusBLL.cs" />
+    <Compile Include="MyAgreementBLL.cs" />
+    <Compile Include="MyClockBLL.cs" />
+    <Compile Include="MyCostBillBLL.cs" />
+    <Compile Include="MyCostBLL.cs" />
+    <Compile Include="MyEntertainBLL.cs" />
+    <Compile Include="MyGiftBuyBLL.cs" />
+    <Compile Include="MyGiftBuyDetailBLL.cs" />
+    <Compile Include="MyGooodsUseBLL.cs" />
+    <Compile Include="MySealOutBLL.cs" />
+    <Compile Include="MySealOutDetailBLL.cs" />
+    <Compile Include="MySealUseBLL.cs" />
+    <Compile Include="MySealUseDetailBLL.cs" />
+    <Compile Include="MyTravelReimbursementBLL.cs" />
+    <Compile Include="MyTravelReimbursementDetailBLL.cs" />
+    <Compile Include="My_AgendaBLL.cs" />
+    <Compile Include="My_Agenda_LogBLL.cs" />
+    <Compile Include="My_Agenda_TeamBLL.cs" />
+    <Compile Include="My_ApplyBLL.cs" />
+    <Compile Include="My_AskBLL.cs" />
+    <Compile Include="My_AttendanceBLL.cs" />
+    <Compile Include="My_AttendanceCountBLL.cs" />
+    <Compile Include="My_BaoXiaoBLL.cs" />
+    <Compile Include="My_BaoXiao_DetailBLL.cs" />
+    <Compile Include="My_BusinessTripBLL.cs" />
+    <Compile Include="My_GoOutBLL.cs" />
+    <Compile Include="My_HolidayBLL.cs" />
+    <Compile Include="My_PaidLeaveBLL.cs" />
+    <Compile Include="My_WorkBLL.cs" />
+    <Compile Include="NewsBLL.cs" />
+    <Compile Include="ProjectBLL.cs" />
+    <Compile Include="Project_BlockBLL.cs" />
+    <Compile Include="Project_LogBLL.cs" />
+    <Compile Include="Project_TaskBLL.cs" />
+    <Compile Include="Project_Task_TeamBLL.cs" />
+    <Compile Include="Project_TeamBLL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportBLL.cs" />
+    <Compile Include="SupplierBLL.cs" />
+    <Compile Include="Supplier_TypeBLL.cs" />
+    <Compile Include="Sys_ButtonBLL.cs" />
+    <Compile Include="Sys_DeptBLL.cs" />
+    <Compile Include="Sys_MenuBLL.cs" />
+    <Compile Include="Sys_RoleBLL.cs" />
+    <Compile Include="Sys_Role_MenuBLL.cs" />
+    <Compile Include="Sys_UserBLL.cs" />
+    <Compile Include="Sys_WxParameterBLL.cs" />
+    <Compile Include="Temporary_TaskBLL.cs" />
+    <Compile Include="Temporary_Task_BlockBLL.cs" />
+    <Compile Include="Temporary_Task_LogBLL.cs" />
+    <Compile Include="Temporary_Task_TeamBLL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZX.DAL\ZX.DAL.csproj">
+      <Project>{39274f62-658f-49b9-94de-244c83d09f6b}</Project>
+      <Name>ZX.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZX.Model\ZX.Model.csproj">
+      <Project>{d0831298-7157-4944-b7d6-f6cc4fe25d31}</Project>
+      <Name>ZX.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZX.Tools\ZX.Tools.csproj">
+      <Project>{1a14e849-11e2-4ca2-8751-7509d959fb51}</Project>
+      <Name>ZX.Tools</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

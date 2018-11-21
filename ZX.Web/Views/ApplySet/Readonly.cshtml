@@ -1,0 +1,39 @@
+﻿@using ZX.Model
+@model Approval
+@{
+    List<Approval_User> listUser = ViewBag.ListUser ?? new List<Approval_User>();
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<div class='row page-content'>
+    <div class='panel'>
+        <div class='panel-body'>
+            <table class='table table-form'>
+                <tr>
+                    <th style='width:200px'>流程名称</th>
+                    <td>
+                        @Model.DName
+                    </td>
+                </tr>
+                <tr>
+                    <th>审批步骤</th>
+                    <td style='padding-left:0;'>
+                        <table id="tbList">
+                            @foreach (var item in listUser)
+                            {
+
+                                <tr>
+                                    <td>
+                                        @(item.FlowName)审批
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

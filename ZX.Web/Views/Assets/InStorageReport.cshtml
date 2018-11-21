@@ -1,0 +1,109 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@{
+    ViewBag.Title = "资产统计-指效OA";
+    InStorageReport MonthData = ViewBag.MonthData;
+    InStorageReport JiduData = ViewBag.JiduData;
+    InStorageReport YearData = ViewBag.YearData;
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    .layui-table td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content with-menu' style="margin-top:0;">
+    <div class='panel'>
+        <div class="panel-heading">
+            <strong><i class="icon-group"></i>资产统计</strong>
+        </div>
+        <div class="panel-body">
+            <div>
+                <fieldset>
+                    <legend>查询条件</legend>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">日期</label>
+                            <input type="text" class="form-control" id="beginTime" placeholder="开始日期" value="@ViewBag.BDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                            至
+                            <input type="text" class="form-control" id="endTime" placeholder="结束日期" value="@ViewBag.EDate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                        </div>
+                        <div class="form-group">
+
+                        </div>
+                        <button type="button" class="btn btn-default" id="btnSearch">查询</button>
+                    </div>
+                </fieldset>
+            </div>
+            <table class='layui-table' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-left'>
+                        <th class='w-150px'>入库总数量</th>
+                        <th>总金额</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            本月：@(MonthData.InCount + "件" + MonthData.TotalMoney + "元")&nbsp;&nbsp;
+                            本季度：@(JiduData.InCount + "件" + JiduData.TotalMoney + "元")&nbsp;&nbsp;
+                            本年度：@(YearData.InCount + "件" + YearData.TotalMoney + "元")&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+        $("#btnSearch").click(function () {
+            getList();
+        });
+    });
+    function getList() {
+        win.showLoading();
+        var beginTime = $("#beginTime").val();
+        var endTime = $("#endTime").val();
+        $.post("/Assets/GetInStorageList", {
+            beginTime: beginTime,
+            endTime: endTime
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+</script>

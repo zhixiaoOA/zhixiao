@@ -1,0 +1,137 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model ZX.Model.Assets_Type
+@{
+    ViewBag.Title = "添加或编辑资产管理信息-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/zTree/js/jquery.ztree.all-3.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style type="text/css">
+    .form-control {
+        display: table-cell;
+    }
+</style>
+<div class='row page-content'>
+    <div id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+        <ul id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+    </div>
+    <div class="page-content">
+        <form action="AssetsTypeSaveData" method="post" class="form" id="formMenu">
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" name="ParentId" value="@Model.ParentId" />
+            <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+            @*<input type="hidden" name="MIcon" value="@Model.MIcon" />*@
+            <table class='table table-form'>
+
+                <tr>
+                    <th style='width:100px'>名称</th>
+                    <td>
+                        <input type='text' placeholder="名称" datatype="*" name="TName" id="TName" value="@Model.TName" class='form-control' />
+                    </td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>所属分类</th>
+                    <td>
+                        <input type='text' placeholder="@(ViewBag.TypeName ?? "所属分类")" datatype="*" value="@(ViewBag.TypeName=="所属分类"?"": ViewBag.TypeName)" id="txtSysMenu" class='form-control' onclick="showSysMenuMenu();" readonly="readonly" />
+                    </td>
+                </tr>
+                <tr>
+                    <th style='width:100px'>备注</th>
+                    <td>
+                        <textarea name='TRemark' placeholder="备注" id='TRemark' class='form-control' rows='5'>@Model.TRemark</textarea>
+                    </td>
+                </tr>
+                <tr class="table-footer">
+                    <td colspan='2'>
+                        @Html.Raw(ViewBag.CurrentBtnList29)
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<div name="" id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+    <ul name="" id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+</div>
+<input type="hidden" name="" id="txtMenuzTree" value="@ViewBag.TreeJson" />
+<script type="text/javascript">
+    var menuTree;
+    function saveData() {
+        $("#formMenu").submit();
+    }
+    $(function () {
+        $("#formMenu").Validform({
+            tiptype: 3,
+            callback: function (form) {
+                $("#formMenu").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            window.parent.location.reload();//刷新当前页面.
+                            win.close();
+                        });
+                    }
+                });
+                return false;
+            }
+        });
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形菜单
+        var menuNodes = eval($("#txtMenuzTree").val());
+        menuTree = $.fn.zTree.init($("#treeSysMenu"), menuSetting, menuNodes);
+    });
+
+    //点击选择菜单
+    function onMenuClick(e, treeId, treeNode) {
+        $("#formMenu input[name='ParentId']").val(treeNode.id);
+        $("#txtSysMenu").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示菜单
+    function showSysMenuMenu() {
+        var cityObj = $("#txtSysMenu");
+        var cityOffset = $("#txtSysMenu").offset();
+        $("#treeSysMenu").width(cityObj.width());
+        $("#sysMenuMenu").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function hideSysMenuMenu() {
+        $("#sysMenuMenu").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysMenuMenu" || $(event.target).parents("#sysMenuMenu").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+</script>

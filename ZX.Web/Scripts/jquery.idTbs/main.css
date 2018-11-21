@@ -1,0 +1,220 @@
+﻿
+.usual {
+    background: #ebecee none repeat scroll 0 0;
+    border: 1px solid #a0a0a0;
+    color: #111;
+    margin: 1px;
+    /*width: 500px;*/
+}
+.usual li {
+    float: left;
+    border-right: 1px solid #a0a0a0;
+    list-style: outside none none;
+}
+.usual ul a {
+    background: #ebecee none repeat scroll 0 0;
+    color: #183152;
+    display: block;
+    margin: 1px 1px 1px 0;
+    padding: 6px 10px;
+    text-decoration: none !important;
+}
+.usual ul a:hover {
+    background: #fff none repeat scroll 0 0;
+    color: #183152;
+}
+.usual ul a.selected {
+    background: #fff none repeat scroll 0 0;
+    border-bottom: 1px solid snow;
+    color: #183152;
+    cursor: default;
+    margin-bottom: 0;
+    font-weight:bold;
+}
+.divTab {
+    background: snow none repeat scroll 0 0;
+    clear: left;
+    font: 10pt Georgia;
+    padding: 10px 10px 8px;
+}
+/*.divTab a {
+    color: #000;
+    font-weight: bold;
+}*/
+#usual2 {
+    background: #0a0a0a none repeat scroll 0 0;
+    border: 1px solid #1a1a1a;
+}
+#usual2 a {
+    background: #222 none repeat scroll 0 0;
+}
+#usual2 a:hover {
+    background: #000 none repeat scroll 0 0;
+}
+#usual2 a.selected {
+    background: snow none repeat scroll 0 0;
+}
+#tabs3 {
+    background: #ff9 none repeat scroll 0 0;
+}
+#freedom {
+    color: #68d;
+    float: left;
+    font: italic 1.3em Cambria,Times New Roman,serif;
+    width: 90px;
+}
+#freedom li a {
+    background: #222 none repeat scroll 0 0;
+    display: block;
+    font-size: 0.7em;
+    font-style: normal;
+    font-weight: bold;
+    margin: 1px;
+    padding: 2px 6px 4px;
+    text-align: left;
+    text-decoration: none;
+    width: 80px;
+}
+#freedom li a:hover {
+    background: #0a0a0a none repeat scroll 0 0;
+    width: 86px;
+}
+#freedom li a.selected {
+    background: #fff none repeat scroll 0 0;
+    color: #000;
+    cursor: default;
+    width: 90px;
+}
+.tabContainer {
+    background: #181818 none repeat scroll 0 0;
+    border: 1px solid #222;
+    margin: 20px auto;
+    padding-top: 2px;
+    width: 400px;
+}
+.tabContainer h3 {
+    color: #f60;
+    padding-bottom: 4px;
+}
+.tabContainer p {
+    padding: 2px 12px 10px;
+    text-align: left;
+}
+#three {
+    border-bottom: 1px solid #444;
+    border-right: 1px solid #444;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+#four {
+    bottom: 10px;
+    color: #d66;
+    font: 2em Cambria,Times New Roman,serif;
+    position: fixed;
+    right: 20px;
+}
+.imagebox {
+    background: #040404 none repeat scroll 0 0;
+    border: 1px solid #1a1a1a;
+    height: 90px;
+    margin: 10px auto;
+    width: 100px;
+}
+.imagebox a {
+    background: #111 none repeat scroll 0 0;
+    display: block;
+    float: left;
+    height: 25px;
+    line-height: 23px;
+    text-decoration: none;
+    width: 25px;
+}
+.imagebox a:hover {
+    background: #000 none repeat scroll 0 0;
+}
+.imagebox a.selected {
+    background: snow none repeat scroll 0 0;
+    color: #222;
+    font-weight: bold;
+}
+.imagebox img {
+    clear: both;
+    margin-top: 6px;
+}
+#adv2 {
+    background: #181818 none repeat scroll 0 0;
+    margin: 6px auto;
+    width: 500px;
+}
+#adv2 ul {
+    display: block;
+    float: left;
+    height: 50px;
+    width: 50px;
+}
+#adv2 li {
+    float: left;
+}
+#adv2 li.split {
+    clear: both;
+}
+#adv2 li a {
+    background: #222 none repeat scroll 0 0;
+    display: block;
+    height: 25px;
+    line-height: 22px;
+    text-decoration: none;
+    width: 25px;
+}
+#adv2 li a:hover {
+    background: #0a0a0a none repeat scroll 0 0;
+}
+#adv2 li a.selected {
+    background: snow none repeat scroll 0 0;
+    color: #111;
+    font-weight: bold;
+}
+#adv2 span {
+    background: #181818 none repeat scroll 0 0;
+    display: block;
+    float: right;
+    height: 50px;
+    line-height: 45px;
+    width: 450px;
+}
+#adv3 a {
+    color: snow;
+    font-size: 2em;
+    font-weight: bold;
+    margin: 6px;
+    text-decoration: none;
+}
+#adv3 a:hover {
+    color: #68d;
+}
+#adv3 p {
+    color: #888;
+    font-style: italic;
+    margin: 5px;
+}
+#adv3 p a {
+    color: #ccc;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0;
+    text-decoration: underline;
+}
+#adv3 p a:hover {
+    color: #fff;
+}
+#message {
+    background: #0d0d0d none repeat scroll 0 0;
+    border: 6px solid #222;
+    color: #fc4;
+    font-size: 1.3em;
+    height: 40px;
+    line-height: 2em;
+    margin: 10px auto;
+    width: 240px;
+}

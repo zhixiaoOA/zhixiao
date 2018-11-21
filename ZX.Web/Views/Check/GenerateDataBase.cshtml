@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+    <script src="/Static/script/jquery-1.10.2.min.js"></script>
+    <script src="~/Static/js/layui/layui.js"></script>
+    <script src="~/Static/js/layer/layer.js"></script>
+    <script src="~/Static/js/layer/layer.tools.js"></script>
+</head>
+<body>
+    <div>
+        
+    </div>
+</body>
+</html>
+<script>
+    $(function () {
+        win.showLoading("正在生成数据库表结构及数据，请耐心等待。。。");
+        $.ajax({
+            type: "POST",
+            url: "/Check/GenerateDataBase",
+            success: function (data) {
+                if (data.Code == 200) {
+                    setTimeout(function () {
+                        win.success("保存成功", function () {
+                            window.location.href = "/Check/SetSysUser";
+                        });
+                    }, 5000);
+                } else {
+                    win.hideLoading();
+                    win.alert(data.Message);
+                }
+            },
+            error: function (data) {
+                alert(JSON.stringify(data));
+            }
+        });
+    });
+</script>

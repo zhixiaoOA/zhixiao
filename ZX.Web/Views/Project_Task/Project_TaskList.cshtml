@@ -1,0 +1,626 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@using ZX.BLL
+@using System.Linq
+@using System.Text
+
+@model List<Project_TaskModel>
+@{
+    ViewBag.Title = "项目任务-指效OA";
+    var StrList = ViewBag.StrList as List<Project_TaskModel>;
+    var intpage = Model.Count();
+    var inpage = ViewBag.result;
+    DateTime? currentTime = ViewBag.CurrentTime;
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .tr-child, .tr-child > td {
+        padding: 0;
+    }
+
+        .tr-child > td > table {
+            padding: 5px;
+            background-color: #fff;
+            border: 2px solid #DDDDDD;
+        }
+
+    td.wait {
+        color: #808080;
+    }
+
+    td.doing {
+        color: #d2322d;
+    }
+
+    td.done {
+        color: #229f24;
+    }
+
+    td.closed {
+        color: #E48600;
+    }
+
+    td.cancel {
+        color: #888888;
+    }
+
+    .w-290px {
+        width: 310px;
+        /*font-size: 12.8;*/
+    }
+
+    .nav-block {
+        float: left;
+    }
+
+    .nav-inline {
+        height: 40px;
+        background-color: #d3c8c8;
+        line-height: 40px;
+        font-size: 16px;
+    }
+
+    .icon-right {
+        font-size: 50px;
+        float: left;
+        width: 25px;
+        height: 40px;
+        background-image: url(/Static/images/bg/right.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+
+    .icon-folder-open {
+        font-size: 24px;
+        float: left;
+        margin: 8px;
+        width: 20px;
+        height: 22px;
+        background-image: url(/Static/images/bg/foder-open.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 10px;
+    }
+    .temp-task-btn {
+        margin-top: 10px !important;
+        margin-right:10px;
+    }
+    table {
+        table-layout: fixed;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="projectId" value="@ViewBag.ProjectId" />
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<input type="hidden" id="TimeSpanDays" value="@ViewBag.TimeSpanDays " />
+<nav id='menu'>
+    <ul class='nav-inline layui-bg-gray'>
+        <li class="nav-block"><a id='currentItem' onclick="openProjectInfo(@ViewBag.ProjectId)"><i class='icon-folder-open'></i> <strong>@ViewBag.ProjectName</strong></a></li>
+        <i class="icon-right"></i>
+        <li class="nav-block">
+            <a href='javascript:;' onclick="goProject_Task(@ViewBag.ProjectId)">列表</a>
+        </li>
+        <i class="icon-right"></i>
+        <li class="nav-block">新建任务</li>
+    </ul>
+    <div style="width:auto;float:right;margin-top:-50px;">
+        <a href='javascript:;' onclick="addTask()" class="layui-btn layui-btn-normal temp-task-btn">新建任务</a>
+    </div>
+</nav>
+<div class='row page-content with-menu'>
+    <div class='task-row'>
+        <form id='ajaxForm' method='post' action="">
+            <table class='layui-table' id='taskList'>
+                <tr class='text-center'>
+                    <th class='w-60px'>
+                        <div>
+                            <a href='javascript:;'>编号</a>
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            <a href='javascript:;'>所属项目</a>
+                        </div>
+                    </th>
+                    <th class='w-40px'>
+                        <div>
+                            <a href='javascript:;'>P</a>
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            <a href='javascript:;'>名称</a>
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            <a href='javascript:;'>截止日期</a>
+                        </div>
+                    </th>
+                    <th class='w-80px'>
+                        <div>
+                            <a href='javascript:;'>指派给</a>
+                        </div>
+                    </th>
+                    <th class='w-90px'>
+                        <div>
+                            <a href='javascript:;'>任务状态</a>
+                        </div>
+                    </th>
+                    <th class='w-90px'>
+                        <div>
+                            <a href='javascript:;'>创建日期</a>
+                        </div>
+                    </th>
+                    <th class='w-80px'>
+                        <div>
+                            <a href='javascript:;'>消耗(h)</a>
+                        </div>
+                    </th>
+                    <th class='w-100px'>
+                        <div>
+                            <a href='javascript:;'>预计剩余(h)</a>
+                        </div>
+                    </th>
+                    <th class='w-290px'>操作</th>
+                </tr>
+                <tbody>
+                    @{
+                        List<Project_TaskModel> list = Model;
+                        if (list != null)
+                        {
+                            List<Project_Task_Team> task_team_List = new List<Project_Task_Team>();
+                            List<Project_TaskModel> childList = new List<Project_TaskModel>();
+                            List<Sys_User> listUser = ViewBag.ListUser;
+                            int i = 1;
+                            foreach (var item in list)
+                            {
+                                if (item.ParentId > 0)
+                                {
+                                    continue;
+                                }
+                                //获取该任务所具有的所有任务团队子表记录,便于后续的耗时统计
+                                //先获取主任务关联的子表记录
+                                childList = list.Where(l => l.ParentId == item.Id).ToList();
+
+                                <tr class='text-center'>
+                                    <td class='text-left'><label class='checkbox-inline'><input type='checkbox' name='taskIDList[]' value='@item.Id' />@i</label></td>
+                                    @{
+                                        string projectName = "";//所属项目名
+
+                                        if (item.ProjectName.Length > 5)
+                                        {
+                                            projectName = item.ProjectName.Substring(0, 5) + "...";
+                                        }
+                                        else
+                                        {
+                                            projectName = item.ProjectName;
+                                        }
+                                    }
+                                    <td class='w-100px' title="@item.ProjectName">@projectName</td>
+                                    <td><span class='active pri pri-@item.Priority'>@item.Priority</span></td>
+
+                                    <td class='text-left' title="@item.TName">
+                                        @{
+                                            //任务结束前一天 亮黄灯控制
+                                            TimeSpan ts = Convert.ToDateTime(item.AsTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                            if (ts.Days == 1 && item.TState != 4)
+                                            {
+                                                <div class="circular Orange" title="仅剩一天时间了!"></div>
+                                            }
+                                            if (ts.Days == 0 && item.TState != 4)
+                                            {
+                                                <div class="circular Orange" title="即将超时"></div>
+                                            }
+
+                                            //超时
+                                            if (ts.Days < 0 && item.TState != 4)
+                                            {
+                                                <div class="circular red" title="已超时@(ts.Days*-1)天"></div>
+                                            }
+                                        }
+                                        <label>@item.TName</label>
+                                        @{
+                                            if (childList.Count > 0)
+                                            {
+                                                <span class="task-toggle">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>
+                                            }
+                                            string asTimeStr = "0000-00-00";
+                                            string assignedRealName = "";
+                                            try
+                                            {
+                                                if (item.AsTime.IsNotNullOrEmpty())
+                                                {
+                                                    asTimeStr = item.AsTime.ToShortDate();
+                                                }
+
+                                                if (item.Assigned.ToInt() > 0)
+                                                {
+                                                    assignedRealName = listUser.Where(l => l.Id == item.Assigned.ToInt()).FirstOrDefault().RealName;
+                                                }
+                                            }
+                                            catch { }
+                                        }
+                                    </td>
+
+                                    <td>@asTimeStr</td>
+                                    <td>@assignedRealName</td>
+                                    @{
+                                        switch (item.TState)
+                                        {
+                                            case 1:
+                                                {
+                                                    <td class="wait">未完成</td>
+                                                    break;
+                                                }
+                                            case 2:
+                                                {
+                                                    <td class="wait">未开始</td>
+
+                                                    break;
+                                                }
+                                            case 3:
+                                                {
+                                                    <td class="doing">进行中</td>
+                                                    break;
+                                                }
+                                            case 4:
+                                                {
+                                                    <td class="done">已完成</td>
+                                                    break;
+                                                }
+                                            case 5:
+                                                {
+                                                    <td class="cancel">已取消</td>
+                                                    break;
+                                                }
+                                            case 6:
+                                                {
+                                                    <td class="closed">已关闭</td>
+                                                    break;
+                                                }
+
+                                            default:
+                                                <td>未知</td>
+                                                break;
+                                        }
+                                        List
+                                        <Project_Task_Team>
+                                        taskTeamList = new List<Project_Task_Team>
+                                        ();
+
+                                        var consumTime = 0;
+                                        var tExpected = 0;
+                                        string pCreateTime = "0000-00-00";
+                                        if (item.CreateTime.IsNotNullOrEmpty())
+                                        {
+                                            pCreateTime = item.CreateTime.ToShortDate();
+                                        }
+                                    }
+                                    <td>@pCreateTime</td>
+                                    @if (childList.Count <= 0)
+                                    {
+                                        taskTeamList = Project_Task_TeamBLL.GetList(d => d.Where(t => t.FK_TaskId == item.Id));
+                                        consumTime = taskTeamList.Sum(d => d.ConsumTime).ToInt();
+                                        tExpected = taskTeamList.Sum(d => d.TheTime).ToInt();
+                                    }
+                                    else
+                                    {
+                                        StringBuilder childIds = new StringBuilder();
+
+                                        foreach (var childItem in childList)
+                                        {
+                                            childIds.Append(childItem.Id);
+                                            if (childItem != childList.Last())
+                                            {
+                                                childIds.Append(",");
+                                            }
+                                        }
+                                        taskTeamList = Project_Task_TeamBLL.GetList(" FK_TaskId in(" + childIds + ")");
+                                        consumTime = taskTeamList.Sum(d => d.ConsumTime).ToInt();
+                                        tExpected = taskTeamList.Sum(d => d.TheTime).ToInt();
+
+                                    }
+                                    <td>@consumTime</td>
+                                    <td>@tExpected</td>
+                                    <td class='text-left'>
+                                        @{
+                                            List<Sys_Button> btnList = new List<Sys_Button>();
+                                            //表行按钮组
+                                            List<Sys_Button> currentBtnList28 = new List<Sys_Button>();
+                                            try
+                                            {
+                                                btnList = ViewBag.RoleButtonList;
+                                                currentBtnList28 = btnList.Where(l => l.BGroup == 28 && l.BIsUse == 0).OrderByDescending(l => l.BSort).ToList();
+                                                if (childList.Count > 0)
+                                                {
+                                                    if (currentBtnList28.Count > 0)
+                                                    {
+                                                        foreach (var btnItem in currentBtnList28)
+                                                        {
+                                                            if (btnItem.BName.Contains("工时") || btnItem.BName.Contains("指派") || btnItem.BName.Contains("开始") || btnItem.BName.Contains("完成") || btnItem.BName.Contains("关闭"))
+                                                            {
+                                                                <a href='javascript:;' disabled>@btnItem.BName</a>;
+                                                                continue;
+                                                            }
+                                                            <a href='javascript:;' onclick="@btnItem.BOptionFun" val="@item.Id,@consumTime,@tExpected,'@item.TName'">@btnItem.BName</a>
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (currentBtnList28.Count > 0)
+                                                    {
+                                                        foreach (var btnItem in currentBtnList28)
+                                                        {
+                                                            //如果是进行中,那么禁用开始 如果已完成,禁用完成
+                                                            if ((item.TState == 3 && btnItem.BName.Contains("开始")) || (item.TState == 4 && btnItem.BName.Contains("完成")) || (item.TState == 6 && btnItem.BName.Contains("关闭")))
+                                                            {
+                                                                <a href='javascript:;' disabled>@btnItem.BName</a>;
+                                                                continue;
+                                                            }
+                                                            <a href='javascript:;' onclick="@btnItem.BOptionFun" val="@item.Id,@consumTime,@tExpected,'@item.TName'">@btnItem.BName</a>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+
+                                    </td>
+                                </tr>
+
+                                if (childList != null && childList.Count > 0)
+                                {
+                                    <tr class='tr-child' style="display: table-row;">
+                                        <td colspan='11'>
+                                            <table class='table table-data table-hover table-fixed'>
+                                                @{
+                                                    int j = 1;
+                                                    foreach (var childItem in childList)
+                                                    {
+                                                        <tr class='text-center'>
+                                                            <td class='w-60px'>@i-@j</td>
+
+                                                            <td class='w-100px' title="@item.ProjectName">@projectName</td>
+                                                            <td class='w-40px'><span class='active pri pri-@item.Priority'>@item.Priority</span></td>
+
+                                                            <td class='text-left' title="@childItem.TName">
+                                                                @{
+                                                                    //任务结束前一天 亮黄灯控制
+                                                                    TimeSpan tsChild = Convert.ToDateTime(childItem.AsTime).Subtract(Convert.ToDateTime(currentTime.ToDateFormat("yyyy-MM-dd 00:00:00")));
+
+                                                                    if (tsChild.Days == 1 && childItem.TState != 4)
+                                                                    {
+                                                                        <div class="circular Orange" title="仅剩一天时间了!"></div>
+                                                                    }
+
+                                                                    if (ts.Days == 0 && childItem.TState != 4)
+                                                                    {
+                                                                        <div class="circular Orange" title="即将超时"></div>
+                                                                    }
+                                                                    //超时
+                                                                    if (tsChild.Days < 0 && childItem.TState != 4)
+                                                                    {
+                                                                        <div class="circular red" title="已超时@(tsChild.Days*-1)天"></div>
+                                                                    }
+                                                                }
+                                                                <span class='label'>子</span>
+                                                                <a href="javascript:;">@childItem.TName</a>
+                                                            </td>
+                                                            @{
+                                                                string childAsTimeStr = "0000-00-00";
+                                                                string childAssignedRealName = "";
+                                                                try
+                                                                {
+                                                                    if (childItem.AsTime.IsNotNullOrEmpty())
+                                                                    {
+                                                                        childAsTimeStr = childItem.AsTime.ToShortDate();
+                                                                    }
+
+                                                                    if (childItem.Assigned.ToInt() > 0)
+                                                                    {
+                                                                        childAssignedRealName = listUser.Where(l => l.Id == childItem.Assigned.ToInt()).FirstOrDefault().RealName;
+                                                                    }
+                                                                }
+                                                                catch { }
+
+                                                            }
+                                                            <td class='w-100px'>@childAsTimeStr</td>
+                                                            <td class='w-80px'>@childAssignedRealName</td>
+
+                                                            @switch (childItem.TState)
+                                                            {
+                                                                case 1:
+                                                                    {
+                                                                        <td class="w-90px wait">未完成</td>
+                                                                        break;
+                                                                    }
+                                                                case 2:
+                                                                    {
+                                                                        <td class="w-90px wait">未开始</td>
+
+                                                                        break;
+                                                                    }
+                                                                case 3:
+                                                                    {
+                                                                        <td class="w-90px doing">进行中</td>
+                                                                        break;
+                                                                    }
+                                                                case 4:
+                                                                    {
+                                                                        <td class="w-90px done">已完成</td>
+                                                                        break;
+                                                                    }
+                                                                case 5:
+                                                                    {
+                                                                        <td class="w-90px cancel">已取消</td>
+                                                                        break;
+                                                                    }
+                                                                case 6:
+                                                                    {
+                                                                        <td class="w-90px closed">已关闭</td>
+                                                                        break;
+                                                                    }
+
+                                                                default:
+                                                                    <td class="w-90px wait">未知</td>
+                                                                    break;
+
+                                                            }
+                                                            @{
+                                                                var childConsumTime = taskTeamList.Where(d => d.FK_TaskId == childItem.Id.ToInt()).Sum(t => t.ConsumTime);
+                                                                var childTExpected = taskTeamList.Where(d => d.FK_TaskId == childItem.Id.ToInt()).Sum(t => t.TheTime);
+                                                                string childCreateTime = "0000-00-00";
+                                                                if (childItem.CreateTime.IsNotNullOrEmpty())
+                                                                {
+                                                                    childCreateTime = childItem.CreateTime.ToShortDate();
+                                                                }
+                                                            }
+
+                                                            <td class='w-90px'>@childCreateTime</td>
+                                                            <td class='w-80px'>@childConsumTime</td>
+                                                            <td class='w-100px'>@childTExpected</td>
+                                                            <td class='w-290px text-left'>
+
+                                                                @{
+                                                                    if (currentBtnList28.Count > 0)
+                                                                    {
+                                                                        foreach (var btnItem in currentBtnList28)
+                                                                        {
+                                                                            //如果是进行中,那么禁用开始 如果已完成,禁用完成
+                                                                            if ((item.TState == 3 && btnItem.BName.Contains("开始")) || (item.TState == 4 && btnItem.BName.Contains("完成")) || (item.TState == 6 && btnItem.BName.Contains("关闭")))
+                                                                            {
+                                                                                <a href='javascript:;' disabled>@btnItem.BName</a>;
+                                                                                continue;
+                                                                            }
+                                                                            if (btnItem.BName.Contains("子任务"))
+                                                                            {
+                                                                                continue;
+                                                                            }
+                                                                            <a href='javascript:;' onclick="@btnItem.BOptionFun" val="@childItem.Id,@childConsumTime,@childTExpected,'@childItem.TName'">@btnItem.BName</a>
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                        j++;
+                                                    }
+                                                }
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                                i++;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+
+            <div class="table-footer">
+                <div class="pull-left text-danger"></div>
+                <div style="float:right; " class="pager form-inline">
+                    <div id="myPager">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script language='Javascript'>
+    //创建任务
+    function addTask() {
+        window.location.href = "/Project_Task/Add?id=0&mid=" + $("#currentMid").val() + "&projectId=" + $("#projectId").val() + "&secondMenuId=" + $("#secondMenuId").val() + "&timeSpanDays=" + $("#TimeSpanDays").val();
+    }
+
+    function look(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/Readonly?Id=" + tArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 1000, 600, tArray[3] + "任务查看");
+    }
+    //编辑
+    function editTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        window.location.href = "/Project_Task/Edit?id=" + tArray[0] + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+    //工时
+    function workTimeTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/WorkTime?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 370, tArray[3] + ".工时");
+    }
+
+    //开始
+    function runTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/Run?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 420, tArray[3] + ".开始");
+    }
+    //指派
+    function appointTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/AppointTask?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 370, tArray[3] + ".指派");
+    }
+    //完成
+    function finishTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/Finish?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 450, tArray[3] + ".完成");
+    }
+    //子任务
+    function addChildTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/Children?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 450, tArray[3] + ".子任务");
+    }
+
+    //关闭
+    function closeTask(obj) {
+        var taskInfo = $(obj).attr("val");
+        var tArray = taskInfo.split(',');
+        win.open("/Project_Task/Close?taskId=" + tArray[0] + "&consumTime=" + tArray[1] + "&theTime=" + tArray[2] + "&secondMenuId=" + $("#secondMenuId").val(), 770, 270, tArray[3] + ".完成");
+        //win.open("/Project_Task/Close?taskId=" + fk_TaskId + "&fk_ProjectId=" + fk_ProjectId + "&expectHours=" + expectHours + "&secondMenuId=" + $("#secondMenuId").val(), 770, 270, taskName + ".关闭");
+    }
+
+    //进入任务
+    function goProject_Task(projectId) {
+        window.location.href = "/Project_Task/GetProjectTaskList?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    //我的任务
+    function IndividualTasks(mark) {
+        window.location.href = "/Project_Task/GetProject_TaskList?mark=" + mark + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+    //显示项目信息
+    function openProjectInfo(projectId) {
+        win.open = "/Project/AddEdit?id=" + projectId + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

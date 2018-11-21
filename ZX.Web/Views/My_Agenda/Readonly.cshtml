@@ -1,0 +1,171 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model My_Agenda
+@{
+    ViewBag.Title = "待办查看—指效";
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/js/layui/css/layui.css" />
+<link href="/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="/Static/js/calendar/zui.calendar.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<script src="/Static/js/zui/zui.min.js"></script>
+<script src="/Static/js/calendar/zui.calendar.min.js"></script>
+<script src="/Static/js/layer/layer.js"></script>
+<script src="/Static/js/layer/layer.tools.js"></script>
+<style>
+    .form-group {
+        margin-left: 0!important;
+        margin-right:0!important;
+    }
+</style>
+<form method="post" class="form-horizontal" action="/Project/SaveData" id="formProject">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class="form-group" style="padding-top:16Px;">
+        <label for="BType" class="col-sm-2">日期</label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="ADate" name="ADate" value="@Model.ADate.ToShortDate()" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            类型
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="ADate" name="ADate" value="@(Model.AType == 0 ? "自定义" : "项目任务")" class="form-control" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            优先级
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select name="pri" id="pri" class="form-control">
+                @{
+                    List<SelectListItem> selectAPriority = new List<SelectListItem>();
+                    try
+                    {
+                        selectAPriority = ViewBag.AgendaPriority;
+                        foreach (var item in selectAPriority)
+                        {
+                            if (Model.APriority.ToString() == item.Value)
+                            {
+                                <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            名称
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <input type="text" id="AName" name="AName" value="@Model.AName" class="form-control" autocomplete="off">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            描述
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <textarea id="ADesc" name="ADesc" class="form-control kindeditorSimple" style="height:150px;">@Model.ADesc</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            备注
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <textarea id="ARemark" name="ARemark" class="form-control kindeditorSimple" style="height:150px;">@Model.ARemark</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            状态
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <select name="AStatus" id="AStatus" class="form-control">
+                @{
+                    List<SelectListItem> selectAStatus = new List<SelectListItem>();
+                    try
+                    {
+                        selectAStatus = ViewBag.AgendaStatus;
+                        foreach (var item in selectAStatus)
+                        {
+                            if (Model.AStatus.ToString() == item.Value)
+                            {
+                                <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="HeadUser" class="col-sm-2">
+            起止时间
+        </label>
+        <div class="col-md-6 col-sm-10">
+            <div class="input-group">
+                <input type="text" class="form-control form-time" name="AStartmmhh" id="AStartmmhh" placeholder="hh:mm" style="width: 50%" value="@Model.AStartmmhh">
+                <input type="text" class="form-control form-time" name="AEndmmhh" id="AEndmmhh" placeholder="hh:mm" style="width: 50%" value="@Model.AEndmmhh">
+                <label class="checkbox-inline"><input type="checkbox" id="dateSwitcher" onclick="switchDateFeature(this);"> 暂时不设定时间</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="StartTime" class="col-sm-2">
+            私人事务
+        </label>
+        <div class="col-md-6 col-sm-10">
+            @{
+                if (Model.AIsPlivate.ToInt() == 0)
+                {
+                    <input type="checkbox" name="AIsPlivate" id="AIsPlivate" value="@Model.AIsPlivate" checked onclick="isPlivate(this)">
+                }
+                else
+                {
+                    <input type="checkbox" name="AIsPlivate" id="AIsPlivate" value="@Model.AIsPlivate" onclick="isPlivate(this)">
+                }
+            }
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    //富文本编辑器初始
+    $(function () {
+        KindEditor.create('textarea.kindeditorSimple', {
+            basePath: '/Static/res/kindeditor/',
+            bodyClass: 'article-content',
+            resizeType: 1,
+            allowPreviewEmoticons: false,
+            allowImageUpload: false,
+            items: [
+                'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                'insertunorderedlist', '|', 'emoticons', 'image', 'link'
+            ]
+        });
+    });
+</script>

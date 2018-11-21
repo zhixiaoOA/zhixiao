@@ -1,0 +1,406 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model  ZX.Model.Sys_User
+@{
+    ViewBag.Title = "添加/编辑-指效";
+    List<Sys_Role> listRole = ViewBag.RoleList ?? new List<Sys_Role>();
+}
+<html>
+<head>
+    <link href="~/Static/js/jquery/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link rel='stylesheet' href='/Static/js/jquery/chosen/min.css' type='text/css' media='print' />
+    <link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Static/js/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/Static/js/jquery/jquery-1.11.1.min.js"></script>
+    <script src="~/Static/js/layer/layer.js"></script>
+    <script src="~/Static/js/zui/zui.min.js"></script>
+    <script src="~/Static/js/layer/layer.tools.js"></script>
+    <script src="~/Static/js/jquery/form/min.js"></script>
+    <script src="/Static/js/jquery/chosen/min.js"></script>
+    <script src="~/Static/js/jquery/jquery-migrate-1.2.1.js"></script>
+    <script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+    <script src="~/Static/js/jquery/zTree/js/jquery.ztree.all-3.1.min.js"></script>
+    <script src="/Static/js/layui/layui.js"></script>
+    <style>
+        .panel-box {
+            width: 60%;
+            margin-left: 20px;
+        }
+
+        .navbar-fixed-top {
+            position: inherit;
+            float: left;
+        }
+
+        body {
+            overflow-x: hidden;
+            background-color: #fff;
+        }
+
+        .navbar-fixed-top {
+            position: inherit;
+            float: left;
+        }
+
+        .page-content {
+            width: 100%;
+        }
+
+        .panel-bodys {
+            width: 80%;
+            padding-top: 50px;
+            padding-left: 50px;
+            border-radius: 6px;
+        }
+
+        #treeSysDept {
+            border: 1px solid #617775;
+            background: #ffffff;
+            overflow-y: scroll;
+            overflow-x: auto;
+        }
+        #treeSysCompanyPosition {
+            border: 1px solid #617775;
+            background: #ffffff;
+            overflow-y: scroll;
+            overflow-x: auto;
+        }
+
+        .add-title {
+            margin-left: -300px;
+        }
+
+        .panel-heading {
+            background-color: #c0c0c0;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+        }
+    </style>
+</head>
+<body>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+    <div class='page-content'>
+        <input type="hidden" id="txtDeptTree" value="@ViewBag.TreeJson" />
+        <input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+        <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+        <div id="sysDeptTree" class="menuContent" style="display: none; position: absolute;">
+            <ul id="treeSysDept" class="ztree" style="margin-top: 0;"></ul>
+        </div>
+        <div class="panel-bodys">
+            <div style="border: 1px solid rgba(128, 128, 128, 0.3);">
+                <div class="panel-heading">
+                    @{
+                        if (Model.Id == 0)
+                        {
+                            <span class="add-title"><strong><i class="layui-icon layui-icon-add-1"></i> 添加成员</strong></span>
+                        }
+                        else
+                        {
+                            <span class="add-title"><strong><i class="layui-icon layui-icon-add-1"></i> 修改成员</strong></span>
+                        }
+                    }
+
+                </div>
+                <div class='panel-box'>
+                    <div id="sysMenuMenu" class="menuContent" style="display: none; position: absolute;">
+                        <ul id="treeSysMenu" class="ztree" style="margin-top: 0;"></ul>
+                    </div>
+                    <form method='post' id='ajaxForm' action="/Sys_User/SaveData">
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                        <input type="hidden" name="Fk_DeptId" id="Fk_DeptId" value="@Model.Fk_DeptId" />
+                        <input type="hidden" name="FK_CompanyPositionId" value="@Model.FK_CompanyPositionId" />
+                        <table class='layui-table' lay-skin="line">
+                            <tr>
+                                <th class='w-100px'>用户名</th>
+                                <td class='w-p40'>
+                                    @{
+                                        if (Model.Id <= 0)
+                                        {
+                                            <input type='text' name='UserName' id='UserName' value='@Model.UserName' class='form-control' autocomplete='off' datatype="*" />
+                                        }
+                                        else
+                                        {
+                                            <input type='text' name='UserName' id='UserName' value='@Model.UserName' class='form-control' autocomplete='off' readonly />
+                                        }
+
+                                    }
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>姓名</th>
+                                <td>
+                                    <input type='text' name='RealName' id='RealName' value='@Model.RealName' class='form-control' autocomplete='off' datatype="*" />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>性别</th>
+                                <td>
+                                    <label class='radio-inline'>
+                                        <input type='radio' name='USex' style="margin-left:0;" value='1' id='genderm' @(Model.USex == "1" ? "checked" : "") />男
+                                    </label>
+                                    <label class='radio-inline'>
+                                        <input type='radio' name='USex' value='2' style="margin-left:0;" id='genderf' class="user-checkbox" @(Model.USex == "2" ? "checked" : "") />女
+                                    </label>
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>职位</th>
+                                <td>
+                                    <input type="text" class='form-control' placeholder="所属职位" datatype="*" id="txtSysCompanyPosition" value="@(ViewBag.CompanyPositionName ?? "普通员工")" readonly="readonly" onclick="showSysCompanyPosition();">
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>部门</th>
+                                <td>
+                                    <input type='text' placeholder="所属部门" datatype="*" id="txtSysDept" value="@(ViewBag.txtSysDept ?? "")" class='form-control' readonly="readonly" onclick="showSysDeptTree();" />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>角色</th>
+                                <td>
+                                    @{
+                                        if (Model.Id == 1 || Model.Id == -1111)
+                                        {
+                                            <label>超级管理员</label>
+                                            <input type="hidden" name="Fk_RoleId" id="Fk_RoleId" value="@Model.Fk_RoleId" />
+                                        }
+                                        else
+                                        {
+                                            <select name="Fk_RoleId" class='form-control'>
+                                                @foreach (var item in listRole)
+                                                {
+                                                    <option value="@item.Id" @(Model.Fk_RoleId == item.Id ? "selected" : "")>@item.RName</option>
+                                                }
+                                            </select>
+                                        }
+                                    }
+
+
+
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            @{
+                                if (Model.Id <= 0)
+                                {
+                                    <tr>
+                                        <th>密码</th>
+                                        <td>
+                                            <input type='password' name='Pwd' id='Pwd' value='' class='form-control' autocomplete='off' placeholder='如未填写,初始密码默认为:88888888' />
+                                        </td>
+                                        <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <th>手机</th>
+                                <td>
+                                    <input type='text' name='UPhone' id='UPhone' value='@Model.UPhone' class='form-control' datatype="*" autocomplete='off' />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>邮箱</th>
+                                <td>
+                                    <input type='text' name='UEmail' id='UEmail' value='@Model.UEmail' class='form-control' autocomplete='off' />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <th>QQ</th>
+                                <td>
+                                    <input type='text' name='UQQ' id='UQQ' value='@Model.UQQ' class='form-control' autocomplete='off' />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <th>通讯地址</th>
+                                <td>
+                                    <input type='text' name='UAddress' id='UAddress' value='@Model.UAddress' class='form-control' autocomplete='off' />
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <th>是否禁用</th>
+                                <td>
+                                    <label class='radio-inline'>
+                                        <input type='radio' name='IsDel' style="margin-left:0;" value='0' id='IsDelYes' @(Model.IsDel == 0 ? "checked" : "") />是
+                                    </label>
+                                    <label class='radio-inline'>
+                                        <input type='radio' name='IsDel' style="margin-left:0;" value='1' id='IsDelYes' @(Model.IsDel == 1 ? "checked" : "") />否
+                                    </label>
+                                </td>
+                                <td style="padding:0;width:130px;"><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th>签名</th>
+                                <td>
+                                    <input type="hidden" name="USgin" id="USgin" value="@Model.USgin" />
+                                    <button type="button" class="layui-btn" id="btnUpload">上传签名</button>
+                                    <label><span style="color:red">*仅支持png、jpg 并且2M以内大小的图片</span></label>
+                                </td>
+                                <td style="padding:0;width:130px;" rowspan="2"> <img id="imgUSgin1" src="@Model.USgin" style="width:200px;height:100px;margin-left:10px;@(Model.USgin + "" == "" ? "display:none" : "")" alt="个人签名" title="个人签名" /><div class="Validform_checktip"></div></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    @Html.Raw(ViewBag.CurrentBtnList29)
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="sysCompanyPosition" class="CompanyPositionContent" style="display: none; position: absolute;">
+        <ul id="treeSysCompanyPosition" class="ztree" style="margin-top: 0;max-height: 280px;"></ul>
+    </div>
+    <input type="hidden" id="txtCompanyPositionzTree" value="@ViewBag.ZwTreeJson" />
+</body>
+<script language='Javascript'>
+    var CompanyPositionTree, menuTree;
+    $(document).ready(function () {
+        $("#ajaxForm").Validform({
+            tiptype: 2,
+            callback: function (form) {
+                win.showLoading("正在保存...");
+                $("#ajaxForm").ajaxSubmit(function (data) {
+                    win.hideLoading();
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("保存成功", function () {
+                            goBackToList();
+                        });
+                    }
+                });
+                return false;
+            }
+        });
+        var menuSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onMenuClick
+            }
+        };
+        //初始化树形部门
+        var deptNodes = eval($("#txtDeptTree").val());
+        menuTree = $.fn.zTree.init($("#treeSysDept"), menuSetting, deptNodes);
+
+        var CompanyPositionSetting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onClick: onCompanyPositionClick
+            }
+        };
+        //初始化树形菜单
+        var CompanyPositionNodes = eval($("#txtCompanyPositionzTree").val());
+        CompanyPositionTree = $.fn.zTree.init($("#treeSysCompanyPosition"), CompanyPositionSetting, CompanyPositionNodes);
+    });
+
+    $(function () {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/UploadUsginFile'
+                , accept: 'images'
+                , size: 2 * 1024  //大小,单位kb
+                , acceptMime: 'image/jpg, image/png'
+                , data: { direName: "/USgin/Files" }
+                , done: function (res) {
+                    $("#USgin").val(res.Data);
+                    $("#imgUSgin1").attr("src", res.Data).show();
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+    function saveData() {
+        $("#ajaxForm").submit();
+    }
+
+    //点击选择部门
+    function onMenuClick(e, treeId, treeNode) {
+        $("#Fk_DeptId").val(treeNode.id);
+        $("#txtSysDept").val(treeNode.name);
+        hideSysMenuMenu();
+    }
+    //显示部门
+    function showSysDeptTree() {
+        var cityObj = $("#txtSysDept");
+        var cityOffset = $("#txtSysDept").offset();
+        $("#treeSysDept").width(cityObj.width());
+        $("#sysDeptTree").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("#sysDeptTree").css("z-index", "10")
+        $("body").bind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏部门
+    function hideSysMenuMenu() {
+        $("#sysDeptTree").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysMenuBodyDown);
+    }
+    //隐藏部门
+    function onAddSysMenuBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "sysDeptTree" || $(event.target).parents("#sysDeptTree").length > 0)) {
+            hideSysMenuMenu();
+        }
+    }
+    function goBackToList() {
+        var url = "/Sys_User/Index?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+        window.location.href = url;
+    }
+
+
+    //点击选择菜单
+    function onCompanyPositionClick(e, treeId, treeNode) {
+        $("#ajaxForm input[name='FK_CompanyPositionId']").val(treeNode.id);
+        $("#txtSysCompanyPosition").val(treeNode.name);
+        hideSysCompanyPosition();
+    }
+    //显示菜单
+    function showSysCompanyPosition() {
+        var cityObj = $("#txtSysCompanyPosition");
+        var cityOffset = $("#txtSysCompanyPosition").offset();
+        $("#treeSysCompanyPosition").width(cityObj.width());
+        $("#sysCompanyPosition").css({ left: cityOffset.left + "px", top: cityOffset.top + cityObj.outerHeight() + "px" }).slideDown("fast");
+        $("body").bind("mousedown", onAddSysCompanyPositionBodyDown);
+    }
+    //隐藏菜单
+    function hideSysCompanyPosition() {
+        $("#sysCompanyPosition").fadeOut("fast");
+        $("body").unbind("mousedown", onAddSysCompanyPositionBodyDown);
+    }
+    //隐藏菜单
+    function onAddSysCompanyPositionBodyDown(event) {
+        if (!(event.target.id == "CompanyPositionBtn" || event.target.id == "sysCompanyPosition" || $(event.target).parents("#sysCompanyPosition").length > 0)) {
+            hideSysCompanyPosition();
+        }
+    }
+</script>
+</html>

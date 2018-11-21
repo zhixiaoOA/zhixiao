@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "申请类型-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="~/Scripts/layer/need/layer.css" />
+<link type="text/css" rel="stylesheet" href="/Scripts/layui/css/layui.css" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='active' style="height:41px;">
+        </li>
+    </ul>
+</nav>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='row page-content with-menu'>
+    <div id='menuActions'>
+        @Html.Raw(ViewBag.CurrentBtnList32)
+    </div>
+    <div class='panel'>
+        <table class='table table-hover table-striped table-bordered tablesorter table-data table-fixed'>
+            <thead>
+                <tr class='text-center'>
+                    <th class='w-60px'>序号</th>
+                    <th class='text-left'>类型名称</th>
+                    <th class='text-left'>自动/手动</th>
+                    <th class='text-left'>审批流</th>
+                    <th class='text-left'>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbList"></tbody>
+        </table>
+        <div class='table-footer'>
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var $ = parent.$;
+    var layui = parent.layui;
+    var win = parent.win;
+    $(function () {
+        getList();
+    });
+    function add() {
+        win.open("/applytype/addedit?secondMenuId=" + $("#secondMenuId").val(), 500, 350, "新增");
+    }
+    function edit(obj) {
+        var id = $(obj).attr("val");
+        win.open("/applytype/addedit?id=" + id + "&secondMenuId=" + $("#secondMenuId").val(), 500, 350, "编辑");
+    }
+
+    function look(obj) {
+        var id = $(obj).attr("val");
+        win.open("/applytype/Readonly/" + id, 500, 350, "编辑");
+    }
+    function del(obj) {
+        var id = $(obj).attr("val");
+        win.confirm("确认要删除吗?", function () {
+            $.post("/applytype/deletedata", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功");
+                    getList();
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        $.post("/applytype/getlist", { pageIndex: pageIndex, pageSize: pageSize, name: "", secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer', 'element'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+</script>

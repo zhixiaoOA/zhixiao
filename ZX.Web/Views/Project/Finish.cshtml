@@ -1,0 +1,60 @@
+﻿@using ZX.Tools
+@using ZX.Model
+<link href="~/Static/js/datetimepicker/datetimepicker.min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/datetimepicker/datetimepicker.min.js"></script>
+<style>
+    .col-sm-2 {
+        width: 14%;
+    }
+</style>
+
+<input type="hidden" id="projectId" value="@ViewBag.ProjectId">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div class="form-group" style="padding-top:10px;">
+    <label for="LogRemark" class="col-sm-2">
+        描述
+    </label>
+    <div class="col-md-6 col-sm-10">
+        <textarea name="LogRemark" id="LogTextRemark" class='form-control' rows='5' placeholder="描述"></textarea>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        @Html.Raw(ViewBag.CurrentBtnList29)
+    </div>
+</div>
+<script>
+    //完成
+    function saveData() {
+        win.showLoading("正在处理...");
+        var remarkText = $("#LogTextRemark").val();
+
+        $.post("/Project/FinishSave", { projectId: $("#projectId").val(), logText: remarkText, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                win.success("已完成", function () {
+                    win.hideLoading();
+                    window.parent.location.reload();
+                    window.close();
+                });
+            } else {
+                layer.alert(data.Message, { icon: 7 });
+            }
+        }, "json");
+    }
+
+</script>

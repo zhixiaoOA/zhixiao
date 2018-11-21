@@ -1,0 +1,229 @@
+﻿@using ZX.Tools
+@using System.Data
+@using ZX.Model
+@{
+    ViewBag.Title = "考勤-指效";
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/datetimepicker/datetimepicker.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/ajaxfileupload.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/datetimepicker/datetimepicker.min.js"></script>
+<style>
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+    .navbar-brand {
+        font-size: 17px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+
+    .navbar-nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+    .nav > li > a {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+    .panel-heading strong {
+        font-size: 14px !important;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+    .with-menu {
+        padding: 20px;
+    }
+
+    .cur {
+        float: left;
+    }
+    #doForm legend{
+        font-size:18px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<nav id='menu'>
+    <ul class='nav'>
+        <li class='cur'>
+            <a href='/My_Attendance/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.内部考勤</a>
+        </li>
+        <li class='cur'>
+            <a href='/My_Attendance_Out/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.外出考勤</a>
+        </li>
+        <li class='cur'>
+            <a href='/AttendanceCount/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.考勤统计</a>
+        </li>
+        <li class='cur'>
+            <a href='/AttendanceTime/Index?mid=@ViewBag.CurrentMid'>@MyAttendanceType.考勤设置</a>
+        </li>
+    </ul>
+</nav>
+<input type="hidden" id="currentMid" value="@ViewBag.CurrentMid">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div style="display: none;">
+    <input type="file" id="fileOrganReport12" multiple="multiple" name="fileOrganReport12_upload" onchange="OnChangeUpload()" />
+</div>
+<div class='with-menu'>
+    <div class='panel'>
+        <div class="panel-heading">
+            <strong><i class="icon-group"></i>员工考勤</strong>
+        </div>
+        <div class="panel-body">
+            <div>
+                <form action="/My_Attendance/OutExcel" id="doForm">
+                    <fieldset>
+                        <legend>查询条件</legend>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                姓名:
+                                <input type="text" id="txtRealname" name="key" value="" class="form-control" />
+                                <label for="exampleInputEmail3">日期</label>
+                                <input type="text" class="form-control" id="StartTime" name="startTime" placeholder="开始日期" value="@(DateTime.Now.ToString("yyyy-MM-01"))" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                                至
+                                <input type="text" class="form-control" id="EndTime" name="endTime" placeholder="结束日期" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\');}',dateFmt:'yyyy-MM-dd'})" style="width:90px;" />
+                            </div>
+                            <button type="button" class="btn btn-default" id="btnSearch">查询</button>
+                            <div style="width:auto;float:right;">
+                                <a href='~/TempFile/temp.xlsx' class="btn btn-primary">模板下载</a>
+                                <a href='javascript:;' onclick="importExcel()" class="btn btn-primary">导入Excel</a>
+                                <a href='javascript:;' onclick="exportExcel()" class="btn btn-primary">导出Excel</a>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+            <table class='layui-table' style="border: 1px solid #ddd;">
+                <thead>
+                    <tr class='text-center'>
+                        <th class='w-60px' rowspan="2">员工编号</th>
+                        <th class="w-80px" rowspan="2">姓名</th>
+                        <th class='w-120px' rowspan="2">日期</th>
+                        <th class='w-240px' colspan="2">上午</th>
+                        <th class='w-240px' colspan="2">下午</th>
+                        <th class='w-120px' rowspan="2">迟到</th>
+                        <th class='w-120px' rowspan="2">早退</th>
+                    </tr>
+                    <tr class='text-center'>
+                        <th class='w-120px'>上班</th>
+                        <th class='w-120px'>下班</th>
+                        <th class='w-120px'>上班</th>
+                        <th class='w-120px'>下班</th>
+                    </tr>
+
+                </thead>
+                <tbody id="tbList"></tbody>
+            </table>
+        </div>
+        <div class='table-footer' style="border-top:1px solid #ddd;">
+            <div class='pull-left text-danger'></div>
+            <div style='float:right; clear:none;' class='pager form-inline'>
+                <div id="myPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        getList();
+        $("#btnSearch").click(function () {
+            pageIndex = 1;
+            getList();
+        });
+    });
+    function edit(id) {
+        window.location.href = "/My_Attendance/GetMy_AttendanceList?id=" + id+"&mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function getList() {
+        win.showLoading();
+        var beginTime = $("#StartTime").val();
+        var endTime = $("#EndTime").val();
+
+        $.post("/My_Attendance/GetMy_AttendanceList", {
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            startTime: beginTime,
+            endTime: endTime,
+            key: $("#txtRealname").val()
+        }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+                win.hideLoading();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        getList();
+                    }
+                }
+            });
+        });
+    }
+
+
+    function importExcel() {
+        win.showLoading("正在导入...")
+       $("#fileOrganReport12").click();
+    }
+    //上传文件
+    function OnChangeUpload() {
+        $.ajaxFileUpload
+            ({
+                url: '/My_Attendance/ImportReport',
+                secureuri: false,
+                fileElementId: 'fileOrganReport12',
+                dataType: 'HTML',
+                success: function (data, status) {
+                    var jsonData = eval("(" + data + ")");
+                    if (jsonData.statusCode == 200) {
+                        win.success("导入成功");
+                    } else {
+                        win.alert(jsonData.message);
+                    }
+                    win.hideLoading();
+                },
+                error: function (data, status, e) {
+                    alert(e);
+                    win.hideLoading();
+                }
+
+            });
+    }
+
+    function exportExcel() {
+        $("#doForm").submit();
+    }
+</script>

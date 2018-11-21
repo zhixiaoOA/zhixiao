@@ -1,0 +1,33 @@
+
+ 
+记录时间：2018-10-16 15:09:22,137 
+线程ID:[5] 
+日志级别：  ERROR 
+错误描述：未将对象引用设置到对象的实例。
+ 
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ZX.Web.Areas.api.Controllers.LoginController.Index(String appId, String timestamp, String sign, String nickname, String headImage, String code) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\LoginController.cs:行号 46
+
+ 
+记录时间：2018-10-16 17:44:41,921 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：ExecuteReader 要求已打开且可用的 Connection。连接的当前状态为已关闭。
+ 
+System.InvalidOperationException: ExecuteReader 要求已打开且可用的 Connection。连接的当前状态为已关闭。
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 744
+   在 ZX.DAL.AllApplyNoticeDAL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 69
+   在 ZX.BLL.AllApplyNoticeBLL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 51
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 36
+
+ 
+记录时间：2018-10-16 18:00:05,907 
+线程ID:[6] 
+日志级别：  ERROR 
+错误描述：阅读器关闭时尝试调用 Read 无效。
+ 
+System.InvalidOperationException: 阅读器关闭时尝试调用 Read 无效。
+   在 ZX.DAL.DbHelper.ExecuteProcToSingle[T](String procName, IDataParameter[] parameters)
+   在 ZX.DAL.AllApplyNoticeDAL.GetMyApplyCount(Int64 userId)
+   在 ZX.BLL.AllApplyNoticeBLL.GetMyApplyCount(Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 51
+   在 ZX.Web.Areas.api.Controllers.HomeController.GetHomeData(String appId, String timestamp, String sign, Int64 userId) 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Areas\api\Controllers\HomeController.cs:行号 36

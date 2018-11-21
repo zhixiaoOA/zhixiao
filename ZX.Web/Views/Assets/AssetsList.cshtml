@@ -1,0 +1,383 @@
+﻿@model List<ZX.Model.Assets>
+@using ZX.Model
+@{
+    ViewBag.Title = "资产管理-指效OA";
+    var List = ViewBag.AssetsList as List<AssetsModel>;
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/treeview/min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/jquery/treeview/min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .page-content.with-menu {
+        margin: 0 0 0 160px;
+    }
+
+    .group-item .checkbox {
+        display: inline-block;
+    }
+
+        .group-item .checkbox input {
+            margin: 2px 0 0 -16px;
+        }
+
+    .leftmenu > .nav > li > a {
+        padding: 0 15px;
+    }
+
+    .input-group-addon label.checkbox {
+        margin: 0;
+        padding-top: 3px;
+    }
+
+    #childList .sort-handle {
+        cursor: move;
+    }
+
+    .doc-category {
+        margin: 41px 0 0;
+    }
+    .layui-table td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+    .a_btn_menu {
+        float: right;
+        margin-right: 7px;
+    }
+    .col-md-2{
+        width:20%;
+    }
+    .col-md-10{
+        width:80%;
+    }
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+    .layui-table td {
+        font-family: 微软雅黑;
+        font-size: 14px !important;
+        color: #666;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="currentMid" value="-1">
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<input type="hidden" id="fk_TypeId" value="">
+<div class='row page-content'>
+
+    <div class="col-md-12">
+        <div class='row'>
+            <div class='col-md-2'>
+                <div class='panel'>
+                    <div class='panel-heading'>
+                        <strong><i class="icon-building"></i>资产分类</strong>
+                        <div style="float:right;">@Html.Raw(ViewBag.CurrentBtnList31)</div>
+                    </div>
+                    <div class='panel-body'>
+                        <div id='treeMenuBox'>
+                            <ul class='tree'></ul>
+                        </div>
+                        <div class="pull-right panel-actions">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-10'>
+                <div class='clearfix'>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <strong><i class="icon-group"></i>资产管理</strong>
+                            <div class="pull-right panel-actions">
+                                @Html.Raw(ViewBag.CurrentBtnList27)
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <fieldset>
+                                <legend>查询条件</legend>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label>资产编码</label>
+                                        <input type="text" class="form-control" id="txtCode">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>资产名称</label>
+                                        <input type="text" class="form-control" id="txtName">
+                                    </div>
+                                    <button type="button" id="btnSearch" class="btn btn-default">查询</button>
+                                </div>
+                            </fieldset>
+                            <div>
+                                <div style="margin-bottom:3px;">
+                                    <a href="javascript:;" onclick="delSelect()" class="btn btn-primary btn-xs">删除已选</a>
+                                </div>
+                                <table class='layui-table' lay-size="sm" style="border: 1px solid #ddd;">
+                                    <thead>
+                                        <tr class='text-left'>
+                                            <th class="w-90px">资产编号</th>
+                                            <th>资产名称</th>
+                                            <th>供应商</th>
+                                            <th>分类名称</th>
+                                            <th>使用部门</th>
+                                            <th class="w-80px">库存</th>
+                                            <th class="w-50px">单位</th>
+                                            <th class="w-80px">价格</th>
+                                            <th class="w-80px">使用期限</th>
+                                            <th class="w-80px">资产性质</th>
+                                            <th class="w-150px">入库时间</th>
+                                            <th class="w-200px">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbList"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class='table-footer' style="border-top:1px solid #ddd;">
+                            <div class='pull-left text-danger'></div>
+                            <div style='float:right; clear:none;' class='pager form-inline'>
+                                <div id="myPager"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" class="layui-btn" id="btnUpload" style="display:none">上传</button>
+<script language='Javascript'>
+    //获取资产数据信息
+    $(document).ready(function () {
+
+        $('td.operate a.forbider').click(function () {
+            $.getJSON($(this).attr('href'), function (data) {
+                if (data.result == 'success') return location.href = data.locate;
+                bootbox.alert(data.message + '');
+            });
+            return false;
+        });
+        GetAssetsTypeList();
+        GetAssetsList();
+        //给新增按钮添加事件
+        // $('#m_Btn_Add').attr('href', "/Assets/addedit?id=0&mid=" + $("#currentMid").val());
+        $("#m_Btn_Add").click(function () {
+            win.open("/Assets/addedit?id=0&mid=" + $("#currentMid").val(), 600, 650, "新增");
+        });
+        $("#btnSearch").click(function () {
+            GetAssetsList();
+        });
+
+        //导入
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/Assets/ImportExec'
+                , accept: "file"
+                , before: function (obj) {
+                    win.showLoading("正在导入...");
+                }
+                , done: function (res) {
+                    if (res.Code == 200) {
+                        pageIndex = 1, count = 0;
+                        GetAssetsList();
+                        win.success("导入成功");
+                    } else {
+                        win.alert("导入失败");
+                    }
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+    function onImport() {
+        $("#btnUpload").click();
+    }
+
+    function treeAdd() {
+        win.open("/Assets/AssetsTypeAddEdit?id=0&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 600, 388, "添加分类");
+    }
+    function treeEdit(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Assets/AssetsTypeAddEdit?id=" + id + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 600, 388, "分类编辑");
+    }
+
+    function treeChildAdd(obj) {
+        var pid = $(obj).attr("val");
+        win.open("/Assets/AssetsTypeAddEdit?id=0&pid=" + pid + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val(), 600, 388, "子分类添加");
+    }
+
+    //全选/取消
+    function onAllCheck(obj) {
+        $("input[name='cbox']").prop("checked", $(obj).prop("checked"));
+    }
+
+    //删除
+    function treeDel(obj) {
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //
+        }, function () {
+            var id = $(obj).attr("val");
+            $.post("/Assets/DeleteType", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    GetAssetsTypeList();
+                    //window.location.href = '/sys_menu/index?mid=' + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+    //添加资产
+    function add() {
+        window.location.href = "/Assets/addedit?id=0&mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    //编辑资产
+    function edit(obj) {
+        var id = $(obj).attr("val");
+        window.location.href = "/Assets/addedit?id=" + id + "&mid=@ViewBag.CurrentMid&secondMenuId=@ViewBag.SecondMenuId";
+    }
+    //查看领取记录
+    function lookUse(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Assets/UseLog?id=" + id, 600, 400, "领取记录");
+    }
+
+    //详情
+    function details(obj) {
+        var id = $(obj).attr("val");
+        win.open("/Assets/Details?id=" + id, 750, 511, "资产详情");
+    }
+
+    //下载
+    function assetsDownload(obj) {
+        var id = $(obj).attr("val");
+        window.location.href = "/Assets/QrImgDownloadHandler?id=" + id;
+    }
+
+    //删除已选
+    function delSelect() {
+        var ids = $.admin.getCboxVal($("input[name='cbox']:checked"));
+        if (ids != "") {
+            layer.confirm('确认要删除吗？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                $.post("/Assets/DeleteData", { id: ids, IsType: 2 }, function (data) {
+                    if (data.Code == 200) {
+                        layer.msg('删除成功', { icon: 1 });
+                        GetAssetsList();
+                    } else {
+                        layer.alert(data.Message, { icon: 7 });
+                    }
+                }, "json");
+            });
+        } else {
+            win.info("请勾选要删除的数据");
+        }
+    }
+
+
+    //删除
+    function del(obj) {
+        layer.confirm('确认要删除吗？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            var id = $(obj).attr("val");
+            $.post("/Assets/DeleteData", { id: id, IsType: 2 }, function (data) {
+                if (data.Code == 200) {
+                    layer.msg('删除成功', { icon: 1 });
+                    GetAssetsList();
+                } else {
+                    layer.alert(data.Message, { icon: 7 });
+                }
+            }, "json");
+        });
+    }
+
+    function GetAssetsTypeList() {
+        var currentIdKey = $.trim($("#currentMid").val());
+        $.post("/Assets/GetAssetsTypeList", { mid: currentIdKey, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            if (data.Code == 200) {
+                $(".tree").html(data.Data);
+                $('.tree').each(function () {
+                    var $this = $(this);
+                    $this.treeview($.extend({ collapsed: false, unique: false }, $this.data()));
+                });
+            } else {
+                //win.alert("获取数据失败");
+            }
+            //win.hideLoadding();
+        });
+    }
+    var pageIndex = 1, pageSize = 10, count = 0;
+    //获取资产管理列表数据
+    function GetAssetsList() {
+        $("#tbList").empty();
+        var codeKey = $.trim($("#txtCode").val());
+        var nameKey = $.trim($("#txtName").val());
+        var currentIdKey = $.trim($("#currentMid").val());
+        win.showLoading();
+        $.post("/Assets/GetAssetsList", { pageIndex: pageIndex, pageSize: pageSize, nameKey: nameKey, codeKey: codeKey, mid: currentIdKey, secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage();
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        GetAssetsTypeList();
+                        GetAssetsList();
+                    }
+                }
+            });
+        });
+    }
+    //展示分类对应的资产数据
+    function showAssets(id) {
+        $('#fk_TypeId').val(id);
+        $("#currentMid").val(id);
+        GetAssetsList();
+    }
+</script>
+

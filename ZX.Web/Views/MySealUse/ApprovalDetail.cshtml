@@ -1,0 +1,171 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model MySealUse
+@{
+    Sys_UserModel user = ViewBag.User;
+    List<Approval_LogModel> listLog = ViewBag.ListLog;
+    List<MySealUseDetail> listDetail = ViewBag.ListDetail ?? new List<MySealUseDetail>();
+}
+<link href="~/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .perip-box {
+        padding: 20px;
+        margin-top: 10%;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .with-menu {
+        padding: 20px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<div class='with-menu'>
+    <div class='panel'>
+        <div class='panel-heading'><strong><i class='icon-building'></i>印章使用审批单</strong></div>
+        <div class='panel-body'>
+            <form action="/MySealUse/SaveApproval" method="post" class="form" id="formMySealUse">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="FK_ApprovalId" value="@Model.FK_ApprovalId" />
+                <input type="hidden" name="status" value="@ApplyStatus.驳回.ToInt()" />
+                <input type="hidden" name="deptId" value="@user.Fk_DeptId" />
+                <table class='table table-bordered' style="border: 1px solid #ddd;">
+                    <tr>
+                        <th class="text-left w-120px">申请部门</th>
+                        <td>@user.DeptName</td>
+                        <th class='text-left w-70px'>申请人 </th>
+                        <td colspan="2">@user.RealName</td>
+                        <th class='text-left w-80px'>申请日期</th>
+                        <td>@(Model.AddTime.ToDateFormat("yyyy-MM-dd"))</td>
+                        <td colspan="4" rowspan="2">留存原件/复印件(一份)</td>
+                    </tr>
+                    <tr>
+                        <th>印章名称</th>
+                        <td colspan="6">@Model.YinzName</td>
+                    </tr>
+                    @{int rowIndex = 1; }
+                    @foreach (var item in listDetail)
+                    {
+                        <tr name="trDetail">
+                            @if (rowIndex == 1)
+                            {
+                                <th rowspan="4" class="text-center">资料名称</th>
+                            }
+                            <td>@item.ZlName</td>
+                            <th class="text-center">份数</th>
+                            <td>@item.ZlCount</td>
+                            @if (rowIndex == 1)
+                            {
+                                <th rowspan="4" class="text-center">合同类填写编号</th>
+                            }
+                            <th>合同编号</th>
+                            <td name="moneys">@item.HtNo</td>
+                            <th class="text-center w-50px">原件</th>
+                            <td>@item.YJianCount</td>
+                            <th>复印件</th>
+                            <td>@item.FYJianCount</td>
+                        </tr>
+                        rowIndex++;
+                    }
+                    @if (listLog.Count > 0)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批日志</th>
+                            <td colspan="9">
+                                <table>
+                                    @foreach (var item in listLog)
+                                    {
+                                        <tr>
+                                            <td style="border:0;">@(item.LContent + "，" + item.CreateTime.ToDateFormat("yyyy-MM-dd HH:mm:ss"))</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    @if ((Model.Status == ApplyStatus.新申请.ToInt() || Model.Status == ApplyStatus.审核中.ToInt()) && ViewBag.UserId != Model.FK_UserId)
+                    {
+                        <tr>
+                            <th class="text-center w-120px">审批意见</th>
+                            <td colspan="9">
+                                <textarea style="width:100%;" cols="3" name="applyMsg" class='form-control' autocomplete="off"></textarea>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td colspan='9'>
+                            @if ((Model.Status == ApplyStatus.新申请.ToInt() || Model.Status == ApplyStatus.审核中.ToInt()) && ViewBag.UserId != Model.FK_UserId)
+                            {
+                                <a href='javascript:;' class='btn btn-warning' onclick='bohui()'>驳回</a>
+                                <span>&nbsp; &nbsp;</span>
+                                <a href='javascript:;' class='btn btn-success' onclick='tongguo()'>通过</a>
+                                <span>&nbsp; &nbsp;</span>
+                            }
+                            @if (Model.Status == ApplyStatus.已审核.ToInt())
+                            {
+                                <span>&nbsp;&nbsp;</span>
+                                <a href='javascript:;' class='btn btn-primary' onclick='printApply(@Model.Id)'>打印</a>
+                            }
+                            <a href='javascript:;' class='btn btn-back' onclick='goBack()'>返回</a>
+                            <span id="spmsg"></span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<iframe frameborder="0" src="" id="printFrame" style="width: 0;height: 0;"></iframe>
+<script type="text/javascript">
+    $(function () {
+        $("#formMySealUse").Validform({
+            tiptype: function (msg, o, cssctl) {
+                var objtip = $("#spmsg");
+                cssctl(objtip, o.type);
+                objtip.text(msg);
+            },
+            callback: function (form) {
+                win.showLoading("正在提交...");
+                $("#formMySealUse").ajaxSubmit(function (data) {
+                    if (data.Code == 300) {
+                        win.alert(data.Message);
+                    } else if (data.Code == 200) {
+                        win.success("审核成功", function () {
+                            goBack();
+                        }, 1000);
+                    }
+                });
+                return false;
+            }
+        });
+    });
+    function bohui() {
+        $("input[name='status']").val("@ApplyStatus.驳回.ToInt()");
+        $("#formMySealUse").submit();
+    }
+    function tongguo() {
+        $("input[name='status']").val("@ApplyStatus.审核中.ToInt()");
+        $("#formMySealUse").submit();
+    }
+    function goBack() {
+        window.history.go(-1);
+    }
+    function printApply(id) {
+        $("#printFrame").attr('src', '/MySealUse/MySealUsePrint?id=' + id);
+    }
+</script>

@@ -1,0 +1,231 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@{
+    ViewBag.Title = "相关文档-指效OA";
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link type="text/css" rel="stylesheet" href="~/Static/css/temp_task/tempTask.css" />
+<link href="~/Static/js/zui/css/zui.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .outer {
+        overflow: auto
+    }
+
+    .doclib-action li {
+        list-style: none
+    }
+
+    .doc-content {
+        overflow-x: scroll;
+    }
+
+    label.checkbox {
+        float: left;
+        margin-right: 10px;
+        width: 100px;
+    }
+
+    input[type=checkbox] {
+        margin-top: 1px;
+    }
+
+    .table-form td + td, .table-form th + th {
+        padding-left: 20px;
+    }
+
+    .icon-2x {
+        font-size: 40px;
+    }
+
+    .libs-group-heading {
+        color: #808080;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+    }
+
+        .libs-group-heading a {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-decoration: none;
+        }
+
+    .libs-group {
+        padding: 10px;
+        height: 84px;
+    }
+
+    .lib {
+        float: left;
+        display: block;
+        width: 80px;
+        padding: 5px;
+        margin: 0px 3px;
+        text-align: center;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .lib .file-icon {
+            margin-bottom: 5px;
+        }
+
+        .lib .lib-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .lib:hover, .lib:focus, .lib:active {
+            border-color: #2e6dad;
+            background-color: #EBF2F9;
+            color: #2e6dad;
+            text-decoration: none;
+        }
+
+    .w-lib-p100 {
+        width: 100%;
+    }
+
+    .w-lib-p50 {
+        width: 45%;
+    }
+
+    .w-lib-p33 {
+        width: 30%;
+    }
+
+    #menu .nav > li > a {
+        display: inline-block;
+    }
+
+    #navBarActions {
+        position: absolute;
+        right: 100px;
+        top: 4px;
+        z-index: 10000;
+    }
+
+    .panel-body > form {
+        max-width: 1200px;
+    }
+
+    #libList .lib .icon-move {
+        display: none;
+        position: relative;
+        top: -20px;
+        right: -70px;
+    }
+
+    #libList .lib:hover .icon-move {
+        display: inline-block;
+        cursor: move;
+    }
+
+    .lib-heading {
+        border-right: 1px solid #ddd;
+    }
+
+    .lib-more a.more {
+        font-weight: bold;
+        display: block;
+    }
+
+    #libs .libs-group-heading {
+        border: 1px solid #ddd;
+    }
+
+    #libs .libs-group {
+        border: 1px solid #ddd;
+        border-top: 0px;
+        margin-bottom: 20px;
+    }
+
+        #libs .libs-group.lib-more {
+            border: 0px;
+            text-align: center;
+            height: 120px;
+            line-height: 110px;
+        }
+
+            #libs .libs-group.lib-more:hover {
+                background-color: #EBF2F9
+            }
+
+    #libs .libs-custom-heading {
+        text-align: center;
+        height: 120px;
+        line-height: 110px;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        #libs .libs-custom-heading:hover {
+            background-color: #EBF2F9
+        }
+
+        #libs .libs-custom-heading a {
+            display: block;
+            height: 100%;
+        }
+
+        #libs .libs-custom-heading .lable-custom {
+            position: absolute;
+            left: 8px;
+        }
+
+    #libs hr {
+        margin-top: 0px;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 10px;
+    }
+
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+<input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+<div id='libs' style="width:98%;margin-top:40px;">
+    <div class='row' id="div_ProjectLib">
+
+    </div>
+</div>
+<script language='Javascript'>
+    $(function () {
+        getList();
+    }
+    );
+    function getList() {
+        win.showLoading();
+        $.post("/Project/GetProjectDocMainList", { secondMenuId: $("#secondMenuId").val() }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#div_ProjectLib").html(data.Data);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+    function jumpProjectLib(projectId) {
+        window.location.href = "/Project/ProjectDocList?projectId=" + projectId + "&mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+</script>

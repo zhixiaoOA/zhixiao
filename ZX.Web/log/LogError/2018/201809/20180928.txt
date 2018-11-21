@@ -1,0 +1,168 @@
+
+ 
+记录时间：2018-09-28 15:09:17,588 
+线程ID:[24] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:10:07,824 
+线程ID:[33] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:11:34,057 
+线程ID:[36] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:11:54,010 
+线程ID:[36] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:12:02,316 
+线程ID:[24] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:16:29,474 
+线程ID:[46] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:17:02,911 
+线程ID:[44] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:17:12,982 
+线程ID:[46] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:17:42,475 
+线程ID:[54] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:17:45,927 
+线程ID:[46] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 15:20:04,563 
+线程ID:[44] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList()
+ClientConnectionId:047887e5-e87a-4113-8490-7f03eb655208
+Error Number:2812,State:62,Class:16
+
+ 
+记录时间：2018-09-28 16:09:34,603 
+线程ID:[16] 
+日志级别：  ERROR 
+错误描述：找不到存储过程 'Proc_GetApplyNoticeList'。
+ 
+System.Data.SqlClient.SqlException (0x80131904): 找不到存储过程 'Proc_GetApplyNoticeList'。
+   在 ZX.DAL.DbHelper.ExecuteProcToList[T](String procName, IDataParameter[] parameters) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\DBHelper\DbHelper.cs:行号 698
+   在 ZX.DAL.AllApplyNoticeDAL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.DAL\AllApplyNoticeDAL.cs:行号 27
+   在 ZX.BLL.AllApplyNoticeBLL.GetApplyNoticeList(Int32 fk_CompanyPositionId, String beginTime, String endTime, Int32 status) 位置 E:\xueqiu\zxoa\trunk\ZX.BLL\AllApplyNoticeBLL.cs:行号 21
+   在 ZX.Web.Controllers.ApprovalController.GetApprovalNotPageList() 位置 E:\xueqiu\zxoa\trunk\ZX.Web\Controllers\Apply\ApprovalController.cs:行号 72
+ClientConnectionId:bf013603-7a00-45af-8c22-6c17ee64b4db
+Error Number:2812,State:62,Class:16

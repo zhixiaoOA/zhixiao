@@ -1,0 +1,273 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@using ZX.BLL
+@using System.Linq
+@using System.Text
+
+@model List<Approval>
+@{
+    ViewBag.Title = "审批统计-指效OA";
+    var StartTime = DateTime.Now;
+}
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<script src="~/Static/js/layer/layer.js"></script>
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<style>
+    .panel {
+        border: 2px solid #e5e5e5 !important;
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 30px 0 0;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<input type="hidden" id="projectId" value="@ViewBag.ProjectId" />
+<input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+
+<div class='row page-content with-menu' style="margin-top:-10px">
+    <div class='row'>
+        <div class='panel'>
+            <div class='panel-heading'>
+                <strong><i class='icon-list-ul'></i>审批统计</strong>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <fieldset>
+                        <legend>查询条件</legend>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="radio" name="justTime" checked onclick="selectByPoint('Day');" />本日
+                                <input type="radio" name="justTime" onclick="selectByPoint('Week');" />本周
+                                <input type="radio" name="justTime" onclick="selectByPoint('Month');" />本月
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail3">姓名</label>
+                                <input type="text" id="Realname" name="Realname" placeholder="姓名" class="form-control form-date">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputInviteCode3">查询时间:</label>
+                                自<input type="text" id="StartTime" name="StartTime" placeholder="开始日期" onclick="WdatePicker()" class="form-control form-date">至 <input type="text" id="EndTime" name="EndTime" placeholder="截止日期" onclick="WdatePicker()" class="form-control form-date">
+                            </div>
+                            <button type="button" class="btn btn-default" onclick="GetMyApprovalList('byWhere')">统计</button>
+                        </div>
+                    </fieldset>
+                </div>
+                <table class='layui-table' style="border: 1px solid #ddd;">
+                    <thead>
+                        <tr class='text-center'>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>序号</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>姓名</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>加班/调休</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>出差</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>申请单</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>物品领用</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>物资采购</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>合同(协议)</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>私车临时公用</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>未打卡证明</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>印章使用</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>印章外带</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>请假</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div>
+                                    <a href='javascript:;'>招待</a>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbList"></tbody>
+                </table>
+
+                <div class="table-footer">
+                    <div class="pull-left text-danger"></div>
+                    <div style="float:right; " class="pager form-inline">
+                        <div id="myPager">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script language='Javascript'>
+
+
+    //默认查询本日
+    $(function () {
+        GetMyApprovalList("Day");
+    });
+    var pageIndex = 1, pageSize = 10, count = 0;
+    function GetMyApprovalList(timeType) {
+
+        var startTime = $("#StartTime").val();
+        var endTime = $("#EndTime").val();
+        var realname = $("#Realname").val();
+
+        $.post("/ApprovalStatistical/ApprovalStatisticalList", { pageIndex: pageIndex, pageSize: pageSize, timeType: timeType, realname: realname, startTime: startTime, endTime: endTime }, function (data) {
+            win.hideLoading();
+            if (data.Code == 200) {
+                $("#tbList").html(data.Data);
+                count = data.TotalCount;
+                initPage(timeType);
+            } else {
+                win.alert("获取数据失败");
+            }
+        });
+    }
+    function initPage(timeType) {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //完整功能
+            laypage.render({
+                elem: 'myPager'
+                , limit: pageSize
+                , curr: pageIndex
+                , count: count
+                , theme: '#1E9FFF'
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        pageIndex = obj.curr;
+                        pageSize = obj.limit;
+                        GetMyApprovalList(timeType);
+                    }
+                }
+            });
+        });
+    }
+
+    //快速切换
+    function selectByPoint(timeType) {
+        pageIndex = 1;
+        GetMyApprovalList(timeType);
+    }
+
+    //加班.调休明细
+    function lookMy_WorkDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMy_WorkDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1000, 500, "加班/调休明细");
+    }
+
+    //出差明细
+    function lookMy_BusinessTripDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMy_BusinessTripDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1000, 500, "出差明细");
+    }
+
+    //申请单明细
+    function lookMy_ApplyDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMy_ApplyDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1000, 500, "申请单明细");
+    }
+
+    //物品领用明细
+    function lookMyGooodsUsecountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMyGooodsUsecountDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1000, 500, "物品领用明细");
+    }
+
+
+    //物资采购明细
+    function lookMyGiftBuycountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMyGiftBuyDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1000, 500, "物资采购明细");
+    }
+
+    //合同明细
+    function lookMyAgreementcountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMyAgreementcountDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1000, 500, "合同明细");
+    }
+
+    //私车公用明细
+    function lookMyCartPubliccountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMyCartPubliccountDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1000, 500, "合同明细");
+    }
+
+    //未打卡证明明细
+    function lookMyClockcountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMyClockcountDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1024, 500, "未打卡证明明细");
+    }
+
+    //印章使用明细
+    function lookMySealUsecountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMySealUsecountDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1024, 500, "印章使用明细");
+    }
+
+    //印章外带明细
+    function lookMySealOutcountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMySealOutcountDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1024, 500, "印章外带明细");
+    }
+
+    //请假明细
+    function lookMy_AskcountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMy_AskcountDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1024, 500, "请假明细");
+    }
+
+    //招待明细
+    function lookMyEntertaincountDetailed(id, startTime, endTime) {
+        win.open("/ApprovalStatistical/LookMyEntertainDetailed?userId=" + id + "&startTime=" + startTime + "&endTime=" + endTime, 1024, 500, "招待明细");
+    }
+
+
+</script>

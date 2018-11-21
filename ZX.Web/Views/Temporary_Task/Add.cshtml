@@ -1,0 +1,375 @@
+﻿@using ZX.Tools
+@using ZX.Model
+@model Temporary_Task
+@{
+    ViewBag.Title = "创建临时任务-指效OA";
+}
+<link href="~/Static/styles/theme/default/all.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/styles/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="~/Static/css/theme/default/style.css" />
+<link href="~/Static/styles/theme/zui/css/min.css" rel="stylesheet" />
+<link href="~/Static/js/Validform/css/style.css" rel="stylesheet" />
+<link href="~/Static/js/jquery/chosen/chosen.min.css" rel="stylesheet" />
+<link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Static/js/layer/need/layer.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="~/Static/js/jquery/chosen/chosen.min.js"></script>
+<script src="~/Static/js/Validform/js/Validform_v5.3.2_min.js"></script>
+<script src="~/Static/js/admin.min.js"></script>
+<script src="~/Static/js/zui/zui.min.js"></script>
+<script src="~/Static/js/layui/layui.js"></script>
+<script src="~/Static/js/layer/layer.js"></script>
+<script src="~/Static/js/layer/layer.tools.js"></script>
+<script src="~/Static/res/My97DatePicker/WdatePicker.js"></script>
+<script src="~/Static/js/jquery/form/min.js"></script>
+<style>
+
+    .label.task-status-doing {
+        color: #D2322D
+    }
+
+    .label.task-status-done {
+        color: #229F24
+    }
+
+    .label.task-status-waiting {
+        color: #E48600
+    }
+
+    .label.task-status-cancel {
+        color: #333
+    }
+
+    .taskMenu {
+        width: 200px
+    }
+
+        .taskMenu + .page-content {
+            margin-left: 220px;
+        }
+
+    #dropMenu {
+        min-width: 200px;
+    }
+
+    #defaultMenu, #finishedMenu, #suspendMenu {
+        min-width: 168px;
+    }
+
+    #groupBar .btn-group {
+        margin-right: 15px;
+    }
+
+    #currentItem {
+        margin-right: 1px;
+    }
+
+    .children {
+        background: #f0f0f0;
+    }
+
+    .modal-team .table-form {
+        margin: auto;
+        width: 90%;
+    }
+
+    .modal-team .modal-content {
+        padding: 5px;
+    }
+
+        .modal-team .modal-content .table-form td + td, .table-form th + th {
+            padding-left: 5px;
+        }
+
+    .panel .panel-heading a:hover {
+        text-decoration: none;
+    }
+
+    #menu .pull-right {
+        margin-right: 5px;
+    }
+
+    .loadingWrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 300;
+        background-image: url(../img/loading2.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: #000;
+        background-color: rgba(234, 229, 229, 0.5);
+        filter: alpha(opacity=50);
+    }
+
+    .only-pick-time table {
+        width: 100%
+    }
+
+        .only-pick-time table td {
+            width: 150px
+        }
+
+        .only-pick-time table > tfoot .today, .only-pick-time table > thead {
+            display: none !important;
+        }
+
+    .loadingWrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 300;
+        background-image: url(../img/loading2.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: #000;
+        background-color: rgba(234, 229, 229, 0.5);
+        filter: alpha(opacity=50);
+    }
+
+    .top-navbar-index {
+        position: inherit;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .row {
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+@Html.Raw(ViewBag.SysAdminMainNavbar)
+<nav id='menu'>
+    <ul class='nav'>
+        <li><a id='currentItem' href="/Project/AddEdit?id=@ViewBag.ProjectId &mid=@ViewBag.CurrentMid"><i class='icon-folder-open-alt'></i> <strong>@ViewBag.ProjectName</strong></a></li>
+        <li class="divider angle"></li>
+        <li>
+            <a href="javascript:;" onclick="jumpToList()">列表</a>
+        </li>
+        <li class="divider angle"></li>
+        <li class="title">新建任务</li>
+    </ul>
+</nav>
+<div class='page-content' style="padding-top: 38px; float:left">
+    <form method="post" class="form-horizontal" id="formTemporary_Task" action="/Temporary_Task/AddSave">
+        <div class='panel'>
+            <div class='panel-heading'><strong>新建任务</strong></div>
+            <div class='panel-body'>
+                <input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+                <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+                <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                <input type="hidden" name="EditCount" id="EditCount" value="@Model.EditCount">
+
+                <div class="form-group">
+                    <label for="TName" class="col-sm-2">名称<span style="color:red">*</span></label>
+                    <div class="col-md-6 col-sm-10">
+                        <div class="input-group">
+                            <input type="text" id="TName" name="TName" value="@Model.TName" class="form-control fix-border fix-padding" placeholder="任务名称" datatype="*" nullmsg="请填写名称">
+                            <span class="input-group-addon ">优先级<span style="color:red">*</span></span>
+                            <input type="hidden" name="Priority" id="Priority" value="@Model.Priority" />
+                            <select name="Sel_Priority" id="Sel_Priority" class="form-control" datatype="*" nullmsg="请选择优先级">
+                                <option value="" data-keys=""></option>
+                                @{
+                                    try
+                                    {
+                                        List<SelectListItem> selectItemsPriority = ViewBag.ListPriority;
+                                        foreach (var item in selectItemsPriority)
+                                        {
+                                            if (Model.Id > 0)
+                                            {
+                                                if (Model.Priority.ToString() == item.Value)
+                                                {
+                                                    <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                                    continue;
+                                                }
+                                                <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    }
+                                    catch { }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Assigned" class="col-sm-2">指派给<span style="color:red">*</span></label>
+                    <div class="col-md-6 col-sm-10">
+                        <input type="hidden" name="Assigned" id="Assigned" value="@Model.Assigned" />
+                        <select name="Sel_Assigned" id="Sel_Assigned" class="form-control" datatype="*" nullmsg="请填写指派人">
+                            <option value="" data-keys=""></option>
+                            @{
+                                try
+                                {
+
+                                    List<SelectListItem> selectItemsAssigned = ViewBag.ListTeam;
+
+                                    foreach (var item in selectItemsAssigned)
+                                    {
+                                        if (Model.Id > 0)
+                                        {
+                                            if (Model.Priority.ToString() == item.Value)
+                                            {
+                                                <option value="@item.Value" data-keys="@item.Value" selected>@item.Text</option>
+                                                continue;
+                                            }
+                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value" data-keys="@item.Value">@item.Text</option>
+                                        }
+                                    }
+                                }
+                                catch { }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="TExpected" class="col-sm-2">
+                        最初预计<span style="color:red">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-10">
+                        <div class="input-group">
+                            <input type="text" id="TExpected" name="TExpected" placeholder="工时" class="form-control" autocomplete="off" value="@Model.TExpected" onkeypress="$.admin.keyPress(this)"
+                                   onkeyup="$.admin.keyUp(this)"
+                                   onblur="$.admin.keyBlur(this)" datatype="*" nullmsg="请输入最初预计工时">
+                            <span class="input-group-addon ">截止日期<span style="color:red">*</span></span>
+                            <input type="text" name="AsTime" value="@Model.AsTime.ToDateFormat()" placeholder="截止日期" onclick="WdatePicker()" class="form-control form-date">
+                        </div>
+                    </div>
+                </div>
+                <div id="div_PDesc" class="form-group">
+                    <label for="PDesc" class="col-sm-2">
+                        任务描述
+                    </label>
+                    <div class="col-md-6 col-sm-10">
+                        <textarea name="TDesc" id="TDesc" class='form-control' rows='5' placeholder="任务描述">@Model.TDesc</textarea>
+                    </div>
+                </div>
+                <div id="div_TCC" class="form-group">
+                    <label for="TCC" class="col-sm-2">
+                        抄送给
+                    </label>
+                    <input type="hidden" id="TCC" name="TCC" class="form-control" value="@Model.TCC" placeholder="抄送给">
+                    <div class="col-md-6 col-sm-10">
+                        <select data-placeholder="选择人员..." class="chosen-select form-control" tabindex="2" multiple="" id="TCC">
+                            @{
+                                try
+                                {
+                                    List<Sys_User> list = ViewBag.ListUser;
+                                    foreach (var item in list)
+                                    {
+                                        <option value="@item.Id" data-keys="@item.RealName">@item.RealName</option>
+                                    }
+                                }
+                                catch { }
+
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div id="div_Attach" class="form-group">
+                    <label for="Attach" class="col-sm-2">
+                        附件
+                    </label>
+                    <div class="col-md-6 col-sm-10">
+                        <input type="hidden" name="Attach" id="Attach" value="@Model.Attach" />
+                        <button type="button" class="layui-btn" id="btnUpload">上传附件</button><label id="lblAttach">@Model.Attach</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        @Html.Raw(ViewBag.CurrentBtnList29)
+                        <span id="spmsg"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            var uploadInst1 = upload.render({
+                elem: '#btnUpload'
+                , url: '/upload/UploadAttach'
+                , accept: 'file'
+                , data: { direName: "/TemporaryTask/Files" }
+                , done: function (res) {
+                    $("#Attach").val(res.Data);
+
+                    $("#lblAttach").text(res.Data);
+                }
+                , error: function (res) {
+                    win.alert(JSON.stringify(res));
+                }
+            });
+        });
+    });
+
+
+    $("#Sel_Priority").change(function () {
+        $("#Priority").val($(this).val());
+    });
+
+    $("#Sel_Assigned").change(function () {
+        $("#Assigned").val($(this).val());
+    });
+
+    $('select.chosen-select').chosen({
+        no_results_text: '没有找到',    // 当检索时没有找到匹配项时显示的提示文本
+        disable_search_threshold: 10, // 10 个以下的选择项则不显示检索框
+        search_contains: true,         // 从任意位置开始检索
+        width: "100%"
+    });
+
+    $('select.chosen-select').on('change', function () {
+        // 用户改变了选择
+        $("#TCC").val($(this).val());
+    });
+    function saveData() {
+        $("#formTemporary_Task").submit();
+    }
+    $("#formTemporary_Task").Validform({
+        tiptype: function (msg, o, cssctl) {
+            var objtip = $("#spmsg");
+            cssctl(objtip, o.type);
+            objtip.text(msg);
+        },
+        beforeSubmit: function () {
+            $('<div class="loadingWrap"></div>').appendTo("body");
+            //在验证成功后，表单提交前执行的函数，curform参数是当前表单对象。
+            //这里明确return false的话表单将不会提交;
+        },
+        callback: function (form) {
+            $("#formTemporary_Task").ajaxSubmit(function (data) {
+                $(".loadingWrap").remove();
+                if (data.Code == 300) {
+                    win.alert("保存失败");
+                } else if (data.Code == 200) {
+                    win.success("保存成功", function () {
+                        jumpToList();
+                    });
+                }
+            });
+            return false;
+        }
+    });
+
+    //进入任务管理
+    function jumpToList() {
+        window.location.href = "/Temporary_Task/Temporary_TaskList?mid=" + $("#currentMid").val() + "&secondMenuId=" + $("#secondMenuId").val();
+    }
+
+</script>

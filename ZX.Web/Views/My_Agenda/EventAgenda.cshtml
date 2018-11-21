@@ -1,0 +1,416 @@
+﻿@using ZX.Model
+@using ZX.Tools
+@using ZX.BLL
+@model My_Agenda
+@{
+    ViewBag.Title = "日程待办-指效";
+    int userId = Session["UserId"].ToInt();
+}
+<link href="/Static/styles/bootstrap.min.css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="/Static/js/layui/css/layui.css" />
+<link href="/Static/js/layer/need/layer.css" rel="stylesheet" />
+<link href="/Static/js/calendar/zui.calendar.min.css" rel="stylesheet" />
+<script src="/Static/js/jquery/jquery-1.11.1.min.js"></script>
+<script src="/Static/js/layui/layui.js"></script>
+<script src="/Static/js/zui/zui.min.js"></script>
+<script src="/Static/js/calendar/zui.calendar.min.js"></script>
+<script src="/Static/js/layer/layer.js"></script>
+<script src="/Static/js/layer/layer.tools.js"></script>
+<style>
+    .label.task-status-doing {
+        color: #D2322D
+    }
+
+    .label.task-status-done {
+        color: #229F24
+    }
+
+    .label.task-status-waiting {
+        color: #E48600
+    }
+
+    .label.task-status-cancel {
+        color: #333
+    }
+
+    .taskMenu {
+        width: 200px
+    }
+
+        .taskMenu + .page-content {
+            margin-left: 220px;
+        }
+
+    #dropMenu {
+        min-width: 200px;
+    }
+
+    #defaultMenu, #finishedMenu, #suspendMenu {
+        min-width: 168px;
+    }
+
+    #groupBar .btn-group {
+        margin-right: 15px;
+    }
+
+    #currentItem {
+        margin-right: 1px;
+    }
+
+    .children {
+        background: #f0f0f0;
+    }
+
+    .modal-team .table-form {
+        margin: auto;
+        width: 90%;
+    }
+
+    .modal-team .modal-content {
+        padding: 5px;
+    }
+
+        .modal-team .modal-content .table-form td + td, .table-form th + th {
+            padding-left: 5px;
+        }
+
+    .panel .panel-heading a:hover {
+        text-decoration: none;
+    }
+
+    #menu .pull-right {
+        margin-right: 5px;
+    }
+    .row {
+        margin: 0;
+    }
+</style>
+
+<div class='row page-content with-menu'>
+    <style>
+        .only-pick-time table {
+            width: 100%
+        }
+
+            .only-pick-time table td {
+                width: 150px
+            }
+
+            .only-pick-time table > tfoot .today, .only-pick-time table > thead {
+                display: none !important;
+            }
+    </style>
+    <input type="hidden" name="currentMid" id="currentMid" value="@ViewBag.CurrentMid" />
+    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+    <input type="hidden" id="secondMenuId" name="secondMenuId" value="@ViewBag.SecondMenuId" />
+
+    <div class='page-content'>
+        <form method='post' id='ajaxForm' enctype='multipart/form-data'>
+            <div class='row'>
+                <div class='col-md-8'>
+                    <div class='panel'>
+                        <div class='panel-heading'><strong>描述</strong></div>
+                        <div class='panel-body'>
+                            @Model.ADesc
+                        </div>
+                    </div>
+                    <style>
+                        .wordwrap {
+                            word-wrap: break-word;
+                            word-break: break-all;
+                        }
+                    </style>
+
+
+                    <div class='panel panel-history'>
+                        <div class='panel-heading'>
+                            <strong>历史记录</strong>
+                        </div>
+                        <div class='panel-body'>
+                            @{
+                                //获取任务历史
+                                List<My_Agenda_Log> listLog = My_Agenda_LogBLL.GetList(d => d.Where(t => t.FK_AgendaId == Model.Id));
+                                List<Sys_User> listUser = new List<Sys_User>();
+                                if (listLog != null && listLog.Count > 0)
+                                {
+                                    //获取用户
+                                    listUser = Sys_UserBLL.GetList();
+                                }
+                                foreach (var item in listLog.OrderByDescending(t => t.Id))
+                                {
+                                    string realName = listUser.Where(l => l.Id == item.CreateUserId).FirstOrDefault().RealName;
+                                    <ol>
+                                        <li value='@item.Id.ToInt()'>
+                                            <span>
+                                                @item.CreateTime, 由 <strong>@realName</strong>操作,<strong>状态为</strong>:@item.AStatus,<strong>备注:</strong> @item.Remark
+                                            </span>
+                                        </li>
+                                    </ol>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                    <div class="text-center actions">
+                        <span class="self">
+                            @{
+                                List<Dictionary> dictList = DictionaryBLL.GetList(); //获取字典
+                                try
+                                {
+
+                                    string statusName = dictList.Where(l => l.Id == Model.AStatus).FirstOrDefault().Name;
+
+
+                                    if (statusName == "已完成")
+                                    {
+                                        <a href="javascript:;" class="btn disabled" disabled>完成</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class="btn btn-success ajaxFinish " onclick="agendaFinish(@Model.Id)">完成</a>
+                                    }
+
+                                    <a href="javascript:;" class="btn ajaxAssign " onclick="agendaDel(@Model.Id)">删除</a>
+                                }
+                                catch
+                                {
+                                }
+
+
+                            }
+                        </span>
+                    </div>
+                    <input type='hidden' name='referer' id='referer' value='' />
+                </div>
+                <div class='col-md-4'>
+                    <div class='panel'>
+                        <div class='panel-heading'><strong>基本信息</strong></div>
+                        <div class='panel-body'>
+                            <table class='table table-info'>
+                                <tr>
+                                    <th>优先级</th>
+                                    <td>
+                                        @{
+                                            string str = "";
+                                            string status = "";
+
+                                            try
+                                            {
+                                                str = dictList.Where(l => l.Id == Model.APriority).FirstOrDefault().Name;
+                                                status = dictList.Where(l => l.Id == Model.AStatus).FirstOrDefault().Name;
+                                            }
+                                            catch { }
+                                        }
+                                        @str
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>状态</th>
+                                    <td>
+                                        @status
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>类型</th>
+                                    <td>
+                                        @(Model.AType == 0 ? "自定义" : "项目任务")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>日期</th>
+                                    <td>
+                                        @(Model.ADate.ToShortDate())
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="color:red;">起止时间</th>
+                                    <td>
+                                        @(Model.AStartmmhh + "~" + Model.AEndmmhh)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>所有者</th>
+                                    <td>
+                                        @{
+
+                                            string createUserName = "";
+                                            try
+                                            {
+                                                createUserName = Sys_UserBLL.GetModel(Model.CreateUserId.ToInt()).RealName;
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                        @(createUserName)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>指派给</th>
+                                    <td>
+                                        @{
+
+                                            string aAssignedUserName = "";
+                                            try
+                                            {
+                                                aAssignedUserName = Sys_UserBLL.GetModel(Model.AAssigned.ToInt()).RealName;
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                        @(aAssignedUserName + "于" + Model.CreateTime)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>完成者</th>
+
+                                    @{
+                                        string aFinishedUserName = "";
+                                        string finishTime = "";
+                                        try
+                                        {
+                                            if (Model.AFinishUserId.ToInt() > 0)
+                                            {
+                                                aFinishedUserName = Sys_UserBLL.GetModel(Model.AFinishUserId.ToInt()).RealName;
+                                                finishTime = Model.AFinishTime.ToDateFormat("yyyy-MM-dd hh:mm:ss");
+
+                                            }
+                                        }
+                                        catch
+                                        {
+                                        }
+                                        if (aFinishedUserName.IsNotNullOrEmpty())
+                                        {
+                                            <td>@(aFinishedUserName + "于" + finishTime)</td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                    }
+                                </tr>
+                                <tr>
+                                    <th>关闭者</th>
+                                    @{
+                                        string aCloseUserName = "";
+                                        string CloseTime = "";
+                                        try
+                                        {
+                                            if (Model.AFinishUserId.ToInt() > 0)
+                                            {
+                                                aCloseUserName = Sys_UserBLL.GetModel(Model.ACloseUserId.ToInt()).RealName;
+                                                CloseTime = Model.ACloseTime.ToDateFormat("yyyy-MM-dd hh:mm:ss");
+
+                                            }
+                                        }
+                                        catch
+                                        {
+                                        }
+                                        if (aCloseUserName.IsNotNullOrEmpty())
+                                        {
+                                            <td title="@("原因:"+Model.ACloseReason)">@(aCloseUserName + "于" + CloseTime)</td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                    }
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script language='Javascript'>
+
+    //历史后退
+    function goBack() {
+        window.history.go(-1);
+    }
+
+    function saveData() {
+        //任务基本信息
+        win.showLoading("正在保存...");
+
+        var taskItem = { Id: "", TName: "", Assigned: "", Priority: "", TExpected: "", AsTime: "", PDesc: "", TState: "", TCC: "", Attach: "", TRemark: "", EditCount: "" };
+
+        taskItem.Id = $("#Id").val();
+        taskItem.TName = $("#TName").val();
+        taskItem.Assigned = $("#Assigned").val();
+        taskItem.Priority = $("#Priority").val();
+        taskItem.TExpected = $("#TExpected").val();
+        taskItem.AsTime = $("#AsTime").val();
+        taskItem.PDesc = $("#PDesc").val();
+        taskItem.TState = $("#TState").val();
+        taskItem.TCC = $("#TCC").val();
+        taskItem.Attach = $("#Attach").val();
+        taskItem.TRemark = $("#TRemark").val();
+        taskItem.EditCount = $("#EditCount").val();
+        var jsonDataTask = JSON.stringify(taskItem);
+
+        //任务团队基本信息
+        var taskTeamItem = { FK_TaskId: "", ExpectHours: "", ConsumTime: "", TheTime: "" }
+        taskTeamItem.FK_TaskId = $("#FK_TemporaryTaskId").val();
+        taskTeamItem.ExpectHours = $("#ExpectHours").val();
+        taskTeamItem.ConsumTime = $("#ConsumTime").val();
+        taskTeamItem.TheTime = $("#TheTime").val();
+
+        var jsonDataTaskTeam = JSON.stringify(taskTeamItem);
+
+
+        $.post("/Temporary_Task/EditSave", { jsonDataTask: jsonDataTask, jsonDataTaskTeam: jsonDataTaskTeam }, function (data) {
+            if (data.Code = 200) {
+                win.success("保存成功", function () {
+                    goTemporary_Task();
+                });
+            } else {
+                win.alert("保存失败");
+            }
+            win.hideLoading();
+        });
+    }
+
+    //完成
+    function agendaFinish(id) {
+        win.confirm("确认要完成吗?", function () {
+            win.showLoading("正在处理...");
+            $.post("/My_Agenda/Finish", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("操作成功", function () {
+                        win.hideLoading();
+                        getList();
+                    });
+                } else {
+                    win.alert("操作失败");
+                }
+            });
+        });
+    }
+
+    function agendaPoint(id) {
+        parent.agendaPoint(id, $("#currentMid").val(), $("#secondMenuId").val());
+        win.close();
+    }
+
+
+    function agendaDel(id) {
+        win.confirm("确认要删除吗?", function () {
+            win.showLoading("正在处理...");
+            $.post("/My_Agenda/DeleteData", { id: id }, function (data) {
+                if (data.Code == 200) {
+                    win.success("删除成功", function () {
+                        win.hideLoading();
+                        window.history.go(-1);
+                        win.close();
+                    });
+                } else {
+                    win.alert("删除失败");
+                }
+            });
+        });
+    }
+</script>
