@@ -299,13 +299,13 @@ hr {
   margin-right: 15px;
 }
 #topbar .navbar-top-links li.open > a {
-  background: #3C3C3C !important;
-  color: #ffffff !important;
+    background: #b1dafd !important;
+    color: #ffffff !important;
 }
-#topbar .navbar-top-links li.open > a:hover,
-#topbar .navbar-top-links li.open > a:focus {
-  background: #3C3C3C !important;
-}
+    #topbar .navbar-top-links li.open > a:hover,
+    #topbar .navbar-top-links li.open > a:focus {
+        background: #b1dafd !important;
+    }
 #topbar .navbar-top-links li.open > a i {
   color: #ffffff;
 }
