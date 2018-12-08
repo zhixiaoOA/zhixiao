@@ -9,5 +9,6 @@ namespace ZX.Web
     {
         public static string SYSNAME = "指效OA";
         public static string DESIGNBY = "山东雪球信息";
+        public static string VERSION = "1.1";
     }
 }
