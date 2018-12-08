@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="utf-8" />
+    <link href="~/Static/js/layui/css/layui.css" rel="stylesheet" />
+    <title>声明</title>
+    <style>
+        .text-box {
+            position:absolute;
+            left:20%;
+            top:6%;
+            padding: 10rem;
+            line-height:24px;
+        }
+        .state-tatle{
+            font-size:30px; 
+        }
+        .state-content{
+            margin-top:40px;
+            padding-bottom:20px;
+            border-bottom:1px solid black;
+        }
+        .state-jump{
+            position:absolute;
+            top:74%;
+            left:45%;
+        }
+        p {
+            font-size:18px;
+            line-height:30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="text-box">
+        <div class="state-tatle">欢迎您使用指效OA协同办公系统</div>
+        <div class="state-content">
+            <p>指效OA由山东雪球信息技术有限公司开发</p><br />
+            <p>专为中小团队量身打造，是中小团队协同工作的首选系统！</p>
+            <p>官方网址：<a href="http://www.aioae.com" target="_blank"><span style="color:blue;">http://www.aioae.com</span></a></p>
+            <p>您当前安装的版本是 <span style="color:red;">@ViewBag.version</span></p>
+        </div>
+        <div class="state-jump"><button class="layui-btn" onclick="load()">开始配置</button></div>
+    </div>
+</body>
+</html>
+<script>
+    function load() {
+        window.location.href = "/Admin/Agreement";
+    }
+</script>
