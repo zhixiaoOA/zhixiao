@@ -350,13 +350,21 @@ namespace ZX.Web.Controllers.init
             AjaxResult result = new AjaxResult();
             try
             {
+                Sys_User adminUser = Sys_UserBLL.GetModel(t => t.Where(a => a.Fk_RoleId == 1));
+                if (adminUser != null)
+                {
+                    if (System.IO.File.Exists(Server.MapPath("~/Data/IsNew.txt")))
+                    {
+                        System.IO.File.Delete(Server.MapPath("~/Data/IsNew.txt"));
+                    }
+                    throw new Exception("管理员用户已存在,请直接登录");
+                }
                 Sys_User model = new Sys_User();
                 Stream reqStream = Request.InputStream;
                 StreamReader streamReader = new StreamReader(reqStream);
                 string json = streamReader.ReadToEnd();
                 model = (Sys_User)JsonConvert.DeserializeObject(json, model.GetType());
                 int row = 0;
-                string message = "";
                 if (model.Id > 0)
                 {
                     model.Pwd = EnDecrypt.SHA1Hash(model.Pwd);
